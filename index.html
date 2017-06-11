@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>The Art of Computer Programming</title>
+    <style>
+        .quotebox {
+            background-color: lightgray;
+            border: 1px solid darkgray;
+            max-width: 200px;
+        }
+        .container {
+            max-width: 1024px;
+        }
+    </style>
 </head>
 <body>
-<div>
+<div class="container">
     <h1>Welcome</h1>
     <p>
         Welcome to the Art of Computer Programming. I am Per Lundholm and ArtComputer is my company. I am a member
         of <a href="http://crisp.se">Crisp</a>, a world known brand within agile development.
-        I have been doing this for over 35 years and here is
-        what I have come to believe on the subject of programming.
+        I have been doing programming for over 35 years and here is
+        what I have come to believe on the subject.
     </p>
     <p>
         I will speak about craftsmanship, architecture and people. I will speak about Readability, Refactoring,
@@ -27,7 +37,7 @@
         The first thing about craftsmanship is <b>refactoring</b>. Code is never well written on first attempt.
         We simply can not just sit down and type well crafted code from scratch. If we could, we would not be solving
         anything complicated. Instead, we learn about the problem as we go. Therefore, to created well crafted code,
-        you need to refactor it. You can not simply stop because you finally got it working.
+        you need to refactor it. You can not simply stop because you got it working.
     </p>
     <h3>Refactoring</h3>
     <p>
@@ -39,9 +49,75 @@
         When your code pass the tests, you can start looking at <b>readability</b>. Never be proud of being able to read
         cryptic code, be proud of writing code that reads like running water. I have written <a
             href="https://blog.crisp.se/2015/03/05/perlundholm/7-rules-on-code-readability">7 rules on
-        code readability</a> which you may enjoy but there are more sources out there. What is important is your
-        attitude,
+        code readability</a> which you may enjoy but there are more sources out there.
+    </p>
+    <div class="quotebox">
+        Your attitude is important,
         never stop until your code is readable.
+    </div>
+    <p>
+        Once the code is readable, you can refactor it further to become minimal. But never on the expense of loosing
+        its readability.
+    </p>
+    <h3>Responsibility</h3>
+    <p>
+        As a professional programmer, you are obliged to take responsibility for your actions. Bad code can kill people
+        or loose large amounts of money.
+    </p>
+    <ol>
+        <li>You are responsible for all the code you write.</li>
+        <li>You are also responsible for code that you should have written but neglected to.
+            E.g. tests, logging, monitoring
+        </li>
+        <li>If you feel you don't have time to do a proper job, it is your responsibility to plan better.</li>
+        <li>If you have neglected your training so that your code is not the best, it is your responsibility too.</li>
+        <li>If other people writes bad code, it is your responsibility to help them become better through carefully
+            written comments in code reviews, pair programming, mob programming or what other means you can find.
+        </li>
+        <li>
+            If requirements or whatever you base your design on, is incomplete or inconsistent, it is your
+            responsibility to sort it out.
+        </li>
+    </ol>
+    <h3>Respect</h3>
+    <p>
+        You should always treat other programmers with respect, you have no idea what their background is.
+        Criticise behaviour or code but never a person. When you thinks something is not right, speak out of
+        consequences. Eg "Unless we have tests, changing things such as a new version of a framework that we use,
+        may break our code without us knowing it."
+    </p>
+    <p>
+        You should always respect the users of your software. If they can't use your system, it is a
+        bug.
+    </p>
+    <div class="quotebox">
+        See this post that I wrote on
+        <a href="https://blog.crisp.se/2015/03/24/perlundholm/too-small-for-a-user-story-bugs-fixes-and-support">
+            how to define bugs</a>.
+    </div>
+    <p>
+        User respect is about understanding their situation when they use your system. Their mental model of the
+        system is most probably different from yours. That is one reasons your naming of things must be constantly
+        updated to stay in sync with your users' world. Mind the gap, if you see what I mean.
+    </p>
+    <h2>Organisation</h2>
+    <p>
+        Your software is connected to how its owning organisation communicates, it is
+        <a href="https://en.wikipedia.org/wiki/Conway%27s_law">Conway's law</a>. Amusing observation at first,
+        but then you realise how painful it can be. It actually tells you that you can not redesign your
+        system architecture without changing the organisation, and vice versa. Once you have established
+        a working system, you have a hard time to innovate. Perhaps that is why Apple changed on how we
+        look at mobile phones and Tesla changed the car industry. Neither were established.
+    </p>
+    <p>
+        For us doing software, it is a problem when projects cross several systems because we need a little
+        something changed in each of those systems. It is today called "component teams" as they are organised
+        according to components, strictly following the system architecture. Thus a project will engage a lot
+        of people which means a lot of communication and synchronization. Expensive and error-prone.
+    </p>
+    <h2>Software Architecture</h2>
+    <p>
+        This is without doubt a large subject.
     </p>
 </div>
 </body>
