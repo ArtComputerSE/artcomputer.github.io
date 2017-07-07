@@ -3,33 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>The Art of Computer Programming</title>
-    <style>
-        .quotebox {
-            background-color: lightgray;
-            border: 1px solid darkgray;
-            max-width: 200px;
-        }
-
-        .container {
-            max-width: 1024px;
-        }
-
-        .header {
-            max-width: inherit;
-            border-bottom: solid 1px;
-        }
-
-        img {
-            height: 100%;
-            width: 100%;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="clock.js"></script>
 </head>
 <body>
 <div class="container">
     <div class="header">
         <img src="image/logotype.png">
+    </div>
+    <div id="clock" style="float:right;">
+
     </div>
     <h1>Welcome</h1>
     <p>
@@ -135,5 +118,9 @@
         This is without doubt a large subject.
     </p>
 </div>
+<script type="text/javascript">
+    var clockDiv = document.getElementById('clock');
+    Elm.Clock.embed(clockDiv);
+</script>
 </body>
 </html>
