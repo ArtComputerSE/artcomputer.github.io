@@ -38,15 +38,20 @@
     <p>
         The first thing about craftsmanship is <b>refactoring</b>. Code is never well written on first attempt.
         We simply can not just sit down and type well crafted code from scratch. If we could, we would not be solving
-        anything complicated. Instead, we learn about the problem as we go. Therefore, to created well crafted code,
+        anything complicated. Instead, we learn about the problem as we go. Therefore, to create well crafted code,
         you need to refactor it. You can not simply stop because you got it working.
     </p>
     <h3>Refactoring</h3>
     <p>
-        When you refactor, you change the code without changing its behaviour. To guarantee that, you need to have tests
+        When you refactor, you change the code without changing its behaviour. To guarantee that, you need to have <b>tests</b>
         that will tell you when your changes break the code. Tests shall also be well crafted, of course. Serving as a
         specification, they should not be coupled to the implementation.
     </p>
+    <div class="quotebox">
+        Tests serve two purposes, to verify that the code works and to specify the intended behaviour. Thus, even simple
+        code
+        needs tests.
+    </div>
     <p>
         When your code pass the tests, you can start looking at <b>readability</b>. Never be proud of being able to read
         cryptic code, be proud of writing code that reads like running water. I have written <a
@@ -54,8 +59,7 @@
         code readability</a> which you may enjoy but there are more sources out there.
     </p>
     <div class="quotebox">
-        Your attitude is important,
-        never stop until your code is readable.
+        Your attitude is important, never stop until your code is readable.
     </div>
     <p>
         Once the code is readable, you can refactor it further to become minimal. But never on the expense of loosing
@@ -78,7 +82,7 @@
         </li>
         <li>
             If requirements or whatever you base your design on, is incomplete or inconsistent, it is your
-            responsibility to sort it out.
+            responsibility to sort it out. You are responsible to know the domain you are working in.
         </li>
     </ol>
     <h3>Respect</h3>
@@ -109,7 +113,7 @@
         but then you realise how painful it can be. It actually tells you that you can not redesign your
         system architecture without changing the organisation, and vice versa. Once you have established
         a working system, you have a hard time to innovate. Perhaps that is why Apple changed on how we
-        look at mobile phones and Tesla changed the car industry. Neither were established.
+        look at mobile phones and Tesla changed the car industry. Neither were established and stuck with that law.
     </p>
     <p>
         For us doing software, it is a problem when projects cross several systems because we need a little
@@ -119,7 +123,20 @@
     </p>
     <h2>Software Architecture</h2>
     <p>
-        This is without doubt a large subject.
+        This is without doubt a large subject. It is also debatable what it really is. But let give you this, all
+        systems have structures of different kinds, such as how data flows and nodes. These structures affect the
+        system's qualities, such as security and performance. If you <a
+            href="https://en.wikipedia.org/wiki/List_of_system_quality_attributes">search the internet</a>, you'll find
+        many sets of qualities to look for. Let me give you one set by the acronym <b>STAMPUS</b>.
+    </p>
+    <p>
+        STAMPUS stands for Security, Testability, Availability, Modifiability, Performance, Usability and Scalability.
+        What you might observe is that many ends with "-ility", which makes many speak of "ilities" as qualities.
+    </p>
+    <p>
+        You can read my blog post on <a
+            href="https://blog.crisp.se/2012/11/18/perlundholm/why-do-we-never-get-the-time-to-work-on-system-architecture">why
+        do we never get the time to work on system architecture</a> to find short explanations on these attributes.
     </p>
 </div>
 <script type="text/javascript">
