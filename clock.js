@@ -24519,7 +24519,7 @@ var $author$project$Clock$minutesHand = function (theDateNow) {
 					$elm$svg$Svg$polygon,
 					_List_fromArray(
 						[
-							$elm$svg$Svg$Attributes$points('0,0 2,2 30,0 2, -2'),
+							$elm$svg$Svg$Attributes$points('0,0 2,2 29,0 2, -2'),
 							$elm$svg$Svg$Attributes$transform('translate(5,0)')
 						]),
 					_List_Nil),
