@@ -32,31 +32,32 @@
     <div class="header">
         <img src="image/logotype.png" alt="ArtComputer Logotype">
     </div>
-    <a href="clock" style="text-decoration: none">
-        <div id="clock" style="float:right;">
-
+    <div style="display: flex;  flex-wrap: wrap;; justify-content: center">
+        <div style="max-width: 150px; margin: 5px  ">
+            <img src="image/per.png" alt="picture of Per">
         </div>
-    </a>
-    <h1>Welcome</h1>
-    <p>
-        Welcome to the Art of Computer Programming. I am Per Lundholm and ArtComputer is my company. I am a member
-        of <a href="https://crisp.se">Crisp</a>, a world known brand within agile development.
-        I have been a professional programmer for 40 years and here is
-        what I have come to believe on the subject.
-    </p>
-    <p>
-        I will speak about craftsmanship, architecture and people. I will speak about Readability, Refactoring,
-        Retrospectives, Resources, Responsibility, Respect.
-    </p>
-    <p>
-        <i>If you wonder about the clock, it is written using my current passion, <a href="https://elm-lang.org">the Elm
-            language</a>. If you click on it, you get a full size version.</i>
-    </p>
+        <div style="max-width: 850px">
+            <h1>Welcome</h1>
+            <p>
+                Welcome to the Art of Computer Programming. I am Per Lundholm and ArtComputer is my company. I am a
+                member
+                of <a href="https://crisp.se">Crisp</a>, a world known brand within agile development.
+                I have been a professional programmer for 40 years and here is
+                what I have come to believe on the subject.
+            </p>
+            <p>
+                I will speak about craftsmanship, architecture and people. I will speak about Readability, Refactoring,
+                Retrospectives, Resources, Responsibility, Respect.
+            </p>
+        </div>
+    </div>
     <h2>Craftsmanship</h2>
     <p>
-        Programming is a craft. We do not create the same piece of software over and over again. Each time we solve a
+        Programming is a craft. We do not create the same piece of software over and over again. Each time we
+        solve a
         new
-        problem. We like to look at well crafted code but we have different opinions on what "well crafted" means.
+        problem. We like to look at well crafted code but we have different opinions on what "well crafted"
+        means.
     </p>
     <p>
         The first thing about craftsmanship is <b>refactoring</b>. Code is never well written on first attempt.
@@ -64,6 +65,7 @@
         anything complicated. Instead, we learn about the problem as we go. Therefore, to create well crafted code,
         you need to refactor it. You can not simply stop because you got it working.
     </p>
+
     <h3>Refactoring</h3>
     <p>
         When you refactor, you change the code without changing its behaviour. To guarantee that, you need to have <b>tests</b>
@@ -163,6 +165,15 @@
     </p>
 </div>
 <hr/>
+<div>
+    <p>Thanks for taking your time to read this. Click on the clock for a full screen version.
+        Note that some browser may not reveal your time zone, so you may get the UTC version.</p>
+    <a href="clock" style="text-decoration: none">
+        <div id="clock" style="float:right;">
+
+        </div>
+    </a>
+</div>
 <script type="text/javascript">
     var clockDiv = document.getElementById('clock');
     Elm.Clock.init({node: clockDiv});
