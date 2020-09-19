@@ -36,25 +36,19 @@
         <a class="current" href="/">Home</a>
         <a href="/sponsor.html">Sponsorship</a>
     </nav>
-    <div style="display: flex;  flex-wrap: wrap;; justify-content: center">
-        <div style="max-width: 150px; margin: 5px  ">
-            <img src="image/per.png" alt="picture of Per">
-        </div>
-        <div style="max-width: 850px">
-            <h1>Welcome</h1>
-            <p>
-                Welcome to the Art of Computer Programming. I am Per Lundholm and ArtComputer is my company. I am a
-                member
-                of <a href="https://crisp.se">Crisp</a>, a world known brand within agile development.
-                I have been a professional programmer for 40 years and here is
-                what I have come to believe on the subject.
-            </p>
-            <p>
-                I will speak about craftsmanship, architecture and people. I will speak about Readability, Refactoring,
-                Retrospectives, Resources, Responsibility, Respect.
-            </p>
-        </div>
-    </div>
+    <img src="image/per.png" alt="picture of Per" style="max-width: 150px; float: left ; margin-left: 0">
+    <h1>Welcome</h1>
+    <p>
+        Welcome to the Art of Computer Programming. I am Per Lundholm and ArtComputer is my company. I am a
+        member
+        of <a href="https://crisp.se">Crisp</a>, a world known brand within agile development.
+        I have been a professional programmer for 40 years and here is
+        what I have come to believe on the subject.
+    </p>
+    <p>
+        I will speak about craftsmanship, architecture and people. I will speak about Readability, Refactoring,
+        Retrospectives, Resources, Responsibility, Respect.
+    </p>
     <h2>Craftsmanship</h2>
     <p>
         Programming is a craft. We do not create the same piece of software over and over again. Each time we
@@ -64,7 +58,8 @@
         means.
     </p>
     <p>
-        The first thing about craftsmanship is <b>refactoring</b>. Code is never well written on first attempt.
+        The first thing about craftsmanship is <strong>refactoring</strong>. Code is never well written on first
+        attempt.
         We simply can not just sit down and type well crafted code from scratch. If we could, we would not be solving
         anything complicated. Instead, we learn about the problem as we go. Therefore, to create well crafted code,
         you need to refactor it. You can not simply stop because you got it working.
@@ -72,7 +67,8 @@
 
     <h3>Refactoring</h3>
     <p>
-        When you refactor, you change the code without changing its behaviour. To guarantee that, you need to have <b>tests</b>
+        When you refactor, you change the code without changing its behaviour. To guarantee that, you need to have
+        <strong>tests</strong>
         that will tell you when your changes break the code. Tests shall also be well crafted, of course. Serving as a
         specification, they should not be coupled to the implementation.
     </p>
@@ -82,7 +78,8 @@
         needs tests.
     </div>
     <p>
-        When your code pass the tests, you can start looking at <b>readability</b>. Never be proud of being able to read
+        When your code pass the tests, you can start looking at <strong>readability</strong>. Never be proud of being
+        able to read
         cryptic code, be proud of writing code that reads like running water. I have written <a
             href="https://blog.crisp.se/2015/03/05/perlundholm/7-rules-on-code-readability">7 rules on
         code readability</a> which you may enjoy but there are more sources out there.
@@ -156,7 +153,7 @@
         systems have structures of different kinds, such as how data flows and nodes. These structures affect the
         system's qualities, such as security and performance. If you <a
             href="https://en.wikipedia.org/wiki/List_of_system_quality_attributes">search the internet</a>, you'll find
-        many sets of qualities to look for. Let me give you one set by the acronym <b>STAMPUS</b>.
+        many sets of qualities to look for. Let me give you one set by the acronym <strong>STAMPUS</strong>.
     </p>
     <p>
         STAMPUS stands for Security, Testability, Availability, Modifiability, Performance, Usability and Scalability.
@@ -167,9 +164,7 @@
             href="https://blog.crisp.se/2012/11/18/perlundholm/why-do-we-never-get-the-time-to-work-on-system-architecture">why
         do we never get the time to work on system architecture</a> to find short explanations on these attributes.
     </p>
-</div>
-<hr/>
-<div>
+    <hr/>
     <p>Thanks for taking your time to read this. Click on the clock for a full screen version.
         Note that some browser may not reveal your time zone, so you may get the UTC version.</p>
     <a href="clock" style="text-decoration: none">
@@ -179,8 +174,7 @@
     </a>
 </div>
 <script type="text/javascript">
-    var clockDiv = document.getElementById('clock');
-    Elm.Clock.init({node: clockDiv});
+    Elm.Clock.init({node: document.getElementById('clock')});
 </script>
 </body>
 </html>
