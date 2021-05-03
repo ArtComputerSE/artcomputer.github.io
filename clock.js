@@ -5145,6 +5145,9 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Clock$GetViewPort = function (a) {
+	return {$: 'GetViewPort', a: a};
+};
 var $author$project$Clock$ReceiveTimeZone = function (a) {
 	return {$: 'ReceiveTimeZone', a: a};
 };
@@ -5176,6 +5179,8 @@ var $elm$core$Task$attempt = F2(
 							$elm$core$Result$Ok),
 						task))));
 	});
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
 var $justinmimbs$timezone_data$TimeZone$NoDataForZoneName = function (a) {
 	return {$: 'NoDataForZoneName', a: a};
 };
@@ -24031,14 +24036,33 @@ var $elm$time$Time$utc = A2($elm$time$Time$Zone, 0, _List_Nil);
 var $author$project$Clock$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
+			busyHours: _List_Nil,
+			clockWidth: '300px',
+			colourInput: '',
+			endHourInput: '',
+			endMinuteInput: '',
+			error: '',
+			showBusyDialog: false,
+			startHourInput: '',
+			startMinuteInput: '',
 			time: A3($author$project$Clock$TimeOfDay, 0, 0, 0),
 			timeZone: $elm$time$Time$utc
 		},
-		A2($elm$core$Task$attempt, $author$project$Clock$ReceiveTimeZone, $justinmimbs$timezone_data$TimeZone$getZone));
+		$elm$core$Platform$Cmd$batch(
+			_List_fromArray(
+				[
+					A2($elm$core$Task$attempt, $author$project$Clock$ReceiveTimeZone, $justinmimbs$timezone_data$TimeZone$getZone),
+					A2($elm$core$Task$perform, $author$project$Clock$GetViewPort, $elm$browser$Browser$Dom$getViewport)
+				])));
 };
 var $author$project$Clock$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
+var $author$project$Clock$WindowResize = F2(
+	function (a, b) {
+		return {$: 'WindowResize', a: a, b: b};
+	});
+var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$time$Time$Every = F2(
 	function (a, b) {
 		return {$: 'Every', a: a, b: b};
@@ -24296,9 +24320,232 @@ var $elm$time$Time$every = F2(
 		return $elm$time$Time$subscription(
 			A2($elm$time$Time$Every, interval, tagger));
 	});
+var $elm$browser$Browser$Events$Window = {$: 'Window'};
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$browser$Browser$Events$MySub = F3(
+	function (a, b, c) {
+		return {$: 'MySub', a: a, b: b, c: c};
+	});
+var $elm$browser$Browser$Events$State = F2(
+	function (subs, pids) {
+		return {pids: pids, subs: subs};
+	});
+var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
+	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
+var $elm$browser$Browser$Events$nodeToKey = function (node) {
+	if (node.$ === 'Document') {
+		return 'd_';
+	} else {
+		return 'w_';
+	}
+};
+var $elm$browser$Browser$Events$addKey = function (sub) {
+	var node = sub.a;
+	var name = sub.b;
+	return _Utils_Tuple2(
+		_Utils_ap(
+			$elm$browser$Browser$Events$nodeToKey(node),
+			name),
+		sub);
+};
+var $elm$browser$Browser$Events$Event = F2(
+	function (key, event) {
+		return {event: event, key: key};
+	});
+var $elm$browser$Browser$Events$spawn = F3(
+	function (router, key, _v0) {
+		var node = _v0.a;
+		var name = _v0.b;
+		var actualNode = function () {
+			if (node.$ === 'Document') {
+				return _Browser_doc;
+			} else {
+				return _Browser_window;
+			}
+		}();
+		return A2(
+			$elm$core$Task$map,
+			function (value) {
+				return _Utils_Tuple2(key, value);
+			},
+			A3(
+				_Browser_on,
+				actualNode,
+				name,
+				function (event) {
+					return A2(
+						$elm$core$Platform$sendToSelf,
+						router,
+						A2($elm$browser$Browser$Events$Event, key, event));
+				}));
+	});
+var $elm$core$Dict$union = F2(
+	function (t1, t2) {
+		return A3($elm$core$Dict$foldl, $elm$core$Dict$insert, t2, t1);
+	});
+var $elm$browser$Browser$Events$onEffects = F3(
+	function (router, subs, state) {
+		var stepRight = F3(
+			function (key, sub, _v6) {
+				var deads = _v6.a;
+				var lives = _v6.b;
+				var news = _v6.c;
+				return _Utils_Tuple3(
+					deads,
+					lives,
+					A2(
+						$elm$core$List$cons,
+						A3($elm$browser$Browser$Events$spawn, router, key, sub),
+						news));
+			});
+		var stepLeft = F3(
+			function (_v4, pid, _v5) {
+				var deads = _v5.a;
+				var lives = _v5.b;
+				var news = _v5.c;
+				return _Utils_Tuple3(
+					A2($elm$core$List$cons, pid, deads),
+					lives,
+					news);
+			});
+		var stepBoth = F4(
+			function (key, pid, _v2, _v3) {
+				var deads = _v3.a;
+				var lives = _v3.b;
+				var news = _v3.c;
+				return _Utils_Tuple3(
+					deads,
+					A3($elm$core$Dict$insert, key, pid, lives),
+					news);
+			});
+		var newSubs = A2($elm$core$List$map, $elm$browser$Browser$Events$addKey, subs);
+		var _v0 = A6(
+			$elm$core$Dict$merge,
+			stepLeft,
+			stepBoth,
+			stepRight,
+			state.pids,
+			$elm$core$Dict$fromList(newSubs),
+			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
+		var deadPids = _v0.a;
+		var livePids = _v0.b;
+		var makeNewPids = _v0.c;
+		return A2(
+			$elm$core$Task$andThen,
+			function (pids) {
+				return $elm$core$Task$succeed(
+					A2(
+						$elm$browser$Browser$Events$State,
+						newSubs,
+						A2(
+							$elm$core$Dict$union,
+							livePids,
+							$elm$core$Dict$fromList(pids))));
+			},
+			A2(
+				$elm$core$Task$andThen,
+				function (_v1) {
+					return $elm$core$Task$sequence(makeNewPids);
+				},
+				$elm$core$Task$sequence(
+					A2($elm$core$List$map, $elm$core$Process$kill, deadPids))));
+	});
+var $elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _v0 = f(mx);
+		if (_v0.$ === 'Just') {
+			var x = _v0.a;
+			return A2($elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var $elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			$elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
+var $elm$browser$Browser$Events$onSelfMsg = F3(
+	function (router, _v0, state) {
+		var key = _v0.key;
+		var event = _v0.event;
+		var toMessage = function (_v2) {
+			var subKey = _v2.a;
+			var _v3 = _v2.b;
+			var node = _v3.a;
+			var name = _v3.b;
+			var decoder = _v3.c;
+			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
+		};
+		var messages = A2($elm$core$List$filterMap, toMessage, state.subs);
+		return A2(
+			$elm$core$Task$andThen,
+			function (_v1) {
+				return $elm$core$Task$succeed(state);
+			},
+			$elm$core$Task$sequence(
+				A2(
+					$elm$core$List$map,
+					$elm$core$Platform$sendToApp(router),
+					messages)));
+	});
+var $elm$browser$Browser$Events$subMap = F2(
+	function (func, _v0) {
+		var node = _v0.a;
+		var name = _v0.b;
+		var decoder = _v0.c;
+		return A3(
+			$elm$browser$Browser$Events$MySub,
+			node,
+			name,
+			A2($elm$json$Json$Decode$map, func, decoder));
+	});
+_Platform_effectManagers['Browser.Events'] = _Platform_createManager($elm$browser$Browser$Events$init, $elm$browser$Browser$Events$onEffects, $elm$browser$Browser$Events$onSelfMsg, 0, $elm$browser$Browser$Events$subMap);
+var $elm$browser$Browser$Events$subscription = _Platform_leaf('Browser.Events');
+var $elm$browser$Browser$Events$on = F3(
+	function (node, name, decoder) {
+		return $elm$browser$Browser$Events$subscription(
+			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
+	});
+var $elm$browser$Browser$Events$onResize = function (func) {
+	return A3(
+		$elm$browser$Browser$Events$on,
+		$elm$browser$Browser$Events$Window,
+		'resize',
+		A2(
+			$elm$json$Json$Decode$field,
+			'target',
+			A3(
+				$elm$json$Json$Decode$map2,
+				func,
+				A2($elm$json$Json$Decode$field, 'innerWidth', $elm$json$Json$Decode$int),
+				A2($elm$json$Json$Decode$field, 'innerHeight', $elm$json$Json$Decode$int))));
+};
 var $author$project$Clock$second = 1000;
 var $author$project$Clock$subscriptions = function (_v0) {
-	return A2($elm$time$Time$every, $author$project$Clock$second, $author$project$Clock$Tick);
+	return $elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				A2($elm$time$Time$every, $author$project$Clock$second, $author$project$Clock$Tick),
+				$elm$browser$Browser$Events$onResize($author$project$Clock$WindowResize)
+			]));
+};
+var $elm$core$Result$andThen = F2(
+	function (callback, result) {
+		if (result.$ === 'Ok') {
+			var value = result.a;
+			return callback(value);
+		} else {
+			var msg = result.a;
+			return $elm$core$Result$Err(msg);
+		}
+	});
+var $author$project$Clock$calculateWidth = function (min) {
+	return $elm$core$String$fromInt(min - 10) + 'px';
 };
 var $elm$time$Time$flooredDiv = F2(
 	function (numerator, denominator) {
@@ -24379,45 +24626,408 @@ var $author$project$Clock$dateFromPosix = F2(
 			A2($elm$time$Time$toMinute, zone, time),
 			A2($elm$time$Time$toSecond, zone, time));
 	});
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Clock$update = F2(
-	function (msg, model) {
-		if (msg.$ === 'Tick') {
-			var newTime = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{
-						time: A2($author$project$Clock$dateFromPosix, model.timeZone, newTime)
-					}),
-				$elm$core$Platform$Cmd$none);
+var $elm$core$Result$fromMaybe = F2(
+	function (err, maybe) {
+		if (maybe.$ === 'Just') {
+			var v = maybe.a;
+			return $elm$core$Result$Ok(v);
 		} else {
-			if (msg.a.$ === 'Ok') {
-				var _v1 = msg.a.a;
-				var zone = _v1.b;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{timeZone: zone}),
-					$elm$core$Platform$Cmd$none);
+			return $elm$core$Result$Err(err);
+		}
+	});
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Result$map5 = F6(
+	function (func, ra, rb, rc, rd, re) {
+		if (ra.$ === 'Err') {
+			var x = ra.a;
+			return $elm$core$Result$Err(x);
+		} else {
+			var a = ra.a;
+			if (rb.$ === 'Err') {
+				var x = rb.a;
+				return $elm$core$Result$Err(x);
 			} else {
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				var b = rb.a;
+				if (rc.$ === 'Err') {
+					var x = rc.a;
+					return $elm$core$Result$Err(x);
+				} else {
+					var c = rc.a;
+					if (rd.$ === 'Err') {
+						var x = rd.a;
+						return $elm$core$Result$Err(x);
+					} else {
+						var d = rd.a;
+						if (re.$ === 'Err') {
+							var x = re.a;
+							return $elm$core$Result$Err(x);
+						} else {
+							var e = re.a;
+							return $elm$core$Result$Ok(
+								A5(func, a, b, c, d, e));
+						}
+					}
+				}
 			}
 		}
 	});
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $elm$core$Basics$round = _Basics_round;
+var $elm$core$String$trim = _String_trim;
+var $author$project$Clock$update = F2(
+	function (msg, model) {
+		switch (msg.$) {
+			case 'Tick':
+				var newTime = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							time: A2($author$project$Clock$dateFromPosix, model.timeZone, newTime)
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'ReceiveTimeZone':
+				if (msg.a.$ === 'Ok') {
+					var _v1 = msg.a.a;
+					var zone = _v1.b;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{timeZone: zone}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 'GetViewPort':
+				var viewPort = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							clockWidth: $author$project$Clock$calculateWidth(
+								$elm$core$Basics$round(
+									A2($elm$core$Basics$min, viewPort.viewport.width, viewPort.viewport.height)))
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'WindowResize':
+				var width = msg.a;
+				var height = msg.b;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							clockWidth: $author$project$Clock$calculateWidth(
+								A2($elm$core$Basics$min, width, height))
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'ShowBusyDialog':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{showBusyDialog: true}),
+					$elm$core$Platform$Cmd$none);
+			case 'UpdateStartHour':
+				var hour = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{startHourInput: hour}),
+					$elm$core$Platform$Cmd$none);
+			case 'UpdateStartMinute':
+				var minute = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{startMinuteInput: minute}),
+					$elm$core$Platform$Cmd$none);
+			case 'UpdateEndHour':
+				var hour = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{endHourInput: hour}),
+					$elm$core$Platform$Cmd$none);
+			case 'UpdateEndMinute':
+				var minute = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{endMinuteInput: minute}),
+					$elm$core$Platform$Cmd$none);
+			case 'UpdateColour':
+				var colour = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{colourInput: colour}),
+					$elm$core$Platform$Cmd$none);
+			case 'AddBusyClicked':
+				var stringToInt = F2(
+					function (string, max) {
+						return A2(
+							$elm$core$Result$andThen,
+							function (h) {
+								return ((h >= 0) && (_Utils_cmp(h, max) < 0)) ? $elm$core$Result$Ok(h) : $elm$core$Result$Err(
+									'Must be between 0 and ' + ($elm$core$String$fromInt(max) + (': ' + string)));
+							},
+							A2(
+								$elm$core$Result$fromMaybe,
+								'Error parsing string: ' + string,
+								$elm$core$String$toInt(
+									$elm$core$String$trim(string))));
+					});
+				var startMinute = A2(stringToInt, model.startMinuteInput, 60);
+				var startHour = A2(stringToInt, model.startHourInput, 24);
+				var endMinute = A2(stringToInt, model.endMinuteInput, 60);
+				var endHour = A2(stringToInt, model.endHourInput, 24);
+				var colour = ($elm$core$String$length(model.colourInput) > 2) ? $elm$core$Result$Ok(model.colourInput) : $elm$core$Result$Err('No colour selected.');
+				var busy = A6(
+					$elm$core$Result$map5,
+					F5(
+						function (sh, sm, eh, em, c) {
+							return {
+								colour: c,
+								endTime: {hour: eh, minute: em, second: 0},
+								startTime: {hour: sh, minute: sm, second: 0}
+							};
+						}),
+					startHour,
+					startMinute,
+					endHour,
+					endMinute,
+					colour);
+				return _Utils_Tuple2(
+					function () {
+						if (busy.$ === 'Ok') {
+							var b = busy.a;
+							return _Utils_update(
+								model,
+								{
+									busyHours: A2($elm$core$List$cons, b, model.busyHours),
+									colourInput: '',
+									endHourInput: '',
+									endMinuteInput: '',
+									error: '',
+									startHourInput: '',
+									startMinuteInput: ''
+								});
+						} else {
+							var error = busy.a;
+							return _Utils_update(
+								model,
+								{error: error});
+						}
+					}(),
+					$elm$core$Platform$Cmd$none);
+			case 'DoneButtonClicked':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{showBusyDialog: false}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var busy = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							busyHours: A2(
+								$elm$core$List$filter,
+								function (b) {
+									return !_Utils_eq(b, busy);
+								},
+								model.busyHours)
+						}),
+					$elm$core$Platform$Cmd$none);
+		}
+	});
+var $author$project$Clock$ShowBusyDialog = {$: 'ShowBusyDialog'};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $author$project$Clock$arcToInner = F4(
+	function (large, r, x, y) {
+		return A2(
+			$elm$core$String$join,
+			' ',
+			_List_fromArray(
+				[
+					'A',
+					$elm$core$String$fromInt(r),
+					$elm$core$String$fromInt(r),
+					large ? '0 1 0' : '0 0 0',
+					$elm$core$String$fromFloat(x),
+					$elm$core$String$fromFloat(y)
+				]));
+	});
+var $author$project$Clock$arcToOuter = F4(
+	function (large, r, x, y) {
+		return A2(
+			$elm$core$String$join,
+			' ',
+			_List_fromArray(
+				[
+					'A',
+					$elm$core$String$fromInt(r),
+					$elm$core$String$fromInt(r),
+					large ? '0 1 1' : '0 0 1',
+					$elm$core$String$fromFloat(x),
+					$elm$core$String$fromFloat(y)
+				]));
+	});
+var $elm$core$Basics$cos = _Basics_cos;
+var $elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
+var $elm$core$Basics$pi = _Basics_pi;
+var $elm$core$Basics$degrees = function (angleInDegrees) {
+	return (angleInDegrees * $elm$core$Basics$pi) / 180;
+};
+var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var $elm$svg$Svg$Attributes$opacity = _VirtualDom_attribute('opacity');
 var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var $elm$svg$Svg$path = $elm$svg$Svg$trustedNode('path');
+var $author$project$Clock$pathLineTo = F2(
+	function (x, y) {
+		return 'L ' + ($elm$core$String$fromFloat(x) + (' ' + $elm$core$String$fromFloat(y)));
+	});
+var $author$project$Clock$pathMoveTo = F2(
+	function (x, y) {
+		return 'M ' + ($elm$core$String$fromFloat(x) + (' ' + $elm$core$String$fromFloat(y)));
+	});
+var $elm$core$Basics$sin = _Basics_sin;
+var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
+var $author$project$Clock$segment = F3(
+	function (startTime, endTime, colour) {
+		var outerEnd = 48;
+		var minuteDiff = $elm$core$Basics$abs(((endTime.hour * 5) + ((endTime.minute / 12) | 0)) - ((startTime.hour * 5) + ((startTime.minute / 12) | 0)));
+		var innerStart = 42;
+		var hour12 = function (time) {
+			return A2($elm$core$Basics$modBy, 12, time.hour);
+		};
+		var hourMin = function (time) {
+			return (hour12(time) * 5.0) + (time.minute / 12.0);
+		};
+		var time2Angle = function (time) {
+			return ($elm$core$Basics$degrees(
+				hourMin(time) - 15.0) * 360) / 60.0;
+		};
+		var startAngle = time2Angle(startTime);
+		var endAngle = time2Angle(endTime);
+		var parts = A2(
+			$elm$core$String$join,
+			' ',
+			_List_fromArray(
+				[
+					A2(
+					$author$project$Clock$pathMoveTo,
+					$elm$core$Basics$cos(startAngle) * innerStart,
+					$elm$core$Basics$sin(startAngle) * innerStart),
+					A2(
+					$author$project$Clock$pathLineTo,
+					$elm$core$Basics$cos(startAngle) * outerEnd,
+					$elm$core$Basics$sin(startAngle) * outerEnd),
+					A4(
+					$author$project$Clock$arcToOuter,
+					minuteDiff >= 30,
+					outerEnd,
+					$elm$core$Basics$cos(endAngle) * outerEnd,
+					$elm$core$Basics$sin(endAngle) * outerEnd),
+					A2(
+					$author$project$Clock$pathLineTo,
+					$elm$core$Basics$cos(endAngle) * innerStart,
+					$elm$core$Basics$sin(endAngle) * innerStart),
+					A4(
+					$author$project$Clock$arcToInner,
+					minuteDiff >= 30,
+					innerStart,
+					$elm$core$Basics$cos(startAngle) * innerStart,
+					$elm$core$Basics$sin(startAngle) * innerStart)
+				]));
+		return A2(
+			$elm$svg$Svg$path,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$d(parts),
+					$elm$svg$Svg$Attributes$fill(colour),
+					$elm$svg$Svg$Attributes$stroke(colour),
+					$elm$svg$Svg$Attributes$opacity('0.5')
+				]),
+			_List_Nil);
+	});
+var $author$project$Clock$busySegments = function (busies) {
+	return A2(
+		$elm$core$List$map,
+		function (b) {
+			return A3($author$project$Clock$segment, b.startTime, b.endTime, b.colour);
+		},
+		busies);
+};
 var $elm$svg$Svg$circle = $elm$svg$Svg$trustedNode('circle');
 var $elm$svg$Svg$Attributes$cx = _VirtualDom_attribute('cx');
 var $elm$svg$Svg$Attributes$cy = _VirtualDom_attribute('cy');
-var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var $elm$svg$Svg$Attributes$points = _VirtualDom_attribute('points');
+var $elm$svg$Svg$polygon = $elm$svg$Svg$trustedNode('polygon');
+var $elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
+var $author$project$Clock$letterE = A2(
+	$elm$svg$Svg$polygon,
+	_List_fromArray(
+		[
+			$elm$svg$Svg$Attributes$points('0,0 0,9 1,9 1,8.5 0.5,8.5 0.5,5 0.75,5 0.75,4 0.5,4 0.5,1 1,1 1,0'),
+			$elm$svg$Svg$Attributes$transform('translate(-3,15)')
+		]),
+	_List_Nil);
+var $author$project$Clock$letterL = A2(
+	$elm$svg$Svg$polygon,
+	_List_fromArray(
+		[
+			$elm$svg$Svg$Attributes$points('0,0 0,1 0.5,1 0.5,9 1,9 1,8.5 0.5,8.5 0.5,0'),
+			$elm$svg$Svg$Attributes$transform('translate(0,15)')
+		]),
+	_List_Nil);
+var $author$project$Clock$letterM = _List_fromArray(
+	[
+		A2(
+		$elm$svg$Svg$polygon,
+		_List_fromArray(
+			[
+				$elm$svg$Svg$Attributes$points('0,4 0,9 0.25,9 0.25,4 '),
+				$elm$svg$Svg$Attributes$transform('translate(3,15)')
+			]),
+		_List_Nil),
+		A2(
+		$elm$svg$Svg$polygon,
+		_List_fromArray(
+			[
+				$elm$svg$Svg$Attributes$points('0.25,5 4,5 4,5.5 0.25,5.5 '),
+				$elm$svg$Svg$Attributes$transform('translate(3,15)')
+			]),
+		_List_Nil),
+		A2(
+		$elm$svg$Svg$polygon,
+		_List_fromArray(
+			[
+				$elm$svg$Svg$Attributes$points('4,5.5 4,9 3.75,9 3.75,5.5'),
+				$elm$svg$Svg$Attributes$transform('translate(3,15)')
+			]),
+		_List_Nil),
+		A2(
+		$elm$svg$Svg$polygon,
+		_List_fromArray(
+			[
+				$elm$svg$Svg$Attributes$points('2,5.5 2,9 1.75,9 1.75,5.5'),
+				$elm$svg$Svg$Attributes$transform('translate(3,15)')
+			]),
+		_List_Nil)
+	]);
 var $elm$svg$Svg$Attributes$r = _VirtualDom_attribute('r');
-var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$svg$Svg$line = $elm$svg$Svg$trustedNode('line');
 var $author$project$Clock$minuteToAngle = function (minute) {
 	return ((minute - 15.0) * 360) / 60.0;
 };
-var $elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
 var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
 var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
 var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
@@ -24454,15 +25064,15 @@ var $author$project$Clock$clockFace = _Utils_ap(
 					$elm$svg$Svg$Attributes$r('49'),
 					$elm$svg$Svg$Attributes$fill('white')
 				]),
-			_List_Nil)
+			_List_Nil),
+			$author$project$Clock$letterE,
+			$author$project$Clock$letterL
 		]),
-	$author$project$Clock$tickMarks);
+	_Utils_ap($author$project$Clock$letterM, $author$project$Clock$tickMarks));
 var $elm$svg$Svg$g = $elm$svg$Svg$trustedNode('g');
-var $author$project$Clock$hourMinute = function (theDateNow) {
-	return (A2($elm$core$Basics$modBy, 12, theDateNow.hour) * 5) + ((theDateNow.minute / 12) | 0);
+var $author$project$Clock$hourMinute = function (theTimeNow) {
+	return (A2($elm$core$Basics$modBy, 12, theTimeNow.hour) * 5) + ((theTimeNow.minute / 12) | 0);
 };
-var $elm$svg$Svg$Attributes$points = _VirtualDom_attribute('points');
-var $elm$svg$Svg$polygon = $elm$svg$Svg$trustedNode('polygon');
 var $author$project$Clock$xLine = F2(
 	function (start, end) {
 		return A2(
@@ -24502,8 +25112,8 @@ var $author$project$Clock$hourHand = function (theDateNow) {
 				]))
 		]);
 };
-var $author$project$Clock$minutesHand = function (theDateNow) {
-	var angle = $author$project$Clock$minuteToAngle(theDateNow.minute);
+var $author$project$Clock$minutesHand = function (theTimeNow) {
+	var angle = $author$project$Clock$minuteToAngle(theTimeNow.minute);
 	return _List_fromArray(
 		[
 			A2(
@@ -24527,9 +25137,26 @@ var $author$project$Clock$minutesHand = function (theDateNow) {
 				]))
 		]);
 };
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$svg$Svg$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $elm$svg$Svg$Attributes$fillOpacity = _VirtualDom_attribute('fill-opacity');
-var $author$project$Clock$secondsHand = function (theDateNow) {
-	var angle = $author$project$Clock$minuteToAngle(theDateNow.second);
+var $author$project$Clock$secondsHand = function (theTimeNow) {
+	var angle = $author$project$Clock$minuteToAngle(theTimeNow.second);
 	return _List_fromArray(
 		[
 			A2(
@@ -24556,53 +25183,367 @@ var $author$project$Clock$secondsHand = function (theDateNow) {
 				]))
 		]);
 };
-var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
-var $author$project$Clock$clockFn = function (theDateNow) {
-	return _List_fromArray(
-		[
-			A2(
-			$elm$svg$Svg$g,
-			_List_fromArray(
-				[
-					$elm$svg$Svg$Attributes$fill('black'),
-					$elm$svg$Svg$Attributes$stroke('black'),
-					$elm$svg$Svg$Attributes$transform('translate(50,50)')
-				]),
-			_Utils_ap(
-				$author$project$Clock$clockFace,
+var $author$project$Clock$clockFn = F2(
+	function (busyHours, theDateNow) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$g,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$fill('black'),
+						$elm$svg$Svg$Attributes$stroke('black'),
+						$elm$svg$Svg$Attributes$transform('translate(50,50)'),
+						$elm$svg$Svg$Events$onClick($author$project$Clock$ShowBusyDialog)
+					]),
 				_Utils_ap(
-					$author$project$Clock$hourHand(theDateNow),
+					$author$project$Clock$clockFace,
 					_Utils_ap(
-						$author$project$Clock$minutesHand(theDateNow),
-						$author$project$Clock$secondsHand(theDateNow)))))
-		]);
-};
+						$author$project$Clock$busySegments(busyHours),
+						_Utils_ap(
+							$author$project$Clock$hourHand(theDateNow),
+							_Utils_ap(
+								$author$project$Clock$minutesHand(theDateNow),
+								$author$project$Clock$secondsHand(theDateNow))))))
+			]);
+	});
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Clock$AddBusyClicked = {$: 'AddBusyClicked'};
+var $author$project$Clock$DoneButtonClicked = {$: 'DoneButtonClicked'};
+var $author$project$Clock$UpdateEndHour = function (a) {
+	return {$: 'UpdateEndHour', a: a};
+};
+var $author$project$Clock$UpdateEndMinute = function (a) {
+	return {$: 'UpdateEndMinute', a: a};
+};
+var $author$project$Clock$UpdateStartHour = function (a) {
+	return {$: 'UpdateStartHour', a: a};
+};
+var $author$project$Clock$UpdateStartMinute = function (a) {
+	return {$: 'UpdateStartMinute', a: a};
+};
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $author$project$Clock$UpdateColour = function (a) {
+	return {$: 'UpdateColour', a: a};
+};
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$html$Html$option = _VirtualDom_node('option');
+var $elm$html$Html$select = _VirtualDom_node('select');
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Clock$colorSelector = function (_v0) {
+	var color2Option = function (colour) {
+		return A2(
+			$elm$html$Html$option,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$value(colour)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(colour)
+				]));
+	};
+	var options = A2(
+		$elm$core$List$map,
+		color2Option,
+		_List_fromArray(
+			['pick a color', 'red', 'green', 'yellow', 'blue', 'grey']));
+	return A2(
+		$elm$html$Html$select,
+		_List_fromArray(
+			[
+				$elm$html$Html$Events$onInput($author$project$Clock$UpdateColour)
+			]),
+		options);
+};
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
+var $author$project$Clock$viewBusyControls = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onInput($author$project$Clock$UpdateStartHour),
+								$elm$html$Html$Attributes$value(model.startHourInput)
+							]),
+						_List_Nil),
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onInput($author$project$Clock$UpdateStartMinute),
+								$elm$html$Html$Attributes$value(model.startMinuteInput)
+							]),
+						_List_Nil),
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onInput($author$project$Clock$UpdateEndHour),
+								$elm$html$Html$Attributes$value(model.endHourInput)
+							]),
+						_List_Nil),
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onInput($author$project$Clock$UpdateEndMinute),
+								$elm$html$Html$Attributes$value(model.endMinuteInput)
+							]),
+						_List_Nil),
+						$author$project$Clock$colorSelector(model),
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$type_('submit'),
+								$elm$html$Html$Events$onClick($author$project$Clock$AddBusyClicked)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Add')
+							]))
+					])),
+				$elm$html$Html$text(model.error),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$type_('submit'),
+						$elm$html$Html$Events$onClick($author$project$Clock$DoneButtonClicked),
+						$elm$svg$Svg$Attributes$width('100%')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Done')
+					]))
+			]));
+};
+var $elm$html$Html$table = _VirtualDom_node('table');
+var $elm$html$Html$tbody = _VirtualDom_node('tbody');
+var $elm$html$Html$th = _VirtualDom_node('th');
+var $elm$html$Html$thead = _VirtualDom_node('thead');
+var $elm$html$Html$tr = _VirtualDom_node('tr');
+var $author$project$Clock$RemoveBusy = function (a) {
+	return {$: 'RemoveBusy', a: a};
+};
+var $author$project$Clock$busyToString = function (timeOfDay) {
+	return A2(
+		$elm$core$String$join,
+		':',
+		_List_fromArray(
+			[
+				$elm$core$String$fromInt(timeOfDay.hour),
+				$elm$core$String$fromInt(timeOfDay.minute)
+			]));
+};
+var $elm$html$Html$td = _VirtualDom_node('td');
+var $author$project$Clock$viewBusy = function (busy) {
+	return A2(
+		$elm$html$Html$tr,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$Clock$busyToString(busy.startTime))
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$Clock$busyToString(busy.endTime))
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(busy.colour)
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick(
+								$author$project$Clock$RemoveBusy(busy))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('X')
+							]))
+					]))
+			]));
+};
+var $author$project$Clock$viewBusyHours = function (busies) {
+	return A2(
+		$elm$html$Html$table,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$thead,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$tr,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$th,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Start')
+									])),
+								A2(
+								$elm$html$Html$th,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('End')
+									])),
+								A2(
+								$elm$html$Html$th,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Colour')
+									])),
+								A2(
+								$elm$html$Html$th,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Remove')
+									]))
+							]))
+					])),
+				A2(
+				$elm$html$Html$tbody,
+				_List_Nil,
+				A2($elm$core$List$map, $author$project$Clock$viewBusy, busies))
+			]));
+};
+var $author$project$Clock$viewBusyDialog = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Busy hours'),
+				$author$project$Clock$viewBusyHours(model.busyHours),
+				$author$project$Clock$viewBusyControls(model)
+			]));
+};
 var $author$project$Clock$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				A2($elm$html$Html$Attributes$style, 'float', 'right'),
-				A2($elm$html$Html$Attributes$style, 'padding', '10px'),
-				A2($elm$html$Html$Attributes$style, 'border', 'solid 1px'),
-				A2($elm$html$Html$Attributes$style, 'max-width', '100px')
+				A2($elm$html$Html$Attributes$style, 'height', '100%'),
+				A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+				A2($elm$html$Html$Attributes$style, 'align-items', 'center'),
+				A2($elm$html$Html$Attributes$style, 'justify-content', 'center')
 			]),
 		_List_fromArray(
 			[
 				A2(
-				$elm$svg$Svg$svg,
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$svg$Svg$Attributes$viewBox('0 0 100 100'),
-						$elm$svg$Svg$Attributes$width('100px')
+						A2($elm$html$Html$Attributes$style, 'padding', '10px'),
+						A2($elm$html$Html$Attributes$style, 'max-width', model.clockWidth)
 					]),
-				$author$project$Clock$clockFn(model.time))
+				model.showBusyDialog ? _List_fromArray(
+					[
+						$author$project$Clock$viewBusyDialog(model)
+					]) : _List_fromArray(
+					[
+						A2(
+						$elm$svg$Svg$svg,
+						_List_fromArray(
+							[
+								$elm$svg$Svg$Attributes$viewBox('0 0 100 100'),
+								$elm$svg$Svg$Attributes$width(model.clockWidth)
+							]),
+						A2($author$project$Clock$clockFn, model.busyHours, model.time))
+					]))
 			]));
 };
 var $author$project$Clock$main = $elm$browser$Browser$element(
