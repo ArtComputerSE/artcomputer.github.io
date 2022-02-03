@@ -10622,25 +10622,25 @@ var $author$project$Main$spicyToString = function (sp) {
 			return 'Extreme';
 	}
 };
-var $author$project$Main$truthDareToString = function (truth) {
-	if (truth.$ === 'Truth') {
-		return 'Truth';
-	} else {
-		return 'Dare';
-	}
-};
 var $author$project$Main$getCards = function () {
 	var truthDare = _List_fromArray(
 		[$author$project$Main$Truth, $author$project$Main$Dare]);
 	var spicy = _List_fromArray(
 		[$author$project$Main$Green, $author$project$Main$Yellow, $author$project$Main$Red, $author$project$Main$Extreme]);
+	var salute = function (td) {
+		if (td.$ === 'Truth') {
+			return 'Hello <actor>, answer this: ';
+		} else {
+			return 'We dare you, <actor>! With <partner>, do ';
+		}
+	};
 	var mkCard = F3(
 		function (t, s, a) {
 			return {
 				audiences: _List_fromArray(
 					[a]),
 				spiciness: s,
-				text: 'Hello ' + ($author$project$Main$truthDareToString(t) + (' ' + ($author$project$Main$spicyToString(s) + (' ' + $author$project$Main$audienceToString(a))))),
+				text: salute(t) + ($author$project$Main$spicyToString(s) + (' ' + $author$project$Main$audienceToString(a))),
 				truthDare: t
 			};
 		});
@@ -10666,20 +10666,26 @@ var $author$project$Main$getCards = function () {
 					},
 					truthDare))));
 }();
+var $author$project$Main$DoWithBoth = {$: 'DoWithBoth'};
+var $author$project$Main$DoWithFemale = {$: 'DoWithFemale'};
+var $author$project$Main$DoWithMale = {$: 'DoWithMale'};
 var $author$project$Main$Female = {$: 'Female'};
 var $author$project$Main$Male = {$: 'Male'};
-var $author$project$Main$Participant = F2(
-	function (name, sex) {
-		return {name: name, sex: sex};
+var $author$project$Main$Participant = F3(
+	function (name, sex, doWith) {
+		return {doWith: doWith, name: name, sex: sex};
 	});
 var $author$project$Main$getParticipants = $elm$core$Array$fromList(
 	_List_fromArray(
 		[
-			A2($author$project$Main$Participant, 'Lasse', $author$project$Main$Male),
-			A2($author$project$Main$Participant, 'Miss Li', $author$project$Main$Female),
-			A2($author$project$Main$Participant, 'Kajsa', $author$project$Main$Female),
-			A2($author$project$Main$Participant, 'Olle', $author$project$Main$Male)
+			A3($author$project$Main$Participant, 'Henrik Hetero', $author$project$Main$Male, $author$project$Main$DoWithFemale),
+			A3($author$project$Main$Participant, 'Henrietta Hetero', $author$project$Main$Female, $author$project$Main$DoWithMale),
+			A3($author$project$Main$Participant, 'Bengt Bi', $author$project$Main$Male, $author$project$Main$DoWithBoth),
+			A3($author$project$Main$Participant, 'Barbara Bi', $author$project$Main$Female, $author$project$Main$DoWithBoth),
+			A3($author$project$Main$Participant, 'Hugo Homo', $author$project$Main$Male, $author$project$Main$DoWithMale),
+			A3($author$project$Main$Participant, 'Hanna Homo', $author$project$Main$Female, $author$project$Main$DoWithFemale)
 		]));
+var $author$project$Main$initEditParticipant = {doWith: $elm$core$Maybe$Nothing, name: '', sex: $elm$core$Maybe$Nothing};
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
@@ -10688,8 +10694,7 @@ var $author$project$Main$init = function (_v0) {
 			currentParticipantIndex: 0,
 			currentPartner: $elm$core$Maybe$Nothing,
 			editCard: {audiences: $Gizra$elm_all_set$EverySet$empty, spiciness: $elm$core$Maybe$Nothing, text: '', truthDare: $elm$core$Maybe$Nothing},
-			editParticipant: '',
-			editParticipantSex: $elm$core$Maybe$Nothing,
+			editParticipant: $author$project$Main$initEditParticipant,
 			participants: $author$project$Main$getParticipants,
 			setting: {audience: $elm$core$Maybe$Nothing, spiciness: $elm$core$Maybe$Nothing, truthDareRatio: 0.5},
 			viewMode: $author$project$Main$ViewCards
@@ -10856,15 +10861,6 @@ var $author$project$Main$pickNextParticipant = function (model) {
 				$elm$core$Array$length(model.participants)) > -1) ? 0 : (model.currentParticipantIndex + 1)
 		});
 };
-var $author$project$Main$currentParticipantName = function (model) {
-	var _v0 = A2($elm$core$Array$get, model.currentParticipantIndex, model.participants);
-	if (_v0.$ === 'Just') {
-		var p = _v0.a;
-		return p.name;
-	} else {
-		return '';
-	}
-};
 var $elm$core$Array$filter = F2(
 	function (isGood, array) {
 		return $elm$core$Array$fromList(
@@ -10877,6 +10873,18 @@ var $elm$core$Array$filter = F2(
 				_List_Nil,
 				array));
 	});
+var $author$project$Main$matchPartner = F2(
+	function (p1, p2) {
+		var _v0 = p1.doWith;
+		switch (_v0.$) {
+			case 'DoWithBoth':
+				return true;
+			case 'DoWithMale':
+				return _Utils_eq(p2.sex, $author$project$Main$Male);
+			default:
+				return _Utils_eq(p2.sex, $author$project$Main$Female);
+		}
+	});
 var $elm$core$Basics$round = _Basics_round;
 var $author$project$Main$pickRandom = F2(
 	function (random, list) {
@@ -10886,22 +10894,32 @@ var $author$project$Main$pickRandom = F2(
 	});
 var $author$project$Main$pickPartner = F2(
 	function (random, model) {
-		var partner = A2(
-			$author$project$Main$pickRandom,
-			random.randomPartner,
-			A2(
-				$elm$core$Array$filter,
-				function (p) {
-					return !_Utils_eq(
-						p.name,
-						$author$project$Main$currentParticipantName(model));
-				},
-				model.participants));
+		var partner = function () {
+			var _v0 = A2($elm$core$Array$get, model.currentParticipantIndex, model.participants);
+			if (_v0.$ === 'Just') {
+				var current = _v0.a;
+				return A2(
+					$author$project$Main$pickRandom,
+					random.randomPartner,
+					A2(
+						$elm$core$Array$filter,
+						function (p) {
+							return A2($author$project$Main$matchPartner, current, p) && A2($author$project$Main$matchPartner, p, current);
+						},
+						A2(
+							$elm$core$Array$filter,
+							function (p) {
+								return !_Utils_eq(p.name, current.name);
+							},
+							model.participants)));
+			} else {
+				return $elm$core$Maybe$Nothing;
+			}
+		}();
 		return _Utils_update(
 			model,
 			{currentPartner: partner});
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -10934,11 +10952,10 @@ var $elm$core$List$member = F2(
 	});
 var $author$project$Main$pickCard = F3(
 	function (random, cardKind, model) {
-		var _v0 = A2($elm$core$Debug$log, 'Picking of kind', cardKind);
-		var _v1 = _Utils_Tuple2(model.setting.spiciness, model.setting.audience);
-		if ((_v1.a.$ === 'Just') && (_v1.b.$ === 'Just')) {
-			var spiciness = _v1.a.a;
-			var audience = _v1.b.a;
+		var _v0 = _Utils_Tuple2(model.setting.spiciness, model.setting.audience);
+		if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
+			var spiciness = _v0.a.a;
+			var audience = _v0.b.a;
 			return _Utils_update(
 				model,
 				{
@@ -11093,37 +11110,62 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'UpdatedParticipantName':
 				var string = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{editParticipant: string}),
-					$elm$core$Platform$Cmd$none);
-			case 'ChangedSex':
-				var sex = msg.a;
+				var p = model.editParticipant;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							editParticipantSex: $elm$core$Maybe$Just(sex)
+							editParticipant: _Utils_update(
+								p,
+								{name: string})
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'ChangedSex':
+				var sex = msg.a;
+				var p = model.editParticipant;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							editParticipant: _Utils_update(
+								p,
+								{
+									sex: $elm$core$Maybe$Just(sex)
+								})
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 'ChangedDoWith':
+				var doWith = msg.a;
+				var p = model.editParticipant;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							editParticipant: _Utils_update(
+								p,
+								{
+									doWith: $elm$core$Maybe$Just(doWith)
+								})
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'ClickedAddParticipant':
 				var newParticipants = function () {
-					var _v1 = model.editParticipantSex;
-					if (_v1.$ === 'Nothing') {
-						return model.participants;
-					} else {
-						var sex = _v1.a;
+					var _v1 = _Utils_Tuple2(model.editParticipant.sex, model.editParticipant.doWith);
+					if ((_v1.a.$ === 'Just') && (_v1.b.$ === 'Just')) {
+						var sex = _v1.a.a;
+						var iSex = _v1.b.a;
 						return A2(
 							$elm$core$Array$push,
-							{name: model.editParticipant, sex: sex},
+							{doWith: iSex, name: model.editParticipant.name, sex: sex},
 							model.participants);
+					} else {
+						return model.participants;
 					}
 				}();
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{editParticipant: '', editParticipantSex: $elm$core$Maybe$Nothing, participants: newParticipants}),
+						{editParticipant: $author$project$Main$initEditParticipant, participants: newParticipants}),
 					$elm$core$Platform$Cmd$none);
 			case 'ClickedViewCards':
 				return _Utils_Tuple2(
@@ -17091,6 +17133,21 @@ var $mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
 };
 var $mdgriffith$elm_ui$Internal$Model$Bottom = {$: 'Bottom'};
 var $mdgriffith$elm_ui$Element$alignBottom = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$Bottom);
+var $mdgriffith$elm_ui$Element$rgb255 = F3(
+	function (red, green, blue) {
+		return A4($mdgriffith$elm_ui$Internal$Model$Rgba, red / 255, green / 255, blue / 255, 1);
+	});
+var $author$project$Main$buttonColor = A3($mdgriffith$elm_ui$Element$rgb255, 200, 200, 200);
+var $mdgriffith$elm_ui$Element$Background$color = function (clr) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$bgColor,
+		A3(
+			$mdgriffith$elm_ui$Internal$Model$Colored,
+			'bg-' + $mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
+			'background-color',
+			clr));
+};
 var $mdgriffith$elm_ui$Internal$Flag$borderRound = $mdgriffith$elm_ui$Internal$Flag$flag(17);
 var $mdgriffith$elm_ui$Element$Border$rounded = function (radius) {
 	return A2(
@@ -17120,8 +17177,9 @@ var $mdgriffith$elm_ui$Element$Border$width = function (v) {
 };
 var $author$project$Main$buttonAttributes = _List_fromArray(
 	[
+		$mdgriffith$elm_ui$Element$Background$color($author$project$Main$buttonColor),
 		$mdgriffith$elm_ui$Element$Border$width(1),
-		$mdgriffith$elm_ui$Element$Border$rounded(5),
+		$mdgriffith$elm_ui$Element$Border$rounded(10),
 		$mdgriffith$elm_ui$Element$padding(5),
 		$mdgriffith$elm_ui$Element$alignBottom
 	]);
@@ -17294,16 +17352,6 @@ var $mdgriffith$elm_ui$Internal$Flag$fontAlignment = $mdgriffith$elm_ui$Internal
 var $mdgriffith$elm_ui$Element$Font$center = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$fontAlignment, $mdgriffith$elm_ui$Internal$Style$classes.textCenter);
 var $mdgriffith$elm_ui$Internal$Model$CenterX = {$: 'CenterX'};
 var $mdgriffith$elm_ui$Element$centerX = $mdgriffith$elm_ui$Internal$Model$AlignX($mdgriffith$elm_ui$Internal$Model$CenterX);
-var $mdgriffith$elm_ui$Element$Background$color = function (clr) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$bgColor,
-		A3(
-			$mdgriffith$elm_ui$Internal$Model$Colored,
-			'bg-' + $mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
-			'background-color',
-			clr));
-};
 var $mdgriffith$elm_ui$Internal$Flag$borderColor = $mdgriffith$elm_ui$Internal$Flag$flag(28);
 var $mdgriffith$elm_ui$Element$Border$color = function (clr) {
 	return A2(
@@ -18714,6 +18762,13 @@ var $mdgriffith$elm_ui$Element$Input$radioHelper = F3(
 			optionArea);
 	});
 var $mdgriffith$elm_ui$Element$Input$radio = $mdgriffith$elm_ui$Element$Input$radioHelper($mdgriffith$elm_ui$Element$Input$Column);
+var $author$project$Main$truthDareToString = function (truth) {
+	if (truth.$ === 'Truth') {
+		return 'Truth';
+	} else {
+		return 'Dare';
+	}
+};
 var $author$project$Main$viewAddCard = function (model) {
 	var truthDare = A2(
 		$mdgriffith$elm_ui$Element$Input$radio,
@@ -18867,9 +18922,212 @@ var $author$project$Main$viewAddCard = function (model) {
 					]))
 			]));
 };
+var $mdgriffith$elm_ui$Internal$Model$Paragraph = {$: 'Paragraph'};
+var $mdgriffith$elm_ui$Element$paragraph = F2(
+	function (attrs, children) {
+		return A4(
+			$mdgriffith$elm_ui$Internal$Model$element,
+			$mdgriffith$elm_ui$Internal$Model$asParagraph,
+			$mdgriffith$elm_ui$Internal$Model$div,
+			A2(
+				$elm$core$List$cons,
+				$mdgriffith$elm_ui$Internal$Model$Describe($mdgriffith$elm_ui$Internal$Model$Paragraph),
+				A2(
+					$elm$core$List$cons,
+					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+					A2(
+						$elm$core$List$cons,
+						$mdgriffith$elm_ui$Element$spacing(5),
+						attrs))),
+			$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
+	});
+var $mdgriffith$elm_ui$Internal$Model$Padding = F5(
+	function (a, b, c, d, e) {
+		return {$: 'Padding', a: a, b: b, c: c, d: d, e: e};
+	});
+var $mdgriffith$elm_ui$Internal$Model$Spaced = F3(
+	function (a, b, c) {
+		return {$: 'Spaced', a: a, b: b, c: c};
+	});
+var $mdgriffith$elm_ui$Internal$Model$extractSpacingAndPadding = function (attrs) {
+	return A3(
+		$elm$core$List$foldr,
+		F2(
+			function (attr, _v0) {
+				var pad = _v0.a;
+				var spacing = _v0.b;
+				return _Utils_Tuple2(
+					function () {
+						if (pad.$ === 'Just') {
+							var x = pad.a;
+							return pad;
+						} else {
+							if ((attr.$ === 'StyleClass') && (attr.b.$ === 'PaddingStyle')) {
+								var _v3 = attr.b;
+								var name = _v3.a;
+								var t = _v3.b;
+								var r = _v3.c;
+								var b = _v3.d;
+								var l = _v3.e;
+								return $elm$core$Maybe$Just(
+									A5($mdgriffith$elm_ui$Internal$Model$Padding, name, t, r, b, l));
+							} else {
+								return $elm$core$Maybe$Nothing;
+							}
+						}
+					}(),
+					function () {
+						if (spacing.$ === 'Just') {
+							var x = spacing.a;
+							return spacing;
+						} else {
+							if ((attr.$ === 'StyleClass') && (attr.b.$ === 'SpacingStyle')) {
+								var _v6 = attr.b;
+								var name = _v6.a;
+								var x = _v6.b;
+								var y = _v6.c;
+								return $elm$core$Maybe$Just(
+									A3($mdgriffith$elm_ui$Internal$Model$Spaced, name, x, y));
+							} else {
+								return $elm$core$Maybe$Nothing;
+							}
+						}
+					}());
+			}),
+		_Utils_Tuple2($elm$core$Maybe$Nothing, $elm$core$Maybe$Nothing),
+		attrs);
+};
+var $mdgriffith$elm_ui$Element$wrappedRow = F2(
+	function (attrs, children) {
+		var _v0 = $mdgriffith$elm_ui$Internal$Model$extractSpacingAndPadding(attrs);
+		var padded = _v0.a;
+		var spaced = _v0.b;
+		if (spaced.$ === 'Nothing') {
+			return A4(
+				$mdgriffith$elm_ui$Internal$Model$element,
+				$mdgriffith$elm_ui$Internal$Model$asRow,
+				$mdgriffith$elm_ui$Internal$Model$div,
+				A2(
+					$elm$core$List$cons,
+					$mdgriffith$elm_ui$Internal$Model$htmlClass($mdgriffith$elm_ui$Internal$Style$classes.contentLeft + (' ' + ($mdgriffith$elm_ui$Internal$Style$classes.contentCenterY + (' ' + $mdgriffith$elm_ui$Internal$Style$classes.wrapped)))),
+					A2(
+						$elm$core$List$cons,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$shrink),
+						A2(
+							$elm$core$List$cons,
+							$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$shrink),
+							attrs))),
+				$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
+		} else {
+			var _v2 = spaced.a;
+			var spaceName = _v2.a;
+			var x = _v2.b;
+			var y = _v2.c;
+			var newPadding = function () {
+				if (padded.$ === 'Just') {
+					var _v5 = padded.a;
+					var name = _v5.a;
+					var t = _v5.b;
+					var r = _v5.c;
+					var b = _v5.d;
+					var l = _v5.e;
+					if ((_Utils_cmp(r, x / 2) > -1) && (_Utils_cmp(b, y / 2) > -1)) {
+						var newTop = t - (y / 2);
+						var newRight = r - (x / 2);
+						var newLeft = l - (x / 2);
+						var newBottom = b - (y / 2);
+						return $elm$core$Maybe$Just(
+							A2(
+								$mdgriffith$elm_ui$Internal$Model$StyleClass,
+								$mdgriffith$elm_ui$Internal$Flag$padding,
+								A5(
+									$mdgriffith$elm_ui$Internal$Model$PaddingStyle,
+									A4($mdgriffith$elm_ui$Internal$Model$paddingNameFloat, newTop, newRight, newBottom, newLeft),
+									newTop,
+									newRight,
+									newBottom,
+									newLeft)));
+					} else {
+						return $elm$core$Maybe$Nothing;
+					}
+				} else {
+					return $elm$core$Maybe$Nothing;
+				}
+			}();
+			if (newPadding.$ === 'Just') {
+				var pad = newPadding.a;
+				return A4(
+					$mdgriffith$elm_ui$Internal$Model$element,
+					$mdgriffith$elm_ui$Internal$Model$asRow,
+					$mdgriffith$elm_ui$Internal$Model$div,
+					A2(
+						$elm$core$List$cons,
+						$mdgriffith$elm_ui$Internal$Model$htmlClass($mdgriffith$elm_ui$Internal$Style$classes.contentLeft + (' ' + ($mdgriffith$elm_ui$Internal$Style$classes.contentCenterY + (' ' + $mdgriffith$elm_ui$Internal$Style$classes.wrapped)))),
+						A2(
+							$elm$core$List$cons,
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$shrink),
+							A2(
+								$elm$core$List$cons,
+								$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$shrink),
+								_Utils_ap(
+									attrs,
+									_List_fromArray(
+										[pad]))))),
+					$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
+			} else {
+				var halfY = -(y / 2);
+				var halfX = -(x / 2);
+				return A4(
+					$mdgriffith$elm_ui$Internal$Model$element,
+					$mdgriffith$elm_ui$Internal$Model$asEl,
+					$mdgriffith$elm_ui$Internal$Model$div,
+					attrs,
+					$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+						_List_fromArray(
+							[
+								A4(
+								$mdgriffith$elm_ui$Internal$Model$element,
+								$mdgriffith$elm_ui$Internal$Model$asRow,
+								$mdgriffith$elm_ui$Internal$Model$div,
+								A2(
+									$elm$core$List$cons,
+									$mdgriffith$elm_ui$Internal$Model$htmlClass($mdgriffith$elm_ui$Internal$Style$classes.contentLeft + (' ' + ($mdgriffith$elm_ui$Internal$Style$classes.contentCenterY + (' ' + $mdgriffith$elm_ui$Internal$Style$classes.wrapped)))),
+									A2(
+										$elm$core$List$cons,
+										$mdgriffith$elm_ui$Internal$Model$Attr(
+											A2(
+												$elm$html$Html$Attributes$style,
+												'margin',
+												$elm$core$String$fromFloat(halfY) + ('px' + (' ' + ($elm$core$String$fromFloat(halfX) + 'px'))))),
+										A2(
+											$elm$core$List$cons,
+											$mdgriffith$elm_ui$Internal$Model$Attr(
+												A2(
+													$elm$html$Html$Attributes$style,
+													'width',
+													'calc(100% + ' + ($elm$core$String$fromInt(x) + 'px)'))),
+											A2(
+												$elm$core$List$cons,
+												$mdgriffith$elm_ui$Internal$Model$Attr(
+													A2(
+														$elm$html$Html$Attributes$style,
+														'height',
+														'calc(100% + ' + ($elm$core$String$fromInt(y) + 'px)'))),
+												A2(
+													$elm$core$List$cons,
+													A2(
+														$mdgriffith$elm_ui$Internal$Model$StyleClass,
+														$mdgriffith$elm_ui$Internal$Flag$spacing,
+														A3($mdgriffith$elm_ui$Internal$Model$SpacingStyle, spaceName, x, y)),
+													_List_Nil))))),
+								$mdgriffith$elm_ui$Internal$Model$Unkeyed(children))
+							])));
+			}
+		}
+	});
 var $author$project$Main$viewCard = function (card) {
 	return A2(
-		$mdgriffith$elm_ui$Element$row,
+		$mdgriffith$elm_ui$Element$wrappedRow,
 		_List_fromArray(
 			[
 				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
@@ -18913,12 +19171,15 @@ var $author$project$Main$viewCard = function (card) {
 						},
 						card.audiences))),
 				A2(
-				$mdgriffith$elm_ui$Element$el,
+				$mdgriffith$elm_ui$Element$paragraph,
 				_List_fromArray(
 					[
 						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
 					]),
-				$mdgriffith$elm_ui$Element$text(card.text))
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$text(card.text)
+					]))
 			]));
 };
 var $author$project$Main$viewCardHeadings = A2(
@@ -19018,8 +19279,29 @@ var $author$project$Main$viewControls = A2(
 				onPress: $elm$core$Maybe$Just($author$project$Main$ClickedViewCards)
 			})
 		]));
-var $author$project$Main$viewCurrentCard = F2(
-	function (maybeCard, partner) {
+var $elm$core$String$replace = F3(
+	function (before, after, string) {
+		return A2(
+			$elm$core$String$join,
+			after,
+			A2($elm$core$String$split, before, string));
+	});
+var $author$project$Main$viewCurrentCard = F3(
+	function (maybeActor, maybeCard, maybePartner) {
+		var replaceText = function (text) {
+			var _v2 = _Utils_Tuple2(maybeActor, maybePartner);
+			if ((_v2.a.$ === 'Just') && (_v2.b.$ === 'Just')) {
+				var actor = _v2.a.a;
+				var partner = _v2.b.a;
+				return A3(
+					$elm$core$String$replace,
+					'<partner>',
+					partner.name,
+					A3($elm$core$String$replace, '<actor>', actor.name, text));
+			} else {
+				return text;
+			}
+		};
 		if (maybeCard.$ === 'Nothing') {
 			return A2(
 				$mdgriffith$elm_ui$Element$column,
@@ -19059,42 +19341,62 @@ var $author$project$Main$viewCurrentCard = F2(
 						}
 					}(),
 						A2(
-						$mdgriffith$elm_ui$Element$el,
+						$mdgriffith$elm_ui$Element$paragraph,
 						_List_fromArray(
 							[$mdgriffith$elm_ui$Element$centerX]),
-						$mdgriffith$elm_ui$Element$text(card.text)),
-						function () {
-						if (partner.$ === 'Just') {
-							var p = partner.a;
-							return A2(
-								$mdgriffith$elm_ui$Element$el,
-								_List_fromArray(
-									[$mdgriffith$elm_ui$Element$centerX]),
-								$mdgriffith$elm_ui$Element$text('Do it with: ' + p.name));
-						} else {
-							return $mdgriffith$elm_ui$Element$none;
-						}
-					}()
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$text(
+								replaceText(card.text))
+							]))
 					]));
 		}
 	});
 var $author$project$Main$ClickedNextRound = {$: 'ClickedNextRound'};
 var $author$project$Main$viewNextRoundButton = A2(
 	$mdgriffith$elm_ui$Element$Input$button,
-	$author$project$Main$buttonAttributes,
+	_Utils_ap(
+		_List_fromArray(
+			[$mdgriffith$elm_ui$Element$centerX]),
+		$author$project$Main$buttonAttributes),
 	{
-		label: $mdgriffith$elm_ui$Element$text('Next'),
+		label: A2(
+			$mdgriffith$elm_ui$Element$el,
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$centerX,
+					$mdgriffith$elm_ui$Element$padding(30)
+				]),
+			$mdgriffith$elm_ui$Element$text('Next')),
 		onPress: $elm$core$Maybe$Just($author$project$Main$ClickedNextRound)
 	});
 var $mdgriffith$elm_ui$Internal$Model$Top = {$: 'Top'};
 var $mdgriffith$elm_ui$Element$alignTop = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$Top);
+var $author$project$Main$col1 = $mdgriffith$elm_ui$Element$width(
+	$mdgriffith$elm_ui$Element$px(16 * 20));
+var $author$project$Main$col2 = $mdgriffith$elm_ui$Element$width(
+	$mdgriffith$elm_ui$Element$px(16 * 8));
+var $author$project$Main$col3 = $mdgriffith$elm_ui$Element$width(
+	$mdgriffith$elm_ui$Element$px(16 * 8));
+var $author$project$Main$ChangedDoWith = function (a) {
+	return {$: 'ChangedDoWith', a: a};
+};
 var $author$project$Main$ChangedSex = function (a) {
 	return {$: 'ChangedSex', a: a};
 };
 var $author$project$Main$ClickedAddParticipant = {$: 'ClickedAddParticipant'};
-var $author$project$Main$NonBinary = {$: 'NonBinary'};
 var $author$project$Main$UpdatedParticipantName = function (a) {
 	return {$: 'UpdatedParticipantName', a: a};
+};
+var $author$project$Main$doWithToString = function (doWith) {
+	switch (doWith.$) {
+		case 'DoWithMale':
+			return 'Male';
+		case 'DoWithFemale':
+			return 'Female';
+		default:
+			return 'Both';
+	}
 };
 var $mdgriffith$elm_ui$Element$Input$TextInputNode = function (a) {
 	return {$: 'TextInputNode', a: a};
@@ -19105,112 +19407,147 @@ var $mdgriffith$elm_ui$Element$Input$text = $mdgriffith$elm_ui$Element$Input$tex
 		spellchecked: false,
 		type_: $mdgriffith$elm_ui$Element$Input$TextInputNode('text')
 	});
-var $author$project$Main$viewAddParticipant = F2(
-	function (editParticipantSex, editParticipant) {
-		return A2(
-			$mdgriffith$elm_ui$Element$column,
-			_List_fromArray(
-				[
-					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
-				]),
-			_List_fromArray(
-				[
-					$mdgriffith$elm_ui$Element$text('Add participant'),
-					A2(
-					$mdgriffith$elm_ui$Element$row,
-					_List_fromArray(
-						[
-							$mdgriffith$elm_ui$Element$spacing(5)
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$mdgriffith$elm_ui$Element$Input$text,
-							_List_Nil,
-							{
-								label: A2(
-									$mdgriffith$elm_ui$Element$Input$labelAbove,
-									_List_Nil,
-									$mdgriffith$elm_ui$Element$text('Name')),
-								onChange: $author$project$Main$UpdatedParticipantName,
-								placeholder: $elm$core$Maybe$Nothing,
-								text: editParticipant
-							}),
-							A2(
-							$mdgriffith$elm_ui$Element$Input$radio,
-							_List_Nil,
-							{
-								label: A2(
-									$mdgriffith$elm_ui$Element$Input$labelAbove,
-									_List_Nil,
-									$mdgriffith$elm_ui$Element$text('Sex')),
-								onChange: $author$project$Main$ChangedSex,
-								options: _List_fromArray(
-									[
-										A2(
-										$mdgriffith$elm_ui$Element$Input$option,
-										$author$project$Main$Male,
-										$mdgriffith$elm_ui$Element$text('Male')),
-										A2(
-										$mdgriffith$elm_ui$Element$Input$option,
-										$author$project$Main$Female,
-										$mdgriffith$elm_ui$Element$text('Female')),
-										A2(
-										$mdgriffith$elm_ui$Element$Input$option,
-										$author$project$Main$NonBinary,
-										$mdgriffith$elm_ui$Element$text('Non-binary'))
-									]),
-								selected: editParticipantSex
-							}),
-							(($elm$core$String$length(editParticipant) > 0) && (!_Utils_eq(editParticipantSex, $elm$core$Maybe$Nothing))) ? A2(
-							$mdgriffith$elm_ui$Element$Input$button,
-							$author$project$Main$buttonAttributes,
-							{
-								label: $mdgriffith$elm_ui$Element$text('Add Participant'),
-								onPress: $elm$core$Maybe$Just($author$project$Main$ClickedAddParticipant)
-							}) : $mdgriffith$elm_ui$Element$none
-						]))
-				]));
-	});
+var $author$project$Main$viewAddParticipant = function (editParticipant) {
+	return A2(
+		$mdgriffith$elm_ui$Element$column,
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+				$mdgriffith$elm_ui$Element$Border$width(1),
+				$mdgriffith$elm_ui$Element$Border$rounded(10),
+				$mdgriffith$elm_ui$Element$padding(5)
+			]),
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$text('Add participant'),
+				A2(
+				$mdgriffith$elm_ui$Element$wrappedRow,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$spacing(5)
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$mdgriffith$elm_ui$Element$Input$text,
+						_List_Nil,
+						{
+							label: A2(
+								$mdgriffith$elm_ui$Element$Input$labelAbove,
+								_List_Nil,
+								$mdgriffith$elm_ui$Element$text('Name')),
+							onChange: $author$project$Main$UpdatedParticipantName,
+							placeholder: $elm$core$Maybe$Nothing,
+							text: editParticipant.name
+						}),
+						A2(
+						$mdgriffith$elm_ui$Element$Input$radio,
+						_List_Nil,
+						{
+							label: A2(
+								$mdgriffith$elm_ui$Element$Input$labelAbove,
+								_List_Nil,
+								$mdgriffith$elm_ui$Element$text('Sex')),
+							onChange: $author$project$Main$ChangedSex,
+							options: _List_fromArray(
+								[
+									A2(
+									$mdgriffith$elm_ui$Element$Input$option,
+									$author$project$Main$Male,
+									$mdgriffith$elm_ui$Element$text('Male')),
+									A2(
+									$mdgriffith$elm_ui$Element$Input$option,
+									$author$project$Main$Female,
+									$mdgriffith$elm_ui$Element$text('Female'))
+								]),
+							selected: editParticipant.sex
+						}),
+						A2(
+						$mdgriffith$elm_ui$Element$Input$radio,
+						_List_Nil,
+						{
+							label: A2(
+								$mdgriffith$elm_ui$Element$Input$labelAbove,
+								_List_Nil,
+								$mdgriffith$elm_ui$Element$text('Do with')),
+							onChange: $author$project$Main$ChangedDoWith,
+							options: _List_fromArray(
+								[
+									A2(
+									$mdgriffith$elm_ui$Element$Input$option,
+									$author$project$Main$DoWithMale,
+									$mdgriffith$elm_ui$Element$text(
+										$author$project$Main$doWithToString($author$project$Main$DoWithMale))),
+									A2(
+									$mdgriffith$elm_ui$Element$Input$option,
+									$author$project$Main$DoWithFemale,
+									$mdgriffith$elm_ui$Element$text(
+										$author$project$Main$doWithToString($author$project$Main$DoWithFemale))),
+									A2(
+									$mdgriffith$elm_ui$Element$Input$option,
+									$author$project$Main$DoWithBoth,
+									$mdgriffith$elm_ui$Element$text(
+										$author$project$Main$doWithToString($author$project$Main$DoWithBoth)))
+								]),
+							selected: editParticipant.doWith
+						}),
+						(($elm$core$String$length(editParticipant.name) > 0) && ((!_Utils_eq(editParticipant.sex, $elm$core$Maybe$Nothing)) && (!_Utils_eq(editParticipant.doWith, $elm$core$Maybe$Nothing)))) ? A2(
+						$mdgriffith$elm_ui$Element$Input$button,
+						$author$project$Main$buttonAttributes,
+						{
+							label: $mdgriffith$elm_ui$Element$text('Add Participant'),
+							onPress: $elm$core$Maybe$Just($author$project$Main$ClickedAddParticipant)
+						}) : $mdgriffith$elm_ui$Element$none
+					]))
+			]));
+};
 var $author$project$Main$sexToString = function (sex) {
-	switch (sex.$) {
-		case 'Male':
-			return 'Male';
-		case 'Female':
-			return 'Female';
-		default:
-			return 'Non-binary';
+	if (sex.$ === 'Male') {
+		return 'Male';
+	} else {
+		return 'Female';
 	}
 };
 var $author$project$Main$viewParticipant = F3(
 	function (current, index, participant) {
 		return A2(
-			$mdgriffith$elm_ui$Element$row,
-			_List_fromArray(
-				[
-					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
-				]),
-			_List_fromArray(
-				[
-					_Utils_eq(current, index) ? $mdgriffith$elm_ui$Element$text('*') : $mdgriffith$elm_ui$Element$text(' '),
-					$mdgriffith$elm_ui$Element$text(participant.name),
-					A2(
-					$mdgriffith$elm_ui$Element$el,
-					_List_fromArray(
-						[$mdgriffith$elm_ui$Element$alignRight]),
-					$mdgriffith$elm_ui$Element$text(
-						$author$project$Main$sexToString(participant.sex)))
-				]));
-	});
-var $author$project$Main$viewParticipants = F4(
-	function (currentIndex, editParticipantSex, editParticipant, participants) {
-		return A2(
-			$mdgriffith$elm_ui$Element$row,
+			$mdgriffith$elm_ui$Element$wrappedRow,
 			_List_fromArray(
 				[
 					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-					$mdgriffith$elm_ui$Element$Border$width(1),
-					$mdgriffith$elm_ui$Element$Border$rounded(10),
+					$mdgriffith$elm_ui$Element$spacing(10)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[$author$project$Main$col1]),
+					$mdgriffith$elm_ui$Element$text(
+						_Utils_ap(
+							_Utils_eq(current, index) ? '*' : ' ',
+							participant.name))),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[$author$project$Main$col2]),
+					$mdgriffith$elm_ui$Element$text(
+						$author$project$Main$sexToString(participant.sex))),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[$author$project$Main$col3]),
+					$mdgriffith$elm_ui$Element$text(
+						$author$project$Main$doWithToString(participant.doWith)))
+				]));
+	});
+var $author$project$Main$viewParticipants = F3(
+	function (currentIndex, editParticipant, participants) {
+		return A2(
+			$mdgriffith$elm_ui$Element$column,
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 					$mdgriffith$elm_ui$Element$spacing(10),
 					$mdgriffith$elm_ui$Element$padding(10)
 				]),
@@ -19220,12 +19557,40 @@ var $author$project$Main$viewParticipants = F4(
 					$mdgriffith$elm_ui$Element$column,
 					_List_fromArray(
 						[
-							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+							$mdgriffith$elm_ui$Element$padding(10),
+							$mdgriffith$elm_ui$Element$Border$width(1),
+							$mdgriffith$elm_ui$Element$Border$rounded(10),
 							$mdgriffith$elm_ui$Element$alignTop
 						]),
 					_List_fromArray(
 						[
 							$mdgriffith$elm_ui$Element$text('Participants'),
+							A2(
+							$mdgriffith$elm_ui$Element$wrappedRow,
+							_List_fromArray(
+								[
+									$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+									$mdgriffith$elm_ui$Element$Font$bold,
+									$mdgriffith$elm_ui$Element$spacing(10)
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$mdgriffith$elm_ui$Element$el,
+									_List_fromArray(
+										[$author$project$Main$col1]),
+									$mdgriffith$elm_ui$Element$text('Name')),
+									A2(
+									$mdgriffith$elm_ui$Element$el,
+									_List_fromArray(
+										[$author$project$Main$col2]),
+									$mdgriffith$elm_ui$Element$text('Sex')),
+									A2(
+									$mdgriffith$elm_ui$Element$el,
+									_List_fromArray(
+										[$author$project$Main$col3]),
+									$mdgriffith$elm_ui$Element$text('Do with'))
+								])),
 							A2(
 							$mdgriffith$elm_ui$Element$column,
 							_List_fromArray(
@@ -19237,7 +19602,7 @@ var $author$project$Main$viewParticipants = F4(
 								$author$project$Main$viewParticipant(currentIndex),
 								$elm$core$Array$toList(participants)))
 						])),
-					A2($author$project$Main$viewAddParticipant, editParticipantSex, editParticipant)
+					$author$project$Main$viewAddParticipant(editParticipant)
 				]));
 	});
 var $author$project$Main$ChangedAudience = function (a) {
@@ -19916,24 +20281,22 @@ var $author$project$Main$viewGame = function (model) {
 		_List_fromArray(
 			[
 				$author$project$Main$viewSetting(model.setting),
-				A4($author$project$Main$viewParticipants, model.currentParticipantIndex, model.editParticipantSex, model.editParticipant, model.participants),
+				A3($author$project$Main$viewParticipants, model.currentParticipantIndex, model.editParticipant, model.participants),
 				((!_Utils_eq(model.setting.audience, $elm$core$Maybe$Nothing)) && (!_Utils_eq(model.setting.spiciness, $elm$core$Maybe$Nothing))) ? A2(
 				$mdgriffith$elm_ui$Element$column,
 				_List_fromArray(
 					[
-						$mdgriffith$elm_ui$Element$spacing(5)
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$spacing(10),
+						$mdgriffith$elm_ui$Element$padding(10)
 					]),
 				_List_fromArray(
 					[
-						(!_Utils_eq(model.currentCard, $elm$core$Maybe$Nothing)) ? A2(
-						$mdgriffith$elm_ui$Element$el,
-						_List_fromArray(
-							[
-								$mdgriffith$elm_ui$Element$padding(10)
-							]),
-						$mdgriffith$elm_ui$Element$text(
-							'This is for ' + ($author$project$Main$currentParticipantName(model) + ':'))) : $mdgriffith$elm_ui$Element$none,
-						A2($author$project$Main$viewCurrentCard, model.currentCard, model.currentPartner),
+						A3(
+						$author$project$Main$viewCurrentCard,
+						A2($elm$core$Array$get, model.currentParticipantIndex, model.participants),
+						model.currentCard,
+						model.currentPartner),
 						$author$project$Main$viewNextRoundButton
 					])) : $mdgriffith$elm_ui$Element$none
 			]));
@@ -19981,4 +20344,4 @@ var $author$project$Main$main = $elm$browser$Browser$element(
 		view: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Main.RandomValues":{"args":[],"type":"{ randomTruthDare : Basics.Float, randomCard : Basics.Float, randomPartner : Basics.Float }"}},"unions":{"Main.Msg":{"args":[],"tags":{"ClickedNextRound":[],"RandomNumbersGenerated":["Main.RandomValues"],"UpdatedParticipantName":["String.String"],"ClickedAddParticipant":[],"ChangedSex":["Main.Sex"],"ChangedAudience":["Main.Audience"],"ChangeRatio":["Basics.Float"],"ChangedSpiciness":["Main.Spiciness"],"ClickedViewCards":[],"ClickedViewGame":[],"ChangedCardTruthDare":["Main.TruthDare"],"ChangedCardSpiciness":["Main.Spiciness"],"ChangedCardAudience":["Main.Audience","Basics.Bool"],"ChangedCardText":["String.String"],"ClickedAddCard":[]}},"Main.Audience":{"args":[],"tags":{"MixedAudience":[],"MaleAudience":[],"FemaleAudience":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Main.Sex":{"args":[],"tags":{"Male":[],"Female":[],"NonBinary":[]}},"Main.Spiciness":{"args":[],"tags":{"Green":[],"Yellow":[],"Red":[],"Extreme":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Main.TruthDare":{"args":[],"tags":{"Truth":[],"Dare":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{"Main.RandomValues":{"args":[],"type":"{ randomTruthDare : Basics.Float, randomCard : Basics.Float, randomPartner : Basics.Float }"}},"unions":{"Main.Msg":{"args":[],"tags":{"ClickedNextRound":[],"RandomNumbersGenerated":["Main.RandomValues"],"UpdatedParticipantName":["String.String"],"ClickedAddParticipant":[],"ChangedSex":["Main.Sex"],"ChangedDoWith":["Main.DoWith"],"ChangedAudience":["Main.Audience"],"ChangeRatio":["Basics.Float"],"ChangedSpiciness":["Main.Spiciness"],"ClickedViewCards":[],"ClickedViewGame":[],"ChangedCardTruthDare":["Main.TruthDare"],"ChangedCardSpiciness":["Main.Spiciness"],"ChangedCardAudience":["Main.Audience","Basics.Bool"],"ChangedCardText":["String.String"],"ClickedAddCard":[]}},"Main.Audience":{"args":[],"tags":{"MixedAudience":[],"MaleAudience":[],"FemaleAudience":[]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Main.DoWith":{"args":[],"tags":{"DoWithMale":[],"DoWithFemale":[],"DoWithBoth":[]}},"Basics.Float":{"args":[],"tags":{"Float":[]}},"Main.Sex":{"args":[],"tags":{"Male":[],"Female":[]}},"Main.Spiciness":{"args":[],"tags":{"Green":[],"Yellow":[],"Red":[],"Extreme":[]}},"String.String":{"args":[],"tags":{"String":[]}},"Main.TruthDare":{"args":[],"tags":{"Truth":[],"Dare":[]}}}}})}});}(this));
