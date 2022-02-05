@@ -15322,7 +15322,7 @@ var $author$project$CustomSlide$viewSvg = function (value) {
 									_List_fromArray(
 										[
 											$elm$svg$Svg$Attributes$offset('0%'),
-											$elm$svg$Svg$Attributes$style('stop-color:rgb(5,204,251);stop-opacity:1')
+											$elm$svg$Svg$Attributes$style('stop-color:rgb(220,67,14);stop-opacity:1')
 										]),
 									_List_Nil),
 									A2(
@@ -15338,7 +15338,7 @@ var $author$project$CustomSlide$viewSvg = function (value) {
 									_List_fromArray(
 										[
 											$elm$svg$Svg$Attributes$offset('100%'),
-											$elm$svg$Svg$Attributes$style('stop-color:rgb(220,67,14);stop-opacity:1')
+											$elm$svg$Svg$Attributes$style('stop-color:rgb(5,204,251);stop-opacity:1')
 										]),
 									_List_Nil)
 								]))
