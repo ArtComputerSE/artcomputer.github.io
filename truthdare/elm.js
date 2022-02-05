@@ -19649,23 +19649,6 @@ var $author$project$Main$viewAudience = function (audience) {
 var $author$project$Main$ChangeRatio = function (a) {
 	return {$: 'ChangeRatio', a: a};
 };
-var $mdgriffith$elm_ui$Element$Input$Thumb = function (a) {
-	return {$: 'Thumb', a: a};
-};
-var $mdgriffith$elm_ui$Element$Input$defaultThumb = $mdgriffith$elm_ui$Element$Input$Thumb(
-	_List_fromArray(
-		[
-			$mdgriffith$elm_ui$Element$width(
-			$mdgriffith$elm_ui$Element$px(16)),
-			$mdgriffith$elm_ui$Element$height(
-			$mdgriffith$elm_ui$Element$px(16)),
-			$mdgriffith$elm_ui$Element$Border$rounded(8),
-			$mdgriffith$elm_ui$Element$Border$width(1),
-			$mdgriffith$elm_ui$Element$Border$color(
-			A3($mdgriffith$elm_ui$Element$rgb, 0.5, 0.5, 0.5)),
-			$mdgriffith$elm_ui$Element$Background$color(
-			A3($mdgriffith$elm_ui$Element$rgb, 1, 1, 1))
-		]));
 var $mdgriffith$elm_ui$Internal$Flag$active = $mdgriffith$elm_ui$Internal$Flag$flag(32);
 var $mdgriffith$elm_ui$Internal$Flag$focus = $mdgriffith$elm_ui$Internal$Flag$flag(31);
 var $mdgriffith$elm_ui$Internal$Model$getHeight = function (attrs) {
@@ -20145,12 +20128,155 @@ var $mdgriffith$elm_ui$Element$Input$slider = F2(
 						$mdgriffith$elm_ui$Element$none)
 					])));
 	});
-var $author$project$Main$viewRatio = function (_float) {
+var $mdgriffith$elm_ui$Element$Input$Thumb = function (a) {
+	return {$: 'Thumb', a: a};
+};
+var $mdgriffith$elm_ui$Element$Input$thumb = $mdgriffith$elm_ui$Element$Input$Thumb;
+var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
+var $elm$svg$Svg$circle = $elm$svg$Svg$trustedNode('circle');
+var $elm$svg$Svg$Attributes$cx = _VirtualDom_attribute('cx');
+var $elm$svg$Svg$Attributes$cy = _VirtualDom_attribute('cy');
+var $elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
+var $elm$svg$Svg$defs = $elm$svg$Svg$trustedNode('defs');
+var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
+var $elm$svg$Svg$Attributes$fillOpacity = _VirtualDom_attribute('fill-opacity');
+var $elm$svg$Svg$g = $elm$svg$Svg$trustedNode('g');
+var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
+var $mdgriffith$elm_ui$Element$html = $mdgriffith$elm_ui$Internal$Model$unstyled;
+var $elm$svg$Svg$Attributes$id = _VirtualDom_attribute('id');
+var $elm$svg$Svg$linearGradient = $elm$svg$Svg$trustedNode('linearGradient');
+var $elm$svg$Svg$Attributes$offset = _VirtualDom_attribute('offset');
+var $elm$svg$Svg$path = $elm$svg$Svg$trustedNode('path');
+var $elm$svg$Svg$Attributes$r = _VirtualDom_attribute('r');
+var $elm$svg$Svg$stop = $elm$svg$Svg$trustedNode('stop');
+var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
+var $elm$svg$Svg$Attributes$strokeOpacity = _VirtualDom_attribute('stroke-opacity');
+var $elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
+var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
+var $elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
+var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
+var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
+var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
+var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
+var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
+var $author$project$CustomSlide$viewSvg = function (value) {
+	var rotationValue = $elm$core$String$fromFloat((value * 180) - 90);
+	var rotateStr = 'rotate(' + (rotationValue + ', 50,50)');
+	return $mdgriffith$elm_ui$Element$html(
+		A2(
+			$elm$svg$Svg$svg,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$width('200'),
+					$elm$svg$Svg$Attributes$height('120'),
+					$elm$svg$Svg$Attributes$viewBox('0 0 100 60')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$svg$Svg$defs,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							$elm$svg$Svg$linearGradient,
+							_List_fromArray(
+								[
+									$elm$svg$Svg$Attributes$id('grad1'),
+									$elm$svg$Svg$Attributes$x1('0%'),
+									$elm$svg$Svg$Attributes$y1('0%'),
+									$elm$svg$Svg$Attributes$x2('100%'),
+									$elm$svg$Svg$Attributes$y2('0%')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$svg$Svg$stop,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$offset('0%'),
+											$elm$svg$Svg$Attributes$style('stop-color:rgb(5,204,251);stop-opacity:1')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$stop,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$offset('50%'),
+											$elm$svg$Svg$Attributes$style('stop-color:rgb(216,196,30);stop-opacity:1')
+										]),
+									_List_Nil),
+									A2(
+									$elm$svg$Svg$stop,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$offset('100%'),
+											$elm$svg$Svg$Attributes$style('stop-color:rgb(220,67,14);stop-opacity:1')
+										]),
+									_List_Nil)
+								]))
+						])),
+					A2(
+					$elm$svg$Svg$path,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$fill('url(\'#grad1\')'),
+							$elm$svg$Svg$Attributes$stroke('black'),
+							$elm$svg$Svg$Attributes$strokeOpacity('0.5'),
+							$elm$svg$Svg$Attributes$d('\n                      M 0,51\n                      L 100,51\n                      A 25,25 0,0,0 0,51\n                      ')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$circle,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$cx('50'),
+							$elm$svg$Svg$Attributes$cy('50'),
+							$elm$svg$Svg$Attributes$r('5'),
+							$elm$svg$Svg$Attributes$stroke('black'),
+							$elm$svg$Svg$Attributes$strokeOpacity('0.5'),
+							$elm$svg$Svg$Attributes$fill('rgb(216,196,30)'),
+							$elm$svg$Svg$Attributes$fillOpacity('1')
+						]),
+					_List_Nil),
+					A2(
+					$elm$svg$Svg$g,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$transform(rotateStr)
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$svg$Svg$path,
+							_List_fromArray(
+								[
+									$elm$svg$Svg$Attributes$fill('rgb(216,196,30)'),
+									$elm$svg$Svg$Attributes$stroke('black'),
+									$elm$svg$Svg$Attributes$strokeOpacity('0.5'),
+									$elm$svg$Svg$Attributes$d('\n                  M 47.5,60\n                  L 50,0\n                  L 52.5,60\n                  L 47.5,60\n                  ')
+								]),
+							_List_Nil)
+						])),
+					A2(
+					$elm$svg$Svg$circle,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$cx('50'),
+							$elm$svg$Svg$Attributes$cy('50'),
+							$elm$svg$Svg$Attributes$r('1'),
+							$elm$svg$Svg$Attributes$fill('black'),
+							$elm$svg$Svg$Attributes$fillOpacity('0.5')
+						]),
+					_List_Nil)
+				])));
+};
+var $author$project$Main$viewRatio = function (value) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
 		_List_fromArray(
 			[
-				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 				$mdgriffith$elm_ui$Element$alignTop,
 				$mdgriffith$elm_ui$Element$padding(5)
 			]),
@@ -20160,7 +20286,12 @@ var $author$project$Main$viewRatio = function (_float) {
 				$mdgriffith$elm_ui$Element$Input$slider,
 				_List_fromArray(
 					[
-						$mdgriffith$elm_ui$Element$Border$width(1)
+						$mdgriffith$elm_ui$Element$height(
+						$mdgriffith$elm_ui$Element$px(120)),
+						$mdgriffith$elm_ui$Element$width(
+						$mdgriffith$elm_ui$Element$px(200)),
+						$mdgriffith$elm_ui$Element$behindContent(
+						$author$project$CustomSlide$viewSvg(value))
 					]),
 				{
 					label: A2(
@@ -20168,13 +20299,13 @@ var $author$project$Main$viewRatio = function (_float) {
 						_List_fromArray(
 							[$mdgriffith$elm_ui$Element$centerX]),
 						$mdgriffith$elm_ui$Element$text(
-							'Ratio ' + $elm$core$String$fromFloat(_float))),
+							'Ratio ' + $elm$core$String$fromFloat(value))),
 					max: 1,
 					min: 0,
 					onChange: $author$project$Main$ChangeRatio,
-					step: $elm$core$Maybe$Just(0.1),
-					thumb: $mdgriffith$elm_ui$Element$Input$defaultThumb,
-					value: _float
+					step: $elm$core$Maybe$Just(0.01),
+					thumb: $mdgriffith$elm_ui$Element$Input$thumb(_List_Nil),
+					value: value
 				}),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
