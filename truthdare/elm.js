@@ -5237,6 +5237,9 @@ var $pzp1997$assoc_list$AssocList$D = function (a) {
 var $pzp1997$assoc_list$AssocList$empty = $pzp1997$assoc_list$AssocList$D(_List_Nil);
 var $Gizra$elm_all_set$EverySet$empty = $Gizra$elm_all_set$EverySet$EverySet($pzp1997$assoc_list$AssocList$empty);
 var $author$project$Main$Dare = {$: 'Dare'};
+var $author$project$Main$DareCard = function (a) {
+	return {$: 'DareCard', a: a};
+};
 var $author$project$Main$Extreme = {$: 'Extreme'};
 var $author$project$Main$FemaleAudience = {$: 'FemaleAudience'};
 var $author$project$Main$Green = {$: 'Green'};
@@ -5244,6 +5247,9 @@ var $author$project$Main$MaleAudience = {$: 'MaleAudience'};
 var $author$project$Main$MixedAudience = {$: 'MixedAudience'};
 var $author$project$Main$Red = {$: 'Red'};
 var $author$project$Main$Truth = {$: 'Truth'};
+var $author$project$Main$TruthCard = function (a) {
+	return {$: 'TruthCard', a: a};
+};
 var $author$project$Main$Yellow = {$: 'Yellow'};
 var $author$project$Main$audienceToString = function (a) {
 	switch (a.$) {
@@ -5327,13 +5333,22 @@ var $author$project$Main$getCards = function () {
 	};
 	var mkCard = F3(
 		function (t, s, a) {
-			return {
-				audiences: _List_fromArray(
-					[a]),
-				spiciness: s,
-				text: salute(t) + ($author$project$Main$spicyToString(s) + (' ' + $author$project$Main$audienceToString(a))),
-				truthDare: t
-			};
+			if (t.$ === 'Truth') {
+				return $author$project$Main$TruthCard(
+					{
+						audiences: _List_fromArray(
+							[a]),
+						text: salute(t) + (' ' + $author$project$Main$audienceToString(a))
+					});
+			} else {
+				return $author$project$Main$DareCard(
+					{
+						audiences: _List_fromArray(
+							[a]),
+						spiciness: s,
+						text: salute(t) + ($author$project$Main$spicyToString(s) + (' ' + $author$project$Main$audienceToString(a)))
+					});
+			}
 		});
 	var audience = _List_fromArray(
 		[$author$project$Main$MixedAudience, $author$project$Main$MaleAudience, $author$project$Main$FemaleAudience]);
@@ -5660,6 +5675,24 @@ var $author$project$Main$pickPartner = F2(
 			model,
 			{currentPartner: partner});
 	});
+var $elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _v0 = f(mx);
+		if (_v0.$ === 'Just') {
+			var x = _v0.a;
+			return A2($elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var $elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			$elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -5690,32 +5723,60 @@ var $elm$core$List$member = F2(
 			},
 			xs);
 	});
-var $author$project$Main$pickCard = F3(
-	function (random, cardKind, model) {
-		var _v0 = _Utils_Tuple2(model.setting.spiciness, model.setting.audience);
+var $author$project$Main$pickDareCard = F4(
+	function (random, audience, spiciness, cards) {
+		return A2(
+			$author$project$Main$pickRandom,
+			random.randomCard,
+			$elm$core$Array$fromList(
+				A2(
+					$elm$core$List$filterMap,
+					function (c) {
+						if (c.$ === 'DareCard') {
+							var dc = c.a;
+							return (A2($elm$core$List$member, audience, dc.audiences) && _Utils_eq(dc.spiciness, spiciness)) ? $elm$core$Maybe$Just(c) : $elm$core$Maybe$Nothing;
+						} else {
+							return $elm$core$Maybe$Nothing;
+						}
+					},
+					$elm$core$Array$toList(cards))));
+	});
+var $author$project$Main$pickTruthCard = F3(
+	function (random, audience, cards) {
+		return A2(
+			$author$project$Main$pickRandom,
+			random.randomCard,
+			$elm$core$Array$fromList(
+				A2(
+					$elm$core$List$filterMap,
+					function (c) {
+						if (c.$ === 'TruthCard') {
+							var tc = c.a;
+							return A2($elm$core$List$member, audience, tc.audiences) ? $elm$core$Maybe$Just(c) : $elm$core$Maybe$Nothing;
+						} else {
+							return $elm$core$Maybe$Nothing;
+						}
+					},
+					$elm$core$Array$toList(cards))));
+	});
+var $author$project$Main$pickTruthOrDare = F2(
+	function (random, model) {
+		var _v0 = _Utils_Tuple2(model.setting.audience, model.setting.spiciness);
 		if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
-			var spiciness = _v0.a.a;
-			var audience = _v0.b.a;
-			return _Utils_update(
+			var audience = _v0.a.a;
+			var spiciness = _v0.b.a;
+			return (_Utils_cmp(random.randomTruthDare, model.setting.truthDareRatio) < 1) ? _Utils_update(
 				model,
 				{
-					currentCard: A2(
-						$author$project$Main$pickRandom,
-						random.randomCard,
-						A2(
-							$elm$core$Array$filter,
-							function (card) {
-								return _Utils_eq(card.truthDare, cardKind) && (_Utils_eq(card.spiciness, spiciness) && A2($elm$core$List$member, audience, card.audiences));
-							},
-							model.cards))
+					currentCard: A3($author$project$Main$pickTruthCard, random, audience, model.cards)
+				}) : _Utils_update(
+				model,
+				{
+					currentCard: A4($author$project$Main$pickDareCard, random, audience, spiciness, model.cards)
 				});
 		} else {
 			return model;
 		}
-	});
-var $author$project$Main$pickTruthOrDare = F2(
-	function (random, model) {
-		return (_Utils_cmp(random.randomTruthDare, model.setting.truthDareRatio) < 1) ? A3($author$project$Main$pickCard, random, $author$project$Main$Truth, model) : A3($author$project$Main$pickCard, random, $author$project$Main$Dare, model);
 	});
 var $author$project$Main$pickNextCard = F2(
 	function (random, model) {
@@ -6057,28 +6118,38 @@ var $author$project$Main$update = F2(
 						}),
 					$elm$core$Platform$Cmd$none);
 			default:
-				var newCard = {
-					audiences: $Gizra$elm_all_set$EverySet$toList(model.editCard.audiences),
-					spiciness: function () {
-						var _v2 = model.editCard.spiciness;
-						if (_v2.$ === 'Just') {
-							var s = _v2.a;
-							return s;
+				var newCard = function () {
+					var _v2 = model.editCard.truthDare;
+					if (_v2.$ === 'Just') {
+						if (_v2.a.$ === 'Truth') {
+							var _v3 = _v2.a;
+							return $author$project$Main$TruthCard(
+								{
+									audiences: $Gizra$elm_all_set$EverySet$toList(model.editCard.audiences),
+									text: model.editCard.text
+								});
 						} else {
-							return $author$project$Main$Green;
+							var _v4 = _v2.a;
+							return $author$project$Main$DareCard(
+								{
+									audiences: $Gizra$elm_all_set$EverySet$toList(model.editCard.audiences),
+									spiciness: function () {
+										var _v5 = model.editCard.spiciness;
+										if (_v5.$ === 'Just') {
+											var s = _v5.a;
+											return s;
+										} else {
+											return $author$project$Main$Green;
+										}
+									}(),
+									text: model.editCard.text
+								});
 						}
-					}(),
-					text: model.editCard.text,
-					truthDare: function () {
-						var _v3 = model.editCard.truthDare;
-						if (_v3.$ === 'Just') {
-							var td = _v3.a;
-							return td;
-						} else {
-							return $author$project$Main$Truth;
-						}
-					}()
-				};
+					} else {
+						return $author$project$Main$TruthCard(
+							{audiences: _List_Nil, text: '?'});
+					}
+				}();
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -6584,24 +6655,6 @@ var $mdgriffith$elm_ui$Internal$Model$Style = F2(
 var $mdgriffith$elm_ui$Internal$Style$dot = function (c) {
 	return '.' + c;
 };
-var $elm$core$List$maybeCons = F3(
-	function (f, mx, xs) {
-		var _v0 = f(mx);
-		if (_v0.$ === 'Just') {
-			var x = _v0.a;
-			return A2($elm$core$List$cons, x, xs);
-		} else {
-			return xs;
-		}
-	});
-var $elm$core$List$filterMap = F2(
-	function (f, xs) {
-		return A3(
-			$elm$core$List$foldr,
-			$elm$core$List$maybeCons(f),
-			_List_Nil,
-			xs);
-	});
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $mdgriffith$elm_ui$Internal$Model$formatColor = function (_v0) {
 	var red = _v0.a;
@@ -14249,61 +14302,118 @@ var $mdgriffith$elm_ui$Element$wrappedRow = F2(
 		}
 	});
 var $author$project$Main$viewCard = function (card) {
-	return A2(
-		$mdgriffith$elm_ui$Element$wrappedRow,
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-				$mdgriffith$elm_ui$Element$spacing(5)
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$mdgriffith$elm_ui$Element$el,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$width(
-						$mdgriffith$elm_ui$Element$px(16 * 4))
-					]),
-				$mdgriffith$elm_ui$Element$text(
-					$author$project$Main$truthDareToString(card.truthDare))),
-				A2(
-				$mdgriffith$elm_ui$Element$el,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$width(
-						$mdgriffith$elm_ui$Element$px(16 * 7))
-					]),
-				$mdgriffith$elm_ui$Element$text(
-					$author$project$Main$spicyToString(card.spiciness))),
-				A2(
-				$mdgriffith$elm_ui$Element$el,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$width(
-						$mdgriffith$elm_ui$Element$px(16 * 12))
-					]),
-				A2(
-					$mdgriffith$elm_ui$Element$column,
-					_List_Nil,
+	if (card.$ === 'TruthCard') {
+		var tc = card.a;
+		return A2(
+			$mdgriffith$elm_ui$Element$wrappedRow,
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+					$mdgriffith$elm_ui$Element$spacing(5)
+				]),
+			_List_fromArray(
+				[
 					A2(
-						$elm$core$List$map,
-						function (a) {
-							return $mdgriffith$elm_ui$Element$text(
-								$author$project$Main$audienceToString(a));
-						},
-						card.audiences))),
-				A2(
-				$mdgriffith$elm_ui$Element$paragraph,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
-					]),
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$text(card.text)
-					]))
-			]));
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width(
+							$mdgriffith$elm_ui$Element$px(16 * 4))
+						]),
+					$mdgriffith$elm_ui$Element$text('Truth')),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width(
+							$mdgriffith$elm_ui$Element$px(16 * 7))
+						]),
+					$mdgriffith$elm_ui$Element$text(' ')),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width(
+							$mdgriffith$elm_ui$Element$px(16 * 12))
+						]),
+					A2(
+						$mdgriffith$elm_ui$Element$column,
+						_List_Nil,
+						A2(
+							$elm$core$List$map,
+							function (a) {
+								return $mdgriffith$elm_ui$Element$text(
+									$author$project$Main$audienceToString(a));
+							},
+							tc.audiences))),
+					A2(
+					$mdgriffith$elm_ui$Element$paragraph,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+						]),
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$text(tc.text)
+						]))
+				]));
+	} else {
+		var dc = card.a;
+		return A2(
+			$mdgriffith$elm_ui$Element$wrappedRow,
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+					$mdgriffith$elm_ui$Element$spacing(5)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width(
+							$mdgriffith$elm_ui$Element$px(16 * 4))
+						]),
+					$mdgriffith$elm_ui$Element$text('Dare')),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width(
+							$mdgriffith$elm_ui$Element$px(16 * 7))
+						]),
+					$mdgriffith$elm_ui$Element$text(
+						$author$project$Main$spicyToString(dc.spiciness))),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width(
+							$mdgriffith$elm_ui$Element$px(16 * 12))
+						]),
+					A2(
+						$mdgriffith$elm_ui$Element$column,
+						_List_Nil,
+						A2(
+							$elm$core$List$map,
+							function (a) {
+								return $mdgriffith$elm_ui$Element$text(
+									$author$project$Main$audienceToString(a));
+							},
+							dc.audiences))),
+					A2(
+					$mdgriffith$elm_ui$Element$paragraph,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+						]),
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$text(dc.text)
+						]))
+				]));
+	}
 };
 var $author$project$Main$viewCardHeadings = A2(
 	$mdgriffith$elm_ui$Element$row,
@@ -14445,34 +14555,47 @@ var $author$project$Main$viewCurrentCard = F3(
 						$mdgriffith$elm_ui$Element$padding(20),
 						$mdgriffith$elm_ui$Element$spacing(10)
 					]),
-				_List_fromArray(
-					[
-						function () {
-						var _v1 = card.truthDare;
-						if (_v1.$ === 'Truth') {
-							return A2(
-								$mdgriffith$elm_ui$Element$el,
-								_List_fromArray(
-									[$mdgriffith$elm_ui$Element$centerX, $mdgriffith$elm_ui$Element$Font$bold]),
-								$mdgriffith$elm_ui$Element$text('Truth'));
-						} else {
-							return A2(
-								$mdgriffith$elm_ui$Element$el,
-								_List_fromArray(
-									[$mdgriffith$elm_ui$Element$centerX, $mdgriffith$elm_ui$Element$Font$bold]),
-								$mdgriffith$elm_ui$Element$text('Dare'));
-						}
-					}(),
-						A2(
-						$mdgriffith$elm_ui$Element$paragraph,
-						_List_fromArray(
-							[$mdgriffith$elm_ui$Element$centerX]),
-						_List_fromArray(
+				function () {
+					if (card.$ === 'TruthCard') {
+						var tc = card.a;
+						return _List_fromArray(
 							[
-								$mdgriffith$elm_ui$Element$text(
-								replaceText(card.text))
-							]))
-					]));
+								A2(
+								$mdgriffith$elm_ui$Element$el,
+								_List_fromArray(
+									[$mdgriffith$elm_ui$Element$centerX, $mdgriffith$elm_ui$Element$Font$bold]),
+								$mdgriffith$elm_ui$Element$text('Truth')),
+								A2(
+								$mdgriffith$elm_ui$Element$paragraph,
+								_List_fromArray(
+									[$mdgriffith$elm_ui$Element$centerX]),
+								_List_fromArray(
+									[
+										$mdgriffith$elm_ui$Element$text(
+										replaceText(tc.text))
+									]))
+							]);
+					} else {
+						var dc = card.a;
+						return _List_fromArray(
+							[
+								A2(
+								$mdgriffith$elm_ui$Element$el,
+								_List_fromArray(
+									[$mdgriffith$elm_ui$Element$centerX, $mdgriffith$elm_ui$Element$Font$bold]),
+								$mdgriffith$elm_ui$Element$text('Dare')),
+								A2(
+								$mdgriffith$elm_ui$Element$paragraph,
+								_List_fromArray(
+									[$mdgriffith$elm_ui$Element$centerX]),
+								_List_fromArray(
+									[
+										$mdgriffith$elm_ui$Element$text(
+										replaceText(dc.text))
+									]))
+							]);
+					}
+				}());
 		}
 	});
 var $author$project$Main$ClickedNextRound = {$: 'ClickedNextRound'};
