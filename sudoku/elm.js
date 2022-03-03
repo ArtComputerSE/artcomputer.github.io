@@ -10536,6 +10536,15 @@ var $elm$core$Basics$never = function (_v0) {
 	}
 };
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Sudoku$Main$Model = function (grid) {
+	return {grid: grid};
+};
+var $elm$json$Json$Decode$array = _Json_decodeArray;
+var $author$project$Sudoku$Main$Cell = F4(
+	function (row, col, options, conflict) {
+		return {col: col, conflict: conflict, options: options, row: row};
+	});
+var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $elm$core$Set$Set_elm_builtin = function (a) {
 	return {$: 'Set_elm_builtin', a: a};
 };
@@ -10549,6 +10558,41 @@ var $elm$core$Set$insert = F2(
 var $elm$core$Set$fromList = function (list) {
 	return A3($elm$core$List$foldl, $elm$core$Set$insert, $elm$core$Set$empty, list);
 };
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
+	function (key, valDecoder, decoder) {
+		return A2(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
+			A2($elm$json$Json$Decode$field, key, valDecoder),
+			decoder);
+	});
+var $author$project$Sudoku$Main$decodeCell = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'conflict',
+	$elm$json$Json$Decode$bool,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'options',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$core$Set$fromList,
+			$elm$json$Json$Decode$list($elm$json$Json$Decode$int)),
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'col',
+			$elm$json$Json$Decode$int,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+				'row',
+				$elm$json$Json$Decode$int,
+				$elm$json$Json$Decode$succeed($author$project$Sudoku$Main$Cell)))));
+var $author$project$Sudoku$Main$decodeRow = $elm$json$Json$Decode$array($author$project$Sudoku$Main$decodeCell);
+var $author$project$Sudoku$Main$decodeGrid = $elm$json$Json$Decode$array($author$project$Sudoku$Main$decodeRow);
+var $author$project$Sudoku$Main$decodeModel = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'grid',
+	$author$project$Sudoku$Main$decodeGrid,
+	$elm$json$Json$Decode$succeed($author$project$Sudoku$Main$Model));
 var $author$project$Sudoku$Main$initCell = F2(
 	function (row, col) {
 		return {
@@ -10572,11 +10616,20 @@ var $perty$matrix$Matrix$initialize = F3(
 					fn(col));
 			});
 	});
-var $author$project$Sudoku$Main$init = function (_v0) {
-	return _Utils_Tuple2(
-		{
+var $author$project$Sudoku$Main$restoreModel = function (string) {
+	var _v0 = A2($elm$json$Json$Decode$decodeString, $author$project$Sudoku$Main$decodeModel, string);
+	if (_v0.$ === 'Ok') {
+		var model = _v0.a;
+		return model;
+	} else {
+		return {
 			grid: A3($perty$matrix$Matrix$initialize, 9, 9, $author$project$Sudoku$Main$initCell)
-		},
+		};
+	}
+};
+var $author$project$Sudoku$Main$init = function (flags) {
+	return _Utils_Tuple2(
+		$author$project$Sudoku$Main$restoreModel(flags),
 		$elm$core$Platform$Cmd$none);
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
@@ -10739,6 +10792,58 @@ var $elm$core$Set$remove = F2(
 		return $elm$core$Set$Set_elm_builtin(
 			A2($elm$core$Dict$remove, key, dict));
 	});
+var $elm$json$Json$Encode$array = F2(
+	function (func, entries) {
+		return _Json_wrap(
+			A3(
+				$elm$core$Array$foldl,
+				_Json_addEntry(func),
+				_Json_emptyArray(_Utils_Tuple0),
+				entries));
+	});
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$json$Json$Encode$int = _Json_wrap;
+var $author$project$Sudoku$Main$encodeCell = function (cell) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'row',
+				$elm$json$Json$Encode$int(cell.row)),
+				_Utils_Tuple2(
+				'col',
+				$elm$json$Json$Encode$int(cell.col)),
+				_Utils_Tuple2(
+				'options',
+				A2(
+					$elm$json$Json$Encode$list,
+					$elm$json$Json$Encode$int,
+					$elm$core$Set$toList(cell.options))),
+				_Utils_Tuple2(
+				'conflict',
+				$elm$json$Json$Encode$bool(cell.conflict))
+			]));
+};
+var $author$project$Sudoku$Main$encodeRow = function (cells) {
+	return A2($elm$json$Json$Encode$array, $author$project$Sudoku$Main$encodeCell, cells);
+};
+var $author$project$Sudoku$Main$encodeGrid = function (matrix) {
+	return A2($elm$json$Json$Encode$array, $author$project$Sudoku$Main$encodeRow, matrix);
+};
+var $author$project$Sudoku$Main$encodeModel = function (model) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'grid',
+				$author$project$Sudoku$Main$encodeGrid(model.grid))
+			]));
+};
+var $author$project$Sudoku$Port$setStorage = _Platform_outgoingPort('setStorage', $elm$core$Basics$identity);
+var $author$project$Sudoku$Main$saveModel = function (model) {
+	return $author$project$Sudoku$Port$setStorage(
+		$author$project$Sudoku$Main$encodeModel(model));
+};
 var $elm$core$Array$setHelp = F4(
 	function (shift, index, value, tree) {
 		var pos = $elm$core$Array$bitMask & (index >>> shift);
@@ -10809,29 +10914,31 @@ var $author$project$Sudoku$Main$update = F2(
 			var newCell = _Utils_update(
 				currentCell,
 				{options: newSet});
+			var newModel = $author$project$Sudoku$Main$checkGrid(
+				_Utils_update(
+					model,
+					{
+						grid: A4($perty$matrix$Matrix$set, model.grid, x, y, newCell)
+					}));
 			return _Utils_Tuple2(
-				$author$project$Sudoku$Main$checkGrid(
-					_Utils_update(
-						model,
-						{
-							grid: A4($perty$matrix$Matrix$set, model.grid, x, y, newCell)
-						})),
-				$elm$core$Platform$Cmd$none);
+				newModel,
+				$author$project$Sudoku$Main$saveModel(newModel));
 		} else {
 			var cell = msg.a;
+			var newModel = $author$project$Sudoku$Main$checkGrid(
+				_Utils_update(
+					model,
+					{
+						grid: A4(
+							$perty$matrix$Matrix$set,
+							model.grid,
+							cell.row,
+							cell.col,
+							A2($author$project$Sudoku$Main$initCell, cell.row, cell.col))
+					}));
 			return _Utils_Tuple2(
-				$author$project$Sudoku$Main$checkGrid(
-					_Utils_update(
-						model,
-						{
-							grid: A4(
-								$perty$matrix$Matrix$set,
-								model.grid,
-								cell.row,
-								cell.col,
-								A2($author$project$Sudoku$Main$initCell, cell.row, cell.col))
-						})),
-				$elm$core$Platform$Cmd$none);
+				newModel,
+				$author$project$Sudoku$Main$saveModel(newModel));
 		}
 	});
 var $mdgriffith$elm_ui$Internal$Style$classes = {above: 'a', active: 'atv', alignBottom: 'ab', alignCenterX: 'cx', alignCenterY: 'cy', alignContainerBottom: 'acb', alignContainerCenterX: 'accx', alignContainerCenterY: 'accy', alignContainerRight: 'acr', alignLeft: 'al', alignRight: 'ar', alignTop: 'at', alignedHorizontally: 'ah', alignedVertically: 'av', any: 's', behind: 'bh', below: 'b', bold: 'w7', borderDashed: 'bd', borderDotted: 'bdt', borderNone: 'bn', borderSolid: 'bs', capturePointerEvents: 'cpe', clip: 'cp', clipX: 'cpx', clipY: 'cpy', column: 'c', container: 'ctr', contentBottom: 'cb', contentCenterX: 'ccx', contentCenterY: 'ccy', contentLeft: 'cl', contentRight: 'cr', contentTop: 'ct', cursorPointer: 'cptr', cursorText: 'ctxt', focus: 'fcs', focusedWithin: 'focus-within', fullSize: 'fs', grid: 'g', hasBehind: 'hbh', heightContent: 'hc', heightExact: 'he', heightFill: 'hf', heightFillPortion: 'hfp', hover: 'hv', imageContainer: 'ic', inFront: 'fr', inputLabel: 'lbl', inputMultiline: 'iml', inputMultilineFiller: 'imlf', inputMultilineParent: 'imlp', inputMultilineWrapper: 'implw', inputText: 'it', italic: 'i', link: 'lnk', nearby: 'nb', noTextSelection: 'notxt', onLeft: 'ol', onRight: 'or', opaque: 'oq', overflowHidden: 'oh', page: 'pg', paragraph: 'p', passPointerEvents: 'ppe', root: 'ui', row: 'r', scrollbars: 'sb', scrollbarsX: 'sbx', scrollbarsY: 'sby', seButton: 'sbt', single: 'e', sizeByCapital: 'cap', spaceEvenly: 'sev', strike: 'sk', text: 't', textCenter: 'tc', textExtraBold: 'w8', textExtraLight: 'w2', textHeavy: 'w9', textJustify: 'tj', textJustifyAll: 'tja', textLeft: 'tl', textLight: 'w3', textMedium: 'w5', textNormalWeight: 'w4', textRight: 'tr', textSemiBold: 'w6', textThin: 'w1', textUnitalicized: 'tun', transition: 'ts', transparent: 'clr', underline: 'u', widthContent: 'wc', widthExact: 'we', widthFill: 'wf', widthFillPortion: 'wfp', wrapped: 'wrp'};
@@ -16511,7 +16618,6 @@ var $mdgriffith$elm_ui$Internal$Model$Button = {$: 'Button'};
 var $mdgriffith$elm_ui$Internal$Model$Describe = function (a) {
 	return {$: 'Describe', a: a};
 };
-var $elm$json$Json$Encode$bool = _Json_wrap;
 var $elm$html$Html$Attributes$boolProperty = F2(
 	function (key, bool) {
 		return A2(
@@ -16984,5 +17090,4 @@ var $author$project$Sudoku$Main$view = function (model) {
 };
 var $author$project$Sudoku$Main$main = $elm$browser$Browser$element(
 	{init: $author$project$Sudoku$Main$init, subscriptions: $author$project$Sudoku$Main$subscriptions, update: $author$project$Sudoku$Main$update, view: $author$project$Sudoku$Main$view});
-_Platform_export({'Sudoku':{'Main':{'init':$author$project$Sudoku$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Sudoku.Main.Msg","aliases":{"Sudoku.Main.Cell":{"args":[],"type":"{ row : Basics.Int, col : Basics.Int, options : Set.Set Basics.Int, conflict : Basics.Bool }"}},"unions":{"Sudoku.Main.Msg":{"args":[],"tags":{"ClickedCell":["Basics.Int","Basics.Int","Basics.Int"],"PressedResetCell":["Sudoku.Main.Cell"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Set.Set":{"args":["t"],"tags":{"Set_elm_builtin":["Dict.Dict t ()"]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}}});}(this));
+_Platform_export({'Sudoku':{'Main':{'init':$author$project$Sudoku$Main$main($elm$json$Json$Decode$string)({"versions":{"elm":"0.19.1"},"types":{"message":"Sudoku.Main.Msg","aliases":{"Sudoku.Main.Cell":{"args":[],"type":"{ row : Basics.Int, col : Basics.Int, options : Set.Set Basics.Int, conflict : Basics.Bool }"}},"unions":{"Sudoku.Main.Msg":{"args":[],"tags":{"ClickedCell":["Basics.Int","Basics.Int","Basics.Int"],"PressedResetCell":["Sudoku.Main.Cell"]}},"Basics.Bool":{"args":[],"tags":{"True":[],"False":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}},"Set.Set":{"args":["t"],"tags":{"Set_elm_builtin":["Dict.Dict t ()"]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":[]}},"Dict.NColor":{"args":[],"tags":{"Red":[],"Black":[]}}}}})}}});}(this));
