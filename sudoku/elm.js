@@ -10617,7 +10617,15 @@ var $author$project$Sudoku$Main$decodeModel = A3(
 		$elm$json$Json$Decode$succeed($author$project$Sudoku$Main$Model)));
 var $author$project$Sudoku$Main$initCell = F2(
 	function (row, col) {
-		return {col: col, conflict: false, constant: false, options: $elm$core$Set$empty, row: row};
+		return {
+			col: col,
+			conflict: false,
+			constant: false,
+			options: $elm$core$Set$fromList(
+				_List_fromArray(
+					[1, 2, 3, 4, 5, 6, 7, 8, 9])),
+			row: row
+		};
 	});
 var $perty$matrix$Matrix$initialize = F3(
 	function (sizeX, sizeY, fn) {
@@ -18072,7 +18080,7 @@ var $author$project$Sudoku$Main$viewCell = function (cell) {
 				$mdgriffith$elm_ui$Element$px(94)),
 				$mdgriffith$elm_ui$Element$padding(5),
 				$mdgriffith$elm_ui$Element$Border$width(1),
-				$mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$grey),
+				cell.conflict ? $mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$red) : $mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$grey),
 				$mdgriffith$elm_ui$Element$Font$center
 			]),
 		_List_fromArray(
