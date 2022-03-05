@@ -12042,6 +12042,11 @@ var $mdgriffith$elm_ui$Element$layoutWith = F3(
 var $author$project$Sudoku$Main$noFocusStyle = {backgroundColor: $elm$core$Maybe$Nothing, borderColor: $elm$core$Maybe$Nothing, shadow: $elm$core$Maybe$Nothing};
 var $author$project$Sudoku$Main$PressedDone = {$: 'PressedDone'};
 var $author$project$Sudoku$Main$PressedSetUp = {$: 'PressedSetUp'};
+var $mdgriffith$elm_ui$Element$rgb = F3(
+	function (r, g, b) {
+		return A4($mdgriffith$elm_ui$Internal$Model$Rgba, r, g, b, 1);
+	});
+var $author$project$Sudoku$Main$blue = A3($mdgriffith$elm_ui$Element$rgb, 0.5, 0.5, 0.9);
 var $mdgriffith$elm_ui$Internal$Model$Class = F2(
 	function (a, b) {
 		return {$: 'Class', a: a, b: b};
@@ -12228,10 +12233,6 @@ var $mdgriffith$elm_ui$Element$Border$color = function (clr) {
 			'border-color',
 			clr));
 };
-var $mdgriffith$elm_ui$Element$rgb = F3(
-	function (r, g, b) {
-		return A4($mdgriffith$elm_ui$Internal$Model$Rgba, r, g, b, 1);
-	});
 var $author$project$Sudoku$Main$grey = A3($mdgriffith$elm_ui$Element$rgb, 0.8, 0.8, 0.8);
 var $author$project$Sudoku$Main$lightRed = A3($mdgriffith$elm_ui$Element$rgb, 0.9, 0.7, 0.7);
 var $mdgriffith$elm_ui$Internal$Model$PaddingStyle = F5(
@@ -12289,6 +12290,16 @@ var $author$project$Sudoku$Main$buttonAttr = _List_fromArray(
 	]);
 var $mdgriffith$elm_ui$Internal$Flag$fontAlignment = $mdgriffith$elm_ui$Internal$Flag$flag(12);
 var $mdgriffith$elm_ui$Element$Font$center = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$fontAlignment, $mdgriffith$elm_ui$Internal$Style$classes.textCenter);
+var $mdgriffith$elm_ui$Element$Font$color = function (fontColor) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$fontColor,
+		A3(
+			$mdgriffith$elm_ui$Internal$Model$Colored,
+			'fc-' + $mdgriffith$elm_ui$Internal$Model$formatColorClass(fontColor),
+			'color',
+			fontColor));
+};
 var $mdgriffith$elm_ui$Internal$Model$AsColumn = {$: 'AsColumn'};
 var $mdgriffith$elm_ui$Internal$Model$asColumn = $mdgriffith$elm_ui$Internal$Model$AsColumn;
 var $mdgriffith$elm_ui$Element$column = F2(
@@ -12318,6 +12329,48 @@ var $mdgriffith$elm_ui$Element$Font$family = function (families) {
 			A3($elm$core$List$foldl, $mdgriffith$elm_ui$Internal$Model$renderFontClassName, 'ff-', families),
 			families));
 };
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
+var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
+var $mdgriffith$elm_ui$Element$newTabLink = F2(
+	function (attrs, _v0) {
+		var url = _v0.url;
+		var label = _v0.label;
+		return A4(
+			$mdgriffith$elm_ui$Internal$Model$element,
+			$mdgriffith$elm_ui$Internal$Model$asEl,
+			$mdgriffith$elm_ui$Internal$Model$NodeName('a'),
+			A2(
+				$elm$core$List$cons,
+				$mdgriffith$elm_ui$Internal$Model$Attr(
+					$elm$html$Html$Attributes$href(url)),
+				A2(
+					$elm$core$List$cons,
+					$mdgriffith$elm_ui$Internal$Model$Attr(
+						$elm$html$Html$Attributes$rel('noopener noreferrer')),
+					A2(
+						$elm$core$List$cons,
+						$mdgriffith$elm_ui$Internal$Model$Attr(
+							$elm$html$Html$Attributes$target('_blank')),
+						A2(
+							$elm$core$List$cons,
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$shrink),
+							A2(
+								$elm$core$List$cons,
+								$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$shrink),
+								A2(
+									$elm$core$List$cons,
+									$mdgriffith$elm_ui$Internal$Model$htmlClass($mdgriffith$elm_ui$Internal$Style$classes.contentCenterX + (' ' + ($mdgriffith$elm_ui$Internal$Style$classes.contentCenterY + (' ' + $mdgriffith$elm_ui$Internal$Style$classes.link)))),
+									attrs)))))),
+			$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+				_List_fromArray(
+					[label])));
+	});
 var $mdgriffith$elm_ui$Internal$Model$Paragraph = {$: 'Paragraph'};
 var $mdgriffith$elm_ui$Internal$Model$SpacingStyle = F3(
 	function (a, b, c) {
@@ -12453,7 +12506,7 @@ var $author$project$Sudoku$Main$viewHelp = A2(
 			_List_Nil,
 			_List_fromArray(
 				[
-					$mdgriffith$elm_ui$Element$text('Here\'s an aid to solve a sudoku puzzle. It keeps track of where there are conflicts while you still do the thinking, the whole point of spending time with puzzles.')
+					$mdgriffith$elm_ui$Element$text('Here\'s an aid to solve Sudoku puzzles. It keeps track of where there are conflicts while you still do the thinking, the whole point of spending time with puzzles.')
 				])),
 			A2(
 			$mdgriffith$elm_ui$Element$paragraph,
@@ -12467,21 +12520,21 @@ var $author$project$Sudoku$Main$viewHelp = A2(
 			_List_Nil,
 			_List_fromArray(
 				[
-					$mdgriffith$elm_ui$Element$text('Every other cell has numbers 1-9 in them. A cell with a red border has at least one number that is in conflict with another cell that has a single number.')
+					$mdgriffith$elm_ui$Element$text('All other cells have numbers 1 - 9 in them. A cell with a red border has at least one number that is in conflict with another cell that has a single number.')
 				])),
 			A2(
 			$mdgriffith$elm_ui$Element$paragraph,
 			_List_Nil,
 			_List_fromArray(
 				[
-					$mdgriffith$elm_ui$Element$text('Remove numbers of a cell that causes conflict. The remaining numbers are those which can be in that cell.')
+					$mdgriffith$elm_ui$Element$text('Remove numbers from a cell that cause conflict. The remaining numbers are those which can be in that cell.')
 				])),
 			A2(
 			$mdgriffith$elm_ui$Element$paragraph,
 			_List_Nil,
 			_List_fromArray(
 				[
-					$mdgriffith$elm_ui$Element$text('Example, if a cell has the single value 5, then no other cell in the same row, the same column or same square, may have the value 5. Click on 5 in all the cells in the same row, column and square. Those cells will now have numbers 1-4 and 6-9 as options.  Keep going until there\'re no more conflicts. Eventually cells will have a single value and reduce the options for adjacent cells.')
+					$mdgriffith$elm_ui$Element$text('Example, if a cell has the single value 5, then no other cell in the same row, the same column or same square, may have the value 5. Click on 5 in all the cells in the same row, column and square. Those cells will now have the numbers 1 - 4 and 6 - 9 as options. Keep going until there are no more conflicts. Eventually cells will have a single value and reduce the options for adjacent cells.')
 				])),
 			A2(
 			$mdgriffith$elm_ui$Element$paragraph,
@@ -12489,6 +12542,23 @@ var $author$project$Sudoku$Main$viewHelp = A2(
 			_List_fromArray(
 				[
 					$mdgriffith$elm_ui$Element$text('The notebook is saved in your browser so if you come back here, your last puzzle will be restored. ')
+				])),
+			A2(
+			$mdgriffith$elm_ui$Element$paragraph,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$text('You can find the source code here: '),
+					A2(
+					$mdgriffith$elm_ui$Element$newTabLink,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$Font$color($author$project$Sudoku$Main$blue)
+						]),
+					{
+						label: $mdgriffith$elm_ui$Element$text('GitHub'),
+						url: 'https://github.com/ArtComputerSE/elm-snippets/tree/master/src/Sudoku'
+					})
 				]))
 		]));
 var $author$project$Sudoku$Main$defaultRound = {bottomLeft: 0, bottomRight: 0, topLeft: 0, topRight: 0};
@@ -12560,7 +12630,6 @@ var $mdgriffith$elm_ui$Element$el = F2(
 					[child])));
 	});
 var $author$project$Sudoku$Main$PressedHelp = {$: 'PressedHelp'};
-var $author$project$Sudoku$Main$blue = A3($mdgriffith$elm_ui$Element$rgb, 0.5, 0.5, 0.9);
 var $mdgriffith$elm_ui$Internal$Model$boxShadowClass = function (shadow) {
 	return $elm$core$String$concat(
 		_List_fromArray(
@@ -13244,16 +13313,6 @@ var $mdgriffith$elm_ui$Element$alpha = function (o) {
 			transparency));
 };
 var $mdgriffith$elm_ui$Element$Input$charcoal = A3($mdgriffith$elm_ui$Element$rgb, 136 / 255, 138 / 255, 133 / 255);
-var $mdgriffith$elm_ui$Element$Font$color = function (fontColor) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$fontColor,
-		A3(
-			$mdgriffith$elm_ui$Internal$Model$Colored,
-			'fc-' + $mdgriffith$elm_ui$Internal$Model$formatColorClass(fontColor),
-			'color',
-			fontColor));
-};
 var $mdgriffith$elm_ui$Element$rgba = $mdgriffith$elm_ui$Internal$Model$Rgba;
 var $mdgriffith$elm_ui$Element$Input$renderPlaceholder = F3(
 	function (_v0, forPlaceholder, on) {
