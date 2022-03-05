@@ -11061,6 +11061,15 @@ var $author$project$Sudoku$Main$update = F2(
 				}
 		}
 	});
+var $mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
+	return {$: 'AlignX', a: a};
+};
+var $mdgriffith$elm_ui$Internal$Model$CenterX = {$: 'CenterX'};
+var $mdgriffith$elm_ui$Element$centerX = $mdgriffith$elm_ui$Internal$Model$AlignX($mdgriffith$elm_ui$Internal$Model$CenterX);
+var $mdgriffith$elm_ui$Internal$Model$Fill = function (a) {
+	return {$: 'Fill', a: a};
+};
+var $mdgriffith$elm_ui$Element$fill = $mdgriffith$elm_ui$Internal$Model$Fill(1);
 var $mdgriffith$elm_ui$Internal$Style$classes = {above: 'a', active: 'atv', alignBottom: 'ab', alignCenterX: 'cx', alignCenterY: 'cy', alignContainerBottom: 'acb', alignContainerCenterX: 'accx', alignContainerCenterY: 'accy', alignContainerRight: 'acr', alignLeft: 'al', alignRight: 'ar', alignTop: 'at', alignedHorizontally: 'ah', alignedVertically: 'av', any: 's', behind: 'bh', below: 'b', bold: 'w7', borderDashed: 'bd', borderDotted: 'bdt', borderNone: 'bn', borderSolid: 'bs', capturePointerEvents: 'cpe', clip: 'cp', clipX: 'cpx', clipY: 'cpy', column: 'c', container: 'ctr', contentBottom: 'cb', contentCenterX: 'ccx', contentCenterY: 'ccy', contentLeft: 'cl', contentRight: 'cr', contentTop: 'ct', cursorPointer: 'cptr', cursorText: 'ctxt', focus: 'fcs', focusedWithin: 'focus-within', fullSize: 'fs', grid: 'g', hasBehind: 'hbh', heightContent: 'hc', heightExact: 'he', heightFill: 'hf', heightFillPortion: 'hfp', hover: 'hv', imageContainer: 'ic', inFront: 'fr', inputLabel: 'lbl', inputMultiline: 'iml', inputMultilineFiller: 'imlf', inputMultilineParent: 'imlp', inputMultilineWrapper: 'implw', inputText: 'it', italic: 'i', link: 'lnk', nearby: 'nb', noTextSelection: 'notxt', onLeft: 'ol', onRight: 'or', opaque: 'oq', overflowHidden: 'oh', page: 'pg', paragraph: 'p', passPointerEvents: 'ppe', root: 'ui', row: 'r', scrollbars: 'sb', scrollbarsX: 'sbx', scrollbarsY: 'sby', seButton: 'sbt', single: 'e', sizeByCapital: 'cap', spaceEvenly: 'sev', strike: 'sk', text: 't', textCenter: 'tc', textExtraBold: 'w8', textExtraLight: 'w2', textHeavy: 'w9', textJustify: 'tj', textJustifyAll: 'tja', textLeft: 'tl', textLight: 'w3', textMedium: 'w5', textNormalWeight: 'w4', textRight: 'tr', textSemiBold: 'w6', textThin: 'w1', textUnitalicized: 'tun', transition: 'ts', transparent: 'clr', underline: 'u', widthContent: 'wc', widthExact: 'we', widthFill: 'wf', widthFillPortion: 'wfp', wrapped: 'wrp'};
 var $mdgriffith$elm_ui$Internal$Model$Attr = function (a) {
 	return {$: 'Attr', a: a};
@@ -16666,6 +16675,14 @@ var $mdgriffith$elm_ui$Element$layoutWith = F3(
 var $mdgriffith$elm_ui$Element$layout = $mdgriffith$elm_ui$Element$layoutWith(
 	{options: _List_Nil});
 var $author$project$Sudoku$Main$PressedDone = {$: 'PressedDone'};
+var $author$project$Sudoku$Main$borderBottomLeft = {bottom: 4, left: 4, right: 2, top: 2};
+var $author$project$Sudoku$Main$borderBottomMiddle = {bottom: 4, left: 2, right: 2, top: 2};
+var $author$project$Sudoku$Main$borderMiddleLeft = {bottom: 2, left: 4, right: 2, top: 2};
+var $author$project$Sudoku$Main$borderMiddleMiddle = {bottom: 2, left: 2, right: 2, top: 2};
+var $author$project$Sudoku$Main$borderMiddleRight = {bottom: 2, left: 2, right: 4, top: 2};
+var $author$project$Sudoku$Main$borderTopLeft = {bottom: 2, left: 4, right: 2, top: 4};
+var $author$project$Sudoku$Main$borderTopMiddle = {bottom: 2, left: 2, right: 2, top: 4};
+var $author$project$Sudoku$Main$borderTopRight = {bottom: 2, left: 2, right: 4, top: 4};
 var $mdgriffith$elm_ui$Internal$Model$Button = {$: 'Button'};
 var $mdgriffith$elm_ui$Internal$Model$Describe = function (a) {
 	return {$: 'Describe', a: a};
@@ -16887,11 +16904,6 @@ var $author$project$Sudoku$Main$buttonAttr = _List_fromArray(
 		$mdgriffith$elm_ui$Element$padding(5),
 		$mdgriffith$elm_ui$Element$Background$color($author$project$Sudoku$Main$lightRed)
 	]);
-var $mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
-	return {$: 'AlignX', a: a};
-};
-var $mdgriffith$elm_ui$Internal$Model$CenterX = {$: 'CenterX'};
-var $mdgriffith$elm_ui$Element$centerX = $mdgriffith$elm_ui$Internal$Model$AlignX($mdgriffith$elm_ui$Internal$Model$CenterX);
 var $mdgriffith$elm_ui$Internal$Model$AsColumn = {$: 'AsColumn'};
 var $mdgriffith$elm_ui$Internal$Model$asColumn = $mdgriffith$elm_ui$Internal$Model$AsColumn;
 var $mdgriffith$elm_ui$Element$column = F2(
@@ -16929,10 +16941,10 @@ var $mdgriffith$elm_ui$Element$el = F2(
 				_List_fromArray(
 					[child])));
 	});
-var $mdgriffith$elm_ui$Internal$Model$Fill = function (a) {
-	return {$: 'Fill', a: a};
+var $mdgriffith$elm_ui$Internal$Model$Px = function (a) {
+	return {$: 'Px', a: a};
 };
-var $mdgriffith$elm_ui$Element$fill = $mdgriffith$elm_ui$Internal$Model$Fill(1);
+var $mdgriffith$elm_ui$Element$px = $mdgriffith$elm_ui$Internal$Model$Px;
 var $mdgriffith$elm_ui$Internal$Model$AsRow = {$: 'AsRow'};
 var $mdgriffith$elm_ui$Internal$Model$asRow = $mdgriffith$elm_ui$Internal$Model$AsRow;
 var $mdgriffith$elm_ui$Element$row = F2(
@@ -16970,10 +16982,6 @@ var $mdgriffith$elm_ui$Element$Input$HiddenLabel = function (a) {
 	return {$: 'HiddenLabel', a: a};
 };
 var $mdgriffith$elm_ui$Element$Input$labelHidden = $mdgriffith$elm_ui$Element$Input$HiddenLabel;
-var $mdgriffith$elm_ui$Internal$Model$Px = function (a) {
-	return {$: 'Px', a: a};
-};
-var $mdgriffith$elm_ui$Element$px = $mdgriffith$elm_ui$Internal$Model$Px;
 var $mdgriffith$elm_ui$Element$Input$TextInputNode = function (a) {
 	return {$: 'TextInputNode', a: a};
 };
@@ -17899,8 +17907,37 @@ var $author$project$Sudoku$Main$viewSetUpCell = function (cell) {
 				})
 			]));
 };
-var $author$project$Sudoku$Main$viewSetUpSquare = F3(
-	function (grid, sr, sc) {
+var $mdgriffith$elm_ui$Element$Border$widthXY = F2(
+	function (x, y) {
+		return A2(
+			$mdgriffith$elm_ui$Internal$Model$StyleClass,
+			$mdgriffith$elm_ui$Internal$Flag$borderWidth,
+			A5(
+				$mdgriffith$elm_ui$Internal$Model$BorderWidth,
+				'b-' + ($elm$core$String$fromInt(x) + ('-' + $elm$core$String$fromInt(y))),
+				y,
+				x,
+				y,
+				x));
+	});
+var $mdgriffith$elm_ui$Element$Border$widthEach = function (_v0) {
+	var bottom = _v0.bottom;
+	var top = _v0.top;
+	var left = _v0.left;
+	var right = _v0.right;
+	return (_Utils_eq(top, bottom) && _Utils_eq(left, right)) ? (_Utils_eq(top, right) ? $mdgriffith$elm_ui$Element$Border$width(top) : A2($mdgriffith$elm_ui$Element$Border$widthXY, left, top)) : A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$borderWidth,
+		A5(
+			$mdgriffith$elm_ui$Internal$Model$BorderWidth,
+			'b-' + ($elm$core$String$fromInt(top) + ('-' + ($elm$core$String$fromInt(right) + ('-' + ($elm$core$String$fromInt(bottom) + ('-' + $elm$core$String$fromInt(left))))))),
+			top,
+			right,
+			bottom,
+			left));
+};
+var $author$project$Sudoku$Main$viewSetUpSquare = F4(
+	function (borders, grid, sr, sc) {
 		var getCell = F2(
 			function (r, c) {
 				return A2(
@@ -17912,14 +17949,16 @@ var $author$project$Sudoku$Main$viewSetUpSquare = F3(
 			$mdgriffith$elm_ui$Element$column,
 			_List_fromArray(
 				[
-					$mdgriffith$elm_ui$Element$Border$width(2),
+					$mdgriffith$elm_ui$Element$centerX,
+					$mdgriffith$elm_ui$Element$Border$widthEach(borders),
 					$mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$blue)
 				]),
 			_List_fromArray(
 				[
 					A2(
 					$mdgriffith$elm_ui$Element$row,
-					_List_Nil,
+					_List_fromArray(
+						[$mdgriffith$elm_ui$Element$centerX]),
 					_List_fromArray(
 						[
 							$author$project$Sudoku$Main$viewSetUpCell(
@@ -17931,7 +17970,8 @@ var $author$project$Sudoku$Main$viewSetUpSquare = F3(
 						])),
 					A2(
 					$mdgriffith$elm_ui$Element$row,
-					_List_Nil,
+					_List_fromArray(
+						[$mdgriffith$elm_ui$Element$centerX]),
 					_List_fromArray(
 						[
 							$author$project$Sudoku$Main$viewSetUpCell(
@@ -17943,7 +17983,8 @@ var $author$project$Sudoku$Main$viewSetUpSquare = F3(
 						])),
 					A2(
 					$mdgriffith$elm_ui$Element$row,
-					_List_Nil,
+					_List_fromArray(
+						[$mdgriffith$elm_ui$Element$centerX]),
 					_List_fromArray(
 						[
 							$author$project$Sudoku$Main$viewSetUpCell(
@@ -17958,14 +17999,20 @@ var $author$project$Sudoku$Main$viewSetUpSquare = F3(
 var $author$project$Sudoku$Main$viewSetUp = function (grid) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$centerX,
+				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+			]),
 		_List_fromArray(
 			[
 				A2(
 				$mdgriffith$elm_ui$Element$row,
 				_List_fromArray(
 					[
-						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width(
+						$mdgriffith$elm_ui$Element$px(900)),
 						$mdgriffith$elm_ui$Element$padding(5)
 					]),
 				_List_fromArray(
@@ -17985,34 +18032,47 @@ var $author$project$Sudoku$Main$viewSetUp = function (grid) {
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_Nil,
 				_List_fromArray(
 					[
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 0, 0),
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 0, 3),
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 0, 6)
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				_List_fromArray(
+					[
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderTopLeft, grid, 0, 0),
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderTopMiddle, grid, 0, 3),
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderTopRight, grid, 0, 6)
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_Nil,
 				_List_fromArray(
 					[
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 3, 0),
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 3, 3),
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 3, 6)
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				_List_fromArray(
+					[
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderMiddleLeft, grid, 3, 0),
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderMiddleMiddle, grid, 3, 3),
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderMiddleRight, grid, 3, 6)
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_Nil,
 				_List_fromArray(
 					[
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 6, 0),
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 6, 3),
-						A3($author$project$Sudoku$Main$viewSetUpSquare, grid, 6, 6)
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				_List_fromArray(
+					[
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderBottomLeft, grid, 6, 0),
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderBottomMiddle, grid, 6, 3),
+						A4($author$project$Sudoku$Main$viewSetUpSquare, $author$project$Sudoku$Main$borderMiddleRight, grid, 6, 6)
 					]))
 			]));
 };
 var $author$project$Sudoku$Main$PressedSetUp = {$: 'PressedSetUp'};
+var $author$project$Sudoku$Main$borderBottomRight = {bottom: 4, left: 2, right: 4, top: 2};
 var $author$project$Sudoku$Main$PressedResetCell = function (a) {
 	return {$: 'PressedResetCell', a: a};
 };
@@ -18075,9 +18135,9 @@ var $author$project$Sudoku$Main$viewCell = function (cell) {
 		_List_fromArray(
 			[
 				$mdgriffith$elm_ui$Element$width(
-				$mdgriffith$elm_ui$Element$px(100)),
+				$mdgriffith$elm_ui$Element$px(101)),
 				$mdgriffith$elm_ui$Element$height(
-				$mdgriffith$elm_ui$Element$px(94)),
+				$mdgriffith$elm_ui$Element$px(101)),
 				$mdgriffith$elm_ui$Element$padding(5),
 				$mdgriffith$elm_ui$Element$Border$width(1),
 				cell.conflict ? $mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$red) : $mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$grey),
@@ -18219,8 +18279,8 @@ var $author$project$Sudoku$Main$viewCell = function (cell) {
 					]))
 			]));
 };
-var $author$project$Sudoku$Main$viewSquare = F3(
-	function (grid, sr, sc) {
+var $author$project$Sudoku$Main$viewSquare = F4(
+	function (borders, grid, sr, sc) {
 		var getCell = F2(
 			function (r, c) {
 				return A2(
@@ -18232,8 +18292,13 @@ var $author$project$Sudoku$Main$viewSquare = F3(
 			$mdgriffith$elm_ui$Element$column,
 			_List_fromArray(
 				[
-					$mdgriffith$elm_ui$Element$Border$width(2),
-					$mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$blue)
+					$mdgriffith$elm_ui$Element$centerX,
+					$mdgriffith$elm_ui$Element$Border$widthEach(borders),
+					$mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$blue),
+					$mdgriffith$elm_ui$Element$width(
+					$mdgriffith$elm_ui$Element$px(308)),
+					$mdgriffith$elm_ui$Element$height(
+					$mdgriffith$elm_ui$Element$px(308))
 				]),
 			_List_fromArray(
 				[
@@ -18278,14 +18343,20 @@ var $author$project$Sudoku$Main$viewSquare = F3(
 var $author$project$Sudoku$Main$viewSolve = function (grid) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$centerX,
+				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+			]),
 		_List_fromArray(
 			[
 				A2(
 				$mdgriffith$elm_ui$Element$row,
 				_List_fromArray(
 					[
-						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width(
+						$mdgriffith$elm_ui$Element$px(900)),
 						$mdgriffith$elm_ui$Element$padding(5)
 					]),
 				_List_fromArray(
@@ -18305,30 +18376,42 @@ var $author$project$Sudoku$Main$viewSolve = function (grid) {
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_Nil,
 				_List_fromArray(
 					[
-						A3($author$project$Sudoku$Main$viewSquare, grid, 0, 0),
-						A3($author$project$Sudoku$Main$viewSquare, grid, 0, 3),
-						A3($author$project$Sudoku$Main$viewSquare, grid, 0, 6)
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				_List_fromArray(
+					[
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderTopLeft, grid, 0, 0),
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderTopMiddle, grid, 0, 3),
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderTopRight, grid, 0, 6)
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_Nil,
 				_List_fromArray(
 					[
-						A3($author$project$Sudoku$Main$viewSquare, grid, 3, 0),
-						A3($author$project$Sudoku$Main$viewSquare, grid, 3, 3),
-						A3($author$project$Sudoku$Main$viewSquare, grid, 3, 6)
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				_List_fromArray(
+					[
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderMiddleLeft, grid, 3, 0),
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderMiddleMiddle, grid, 3, 3),
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderMiddleRight, grid, 3, 6)
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_Nil,
 				_List_fromArray(
 					[
-						A3($author$project$Sudoku$Main$viewSquare, grid, 6, 0),
-						A3($author$project$Sudoku$Main$viewSquare, grid, 6, 3),
-						A3($author$project$Sudoku$Main$viewSquare, grid, 6, 6)
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				_List_fromArray(
+					[
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderBottomLeft, grid, 6, 0),
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderBottomMiddle, grid, 6, 3),
+						A4($author$project$Sudoku$Main$viewSquare, $author$project$Sudoku$Main$borderBottomRight, grid, 6, 6)
 					]))
 			]));
 };
@@ -18343,7 +18426,11 @@ var $author$project$Sudoku$Main$viewAll = function (model) {
 var $author$project$Sudoku$Main$view = function (model) {
 	return A2(
 		$mdgriffith$elm_ui$Element$layout,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$centerX,
+				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+			]),
 		$author$project$Sudoku$Main$viewAll(model));
 };
 var $author$project$Sudoku$Main$main = $elm$browser$Browser$element(
