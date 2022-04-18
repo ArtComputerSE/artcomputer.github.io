@@ -12320,15 +12320,14 @@ var $mdgriffith$elm_ui$Element$column = F2(
 						attrs))),
 			$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
 	});
-var $mdgriffith$elm_ui$Element$Font$family = function (families) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$fontFamily,
-		A2(
-			$mdgriffith$elm_ui$Internal$Model$FontFamily,
-			A3($elm$core$List$foldl, $mdgriffith$elm_ui$Internal$Model$renderFontClassName, 'ff-', families),
-			families));
-};
+var $mdgriffith$elm_ui$Internal$Model$Max = F2(
+	function (a, b) {
+		return {$: 'Max', a: a, b: b};
+	});
+var $mdgriffith$elm_ui$Element$maximum = F2(
+	function (i, l) {
+		return A2($mdgriffith$elm_ui$Internal$Model$Max, i, l);
+	});
 var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
 		$elm$html$Html$Attributes$stringProperty,
@@ -12409,10 +12408,6 @@ var $mdgriffith$elm_ui$Element$paragraph = F2(
 						attrs))),
 			$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
 	});
-var $mdgriffith$elm_ui$Internal$Model$Px = function (a) {
-	return {$: 'Px', a: a};
-};
-var $mdgriffith$elm_ui$Element$px = $mdgriffith$elm_ui$Internal$Model$Px;
 var $mdgriffith$elm_ui$Internal$Model$AsRow = {$: 'AsRow'};
 var $mdgriffith$elm_ui$Internal$Model$asRow = $mdgriffith$elm_ui$Internal$Model$AsRow;
 var $mdgriffith$elm_ui$Element$row = F2(
@@ -12433,8 +12428,6 @@ var $mdgriffith$elm_ui$Element$row = F2(
 						attrs))),
 			$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
 	});
-var $mdgriffith$elm_ui$Internal$Model$Serif = {$: 'Serif'};
-var $mdgriffith$elm_ui$Element$Font$serif = $mdgriffith$elm_ui$Internal$Model$Serif;
 var $mdgriffith$elm_ui$Element$Font$size = function (i) {
 	return A2(
 		$mdgriffith$elm_ui$Internal$Model$StyleClass,
@@ -12447,30 +12440,41 @@ var $mdgriffith$elm_ui$Internal$Model$Text = function (a) {
 var $mdgriffith$elm_ui$Element$text = function (content) {
 	return $mdgriffith$elm_ui$Internal$Model$Text(content);
 };
+var $mdgriffith$elm_ui$Element$Font$family = function (families) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$fontFamily,
+		A2(
+			$mdgriffith$elm_ui$Internal$Model$FontFamily,
+			A3($elm$core$List$foldl, $mdgriffith$elm_ui$Internal$Model$renderFontClassName, 'ff-', families),
+			families));
+};
+var $mdgriffith$elm_ui$Internal$Model$Serif = {$: 'Serif'};
+var $mdgriffith$elm_ui$Element$Font$serif = $mdgriffith$elm_ui$Internal$Model$Serif;
+var $author$project$Sudoku$Main$topRowAttributes = _List_fromArray(
+	[
+		$mdgriffith$elm_ui$Element$centerX,
+		$mdgriffith$elm_ui$Element$width(
+		A2($mdgriffith$elm_ui$Element$maximum, 900, $mdgriffith$elm_ui$Element$fill)),
+		$mdgriffith$elm_ui$Element$padding(5),
+		$mdgriffith$elm_ui$Element$Font$family(
+		_List_fromArray(
+			[$mdgriffith$elm_ui$Element$Font$serif]))
+	]);
 var $author$project$Sudoku$Main$viewHelp = A2(
 	$mdgriffith$elm_ui$Element$column,
 	_List_fromArray(
 		[
-			$mdgriffith$elm_ui$Element$centerX,
 			$mdgriffith$elm_ui$Element$width(
-			$mdgriffith$elm_ui$Element$px(900)),
-			$mdgriffith$elm_ui$Element$Font$family(
-			_List_fromArray(
-				[$mdgriffith$elm_ui$Element$Font$serif])),
-			$mdgriffith$elm_ui$Element$spacing(10)
+			A2($mdgriffith$elm_ui$Element$maximum, 900, $mdgriffith$elm_ui$Element$fill)),
+			$mdgriffith$elm_ui$Element$spacing(10),
+			$mdgriffith$elm_ui$Element$padding(5)
 		]),
 	_List_fromArray(
 		[
 			A2(
 			$mdgriffith$elm_ui$Element$row,
-			_List_fromArray(
-				[
-					$mdgriffith$elm_ui$Element$centerX,
-					$mdgriffith$elm_ui$Element$width(
-					$mdgriffith$elm_ui$Element$px(900)),
-					$mdgriffith$elm_ui$Element$padding(5),
-					$mdgriffith$elm_ui$Element$spacing(5)
-				]),
+			$author$project$Sudoku$Main$topRowAttributes,
 			_List_fromArray(
 				[
 					A2(
@@ -12702,6 +12706,10 @@ var $mdgriffith$elm_ui$Element$Input$HiddenLabel = function (a) {
 	return {$: 'HiddenLabel', a: a};
 };
 var $mdgriffith$elm_ui$Element$Input$labelHidden = $mdgriffith$elm_ui$Element$Input$HiddenLabel;
+var $mdgriffith$elm_ui$Internal$Model$Px = function (a) {
+	return {$: 'Px', a: a};
+};
+var $mdgriffith$elm_ui$Element$px = $mdgriffith$elm_ui$Internal$Model$Px;
 var $mdgriffith$elm_ui$Element$Input$TextInputNode = function (a) {
 	return {$: 'TextInputNode', a: a};
 };
@@ -13740,16 +13748,7 @@ var $author$project$Sudoku$Main$viewSetUp = function (grid) {
 			[
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$centerX,
-						$mdgriffith$elm_ui$Element$width(
-						$mdgriffith$elm_ui$Element$px(900)),
-						$mdgriffith$elm_ui$Element$padding(5),
-						$mdgriffith$elm_ui$Element$Font$family(
-						_List_fromArray(
-							[$mdgriffith$elm_ui$Element$Font$serif]))
-					]),
+				$author$project$Sudoku$Main$topRowAttributes,
 				_List_fromArray(
 					[
 						$author$project$Sudoku$Main$helpButton,
@@ -14089,16 +14088,7 @@ var $author$project$Sudoku$Main$viewSolve = function (grid) {
 			[
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$centerX,
-						$mdgriffith$elm_ui$Element$width(
-						$mdgriffith$elm_ui$Element$px(900)),
-						$mdgriffith$elm_ui$Element$padding(5),
-						$mdgriffith$elm_ui$Element$Font$family(
-						_List_fromArray(
-							[$mdgriffith$elm_ui$Element$Font$serif]))
-					]),
+				$author$project$Sudoku$Main$topRowAttributes,
 				_List_fromArray(
 					[
 						$author$project$Sudoku$Main$helpButton,
