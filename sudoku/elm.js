@@ -5189,9 +5189,9 @@ var $author$project$Sudoku$Main$Model = F2(
 		return {grid: grid, viewMode: viewMode};
 	});
 var $elm$json$Json$Decode$array = _Json_decodeArray;
-var $author$project$Sudoku$Main$Cell = F5(
-	function (row, col, options, conflict, constant) {
-		return {col: col, conflict: conflict, constant: constant, options: options, row: row};
+var $author$project$Sudoku$Main$Cell = F6(
+	function (row, col, options, conflictOptions, conflict, constant) {
+		return {col: col, conflict: conflict, conflictOptions: conflictOptions, constant: constant, options: options, row: row};
 	});
 var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $elm$core$Set$Set_elm_builtin = function (a) {
@@ -5321,7 +5321,64 @@ var $elm$core$Set$fromList = function (list) {
 var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$list = _Json_decodeList;
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
+var $elm$json$Json$Decode$andThen = _Json_andThen;
 var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$json$Json$Decode$decodeValue = _Json_run;
+var $elm$json$Json$Decode$null = _Json_decodeNull;
+var $elm$json$Json$Decode$oneOf = _Json_oneOf;
+var $elm$json$Json$Decode$value = _Json_decodeValue;
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optionalDecoder = F3(
+	function (path, valDecoder, fallback) {
+		var nullOr = function (decoder) {
+			return $elm$json$Json$Decode$oneOf(
+				_List_fromArray(
+					[
+						decoder,
+						$elm$json$Json$Decode$null(fallback)
+					]));
+		};
+		var handleResult = function (input) {
+			var _v0 = A2(
+				$elm$json$Json$Decode$decodeValue,
+				A2($elm$json$Json$Decode$at, path, $elm$json$Json$Decode$value),
+				input);
+			if (_v0.$ === 'Ok') {
+				var rawValue = _v0.a;
+				var _v1 = A2(
+					$elm$json$Json$Decode$decodeValue,
+					nullOr(valDecoder),
+					rawValue);
+				if (_v1.$ === 'Ok') {
+					var finalResult = _v1.a;
+					return $elm$json$Json$Decode$succeed(finalResult);
+				} else {
+					return A2(
+						$elm$json$Json$Decode$at,
+						path,
+						nullOr(valDecoder));
+				}
+			} else {
+				return $elm$json$Json$Decode$succeed(fallback);
+			}
+		};
+		return A2($elm$json$Json$Decode$andThen, handleResult, $elm$json$Json$Decode$value);
+	});
+var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional = F4(
+	function (key, valDecoder, fallback, decoder) {
+		return A2(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom,
+			A3(
+				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optionalDecoder,
+				_List_fromArray(
+					[key]),
+				valDecoder,
+				fallback),
+			decoder);
+	});
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
 	function (key, valDecoder, decoder) {
 		return A2(
@@ -5337,26 +5394,33 @@ var $author$project$Sudoku$Main$decodeCell = A3(
 		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
 		'conflict',
 		$elm$json$Json$Decode$bool,
-		A3(
-			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-			'options',
+		A4(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$optional,
+			'conflictOptions',
 			A2(
 				$elm$json$Json$Decode$map,
 				$elm$core$Set$fromList,
 				$elm$json$Json$Decode$list($elm$json$Json$Decode$int)),
+			$elm$core$Set$empty,
 			A3(
 				$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-				'col',
-				$elm$json$Json$Decode$int,
+				'options',
+				A2(
+					$elm$json$Json$Decode$map,
+					$elm$core$Set$fromList,
+					$elm$json$Json$Decode$list($elm$json$Json$Decode$int)),
 				A3(
 					$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
-					'row',
+					'col',
 					$elm$json$Json$Decode$int,
-					$elm$json$Json$Decode$succeed($author$project$Sudoku$Main$Cell))))));
+					A3(
+						$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+						'row',
+						$elm$json$Json$Decode$int,
+						$elm$json$Json$Decode$succeed($author$project$Sudoku$Main$Cell)))))));
 var $author$project$Sudoku$Main$decodeRow = $elm$json$Json$Decode$array($author$project$Sudoku$Main$decodeCell);
 var $author$project$Sudoku$Main$decodeGrid = $elm$json$Json$Decode$array($author$project$Sudoku$Main$decodeRow);
 var $author$project$Sudoku$Main$Solve = {$: 'Solve'};
-var $elm$json$Json$Decode$andThen = _Json_andThen;
 var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$Sudoku$Main$decodeViewMode = A2(
 	$elm$json$Json$Decode$andThen,
@@ -5383,6 +5447,7 @@ var $author$project$Sudoku$Main$initCell = F2(
 		return {
 			col: col,
 			conflict: false,
+			conflictOptions: $elm$core$Set$empty,
 			constant: false,
 			options: $elm$core$Set$fromList(
 				_List_fromArray(
@@ -5487,9 +5552,37 @@ var $elm$core$Set$member = F2(
 		return A2($elm$core$Dict$member, key, dict);
 	});
 var $elm$core$Basics$neq = _Utils_notEqual;
+var $elm$core$Dict$sizeHelp = F2(
+	function (n, dict) {
+		sizeHelp:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return n;
+			} else {
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$n = A2($elm$core$Dict$sizeHelp, n + 1, right),
+					$temp$dict = left;
+				n = $temp$n;
+				dict = $temp$dict;
+				continue sizeHelp;
+			}
+		}
+	});
+var $elm$core$Dict$size = function (dict) {
+	return A2($elm$core$Dict$sizeHelp, 0, dict);
+};
+var $elm$core$Set$size = function (_v0) {
+	var dict = _v0.a;
+	return $elm$core$Dict$size(dict);
+};
 var $author$project$Sudoku$Main$checkCell = F2(
 	function (sc, cell) {
-		var squareConflict = 0 < $elm$core$List$length(
+		var squareConflict = A2(
+			$elm$core$List$map,
+			function ($) {
+				return $.value;
+			},
 			A2(
 				$elm$core$List$filter,
 				function (s) {
@@ -5498,23 +5591,38 @@ var $author$project$Sudoku$Main$checkCell = F2(
 						$author$project$Sudoku$Main$inSquare(cell)) && ((!_Utils_eq(s.col, cell.col)) && ((!_Utils_eq(s.row, cell.row)) && A2($elm$core$Set$member, s.value, cell.options)));
 				},
 				sc));
-		var rowConflict = 0 < $elm$core$List$length(
+		var rowConflict = A2(
+			$elm$core$List$map,
+			function ($) {
+				return $.value;
+			},
 			A2(
 				$elm$core$List$filter,
 				function (s) {
 					return _Utils_eq(s.row, cell.row) && ((!_Utils_eq(s.col, cell.col)) && A2($elm$core$Set$member, s.value, cell.options));
 				},
 				sc));
-		var colConflict = 0 < $elm$core$List$length(
+		var colConflict = A2(
+			$elm$core$List$map,
+			function ($) {
+				return $.value;
+			},
 			A2(
 				$elm$core$List$filter,
 				function (s) {
 					return _Utils_eq(s.col, cell.col) && ((!_Utils_eq(s.row, cell.row)) && A2($elm$core$Set$member, s.value, cell.options));
 				},
 				sc));
+		var conflictOptions = $elm$core$Set$fromList(
+			_Utils_ap(
+				rowConflict,
+				_Utils_ap(colConflict, squareConflict)));
 		return _Utils_update(
 			cell,
-			{conflict: rowConflict || (colConflict || squareConflict)});
+			{
+				conflict: $elm$core$Set$size(conflictOptions) > 0,
+				conflictOptions: conflictOptions
+			});
 	});
 var $elm$core$Elm$JsArray$map = _JsArray_map;
 var $elm$core$Array$map = F2(
@@ -5586,30 +5694,6 @@ var $elm$core$List$head = function (list) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $elm$core$Dict$sizeHelp = F2(
-	function (n, dict) {
-		sizeHelp:
-		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
-				return n;
-			} else {
-				var left = dict.d;
-				var right = dict.e;
-				var $temp$n = A2($elm$core$Dict$sizeHelp, n + 1, right),
-					$temp$dict = left;
-				n = $temp$n;
-				dict = $temp$dict;
-				continue sizeHelp;
-			}
-		}
-	});
-var $elm$core$Dict$size = function (dict) {
-	return A2($elm$core$Dict$sizeHelp, 0, dict);
-};
-var $elm$core$Set$size = function (_v0) {
-	var dict = _v0.a;
-	return $elm$core$Dict$size(dict);
-};
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -5648,77 +5732,6 @@ var $author$project$Sudoku$Main$checkGrid = function (model) {
 	return _Utils_update(
 		model,
 		{grid: newGrid});
-};
-var $author$project$Sudoku$Main$emptyCell = {col: 0, conflict: false, constant: true, options: $elm$core$Set$empty, row: 0};
-var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
-var $elm$core$Basics$ge = _Utils_ge;
-var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
-var $elm$core$Array$getHelp = F3(
-	function (shift, index, tree) {
-		getHelp:
-		while (true) {
-			var pos = $elm$core$Array$bitMask & (index >>> shift);
-			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
-			if (_v0.$ === 'SubTree') {
-				var subTree = _v0.a;
-				var $temp$shift = shift - $elm$core$Array$shiftStep,
-					$temp$index = index,
-					$temp$tree = subTree;
-				shift = $temp$shift;
-				index = $temp$index;
-				tree = $temp$tree;
-				continue getHelp;
-			} else {
-				var values = _v0.a;
-				return A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, values);
-			}
-		}
-	});
-var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
-var $elm$core$Array$tailIndex = function (len) {
-	return (len >>> 5) << 5;
-};
-var $elm$core$Array$get = F2(
-	function (index, _v0) {
-		var len = _v0.a;
-		var startShift = _v0.b;
-		var tree = _v0.c;
-		var tail = _v0.d;
-		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? $elm$core$Maybe$Nothing : ((_Utils_cmp(
-			index,
-			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
-			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
-			A3($elm$core$Array$getHelp, startShift, index, tree)));
-	});
-var $perty$matrix$Matrix$getXs = F2(
-	function (matrix, x) {
-		return A2(
-			$elm$core$Maybe$withDefault,
-			$elm$core$Array$empty,
-			A2($elm$core$Array$get, x, matrix));
-	});
-var $perty$matrix$Matrix$get = F3(
-	function (matrix, x, y) {
-		return A2(
-			$elm$core$Array$get,
-			y,
-			A2($perty$matrix$Matrix$getXs, matrix, x));
-	});
-var $author$project$Sudoku$Main$initNonConstant = function (matrix) {
-	return A2(
-		$perty$matrix$Matrix$map,
-		function (c) {
-			return c.constant ? c : _Utils_update(
-				c,
-				{
-					options: $elm$core$Set$fromList(
-						_List_fromArray(
-							[1, 2, 3, 4, 5, 6, 7, 8, 9]))
-				});
-		},
-		matrix);
 };
 var $elm$core$Dict$getMin = function (dict) {
 	getMin:
@@ -6088,6 +6101,104 @@ var $elm$core$Set$remove = F2(
 		return $elm$core$Set$Set_elm_builtin(
 			A2($elm$core$Dict$remove, key, dict));
 	});
+var $author$project$Sudoku$Main$clearConflict = F2(
+	function (singleCell, cell) {
+		return (cell.constant || (_Utils_eq(singleCell.row, cell.row) && _Utils_eq(singleCell.col, cell.col))) ? cell : ((_Utils_eq(singleCell.row, cell.row) || (_Utils_eq(singleCell.col, cell.col) || _Utils_eq(
+			$author$project$Sudoku$Main$inSquare(singleCell),
+			$author$project$Sudoku$Main$inSquare(cell)))) ? _Utils_update(
+			cell,
+			{
+				options: A2($elm$core$Set$remove, singleCell.value, cell.options)
+			}) : cell);
+	});
+var $author$project$Sudoku$Main$clearConflicts = F2(
+	function (grid, singleCell) {
+		return A2(
+			$perty$matrix$Matrix$map,
+			$author$project$Sudoku$Main$clearConflict(singleCell),
+			grid);
+	});
+var $author$project$Sudoku$Main$clearAllConflicts = function (grid) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (sc, g) {
+				return A2($author$project$Sudoku$Main$clearConflicts, g, sc);
+			}),
+		grid,
+		$author$project$Sudoku$Main$singleCells(grid));
+};
+var $author$project$Sudoku$Main$emptyCell = {col: 0, conflict: false, conflictOptions: $elm$core$Set$empty, constant: true, options: $elm$core$Set$empty, row: 0};
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
+var $elm$core$Basics$ge = _Utils_ge;
+var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var $elm$core$Array$getHelp = F3(
+	function (shift, index, tree) {
+		getHelp:
+		while (true) {
+			var pos = $elm$core$Array$bitMask & (index >>> shift);
+			var _v0 = A2($elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (_v0.$ === 'SubTree') {
+				var subTree = _v0.a;
+				var $temp$shift = shift - $elm$core$Array$shiftStep,
+					$temp$index = index,
+					$temp$tree = subTree;
+				shift = $temp$shift;
+				index = $temp$index;
+				tree = $temp$tree;
+				continue getHelp;
+			} else {
+				var values = _v0.a;
+				return A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, values);
+			}
+		}
+	});
+var $elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var $elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
+};
+var $elm$core$Array$get = F2(
+	function (index, _v0) {
+		var len = _v0.a;
+		var startShift = _v0.b;
+		var tree = _v0.c;
+		var tail = _v0.d;
+		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? $elm$core$Maybe$Nothing : ((_Utils_cmp(
+			index,
+			$elm$core$Array$tailIndex(len)) > -1) ? $elm$core$Maybe$Just(
+			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
+			A3($elm$core$Array$getHelp, startShift, index, tree)));
+	});
+var $perty$matrix$Matrix$getXs = F2(
+	function (matrix, x) {
+		return A2(
+			$elm$core$Maybe$withDefault,
+			$elm$core$Array$empty,
+			A2($elm$core$Array$get, x, matrix));
+	});
+var $perty$matrix$Matrix$get = F3(
+	function (matrix, x, y) {
+		return A2(
+			$elm$core$Array$get,
+			y,
+			A2($perty$matrix$Matrix$getXs, matrix, x));
+	});
+var $author$project$Sudoku$Main$initNonConstant = function (matrix) {
+	return A2(
+		$perty$matrix$Matrix$map,
+		function (c) {
+			return c.constant ? c : _Utils_update(
+				c,
+				{
+					options: $elm$core$Set$fromList(
+						_List_fromArray(
+							[1, 2, 3, 4, 5, 6, 7, 8, 9]))
+				});
+		},
+		matrix);
+};
 var $author$project$Sudoku$Main$resetNonConstant = function (matrix) {
 	return A2(
 		$perty$matrix$Matrix$map,
@@ -6168,6 +6279,12 @@ var $author$project$Sudoku$Main$encodeCell = function (cell) {
 					$elm$json$Json$Encode$list,
 					$elm$json$Json$Encode$int,
 					$elm$core$Set$toList(cell.options))),
+				_Utils_Tuple2(
+				'conflictOptions',
+				A2(
+					$elm$json$Json$Encode$list,
+					$elm$json$Json$Encode$int,
+					$elm$core$Set$toList(cell.conflictOptions))),
 				_Utils_Tuple2(
 				'conflict',
 				$elm$json$Json$Encode$bool(cell.conflict)),
@@ -6304,6 +6421,36 @@ var $author$project$Sudoku$Main$update = F2(
 								cell.row,
 								cell.col,
 								A2($author$project$Sudoku$Main$initCell, cell.row, cell.col))
+						}));
+				return _Utils_Tuple2(
+					newModel,
+					$author$project$Sudoku$Main$saveModel(newModel));
+			case 'PressedClearConstant':
+				var cell = msg.a;
+				var singleCell = {
+					col: cell.col,
+					row: cell.row,
+					value: A2(
+						$elm$core$Maybe$withDefault,
+						0,
+						$elm$core$List$head(
+							$elm$core$Set$toList(cell.options)))
+				};
+				var newModel = $author$project$Sudoku$Main$checkGrid(
+					_Utils_update(
+						model,
+						{
+							grid: A2($author$project$Sudoku$Main$clearConflicts, model.grid, singleCell)
+						}));
+				return _Utils_Tuple2(
+					newModel,
+					$author$project$Sudoku$Main$saveModel(newModel));
+			case 'PressedClearAllConstants':
+				var newModel = $author$project$Sudoku$Main$checkGrid(
+					_Utils_update(
+						model,
+						{
+							grid: $author$project$Sudoku$Main$clearAllConflicts(model.grid)
 						}));
 				return _Utils_Tuple2(
 					newModel,
@@ -12468,7 +12615,8 @@ var $author$project$Sudoku$Main$viewHelp = A2(
 			$mdgriffith$elm_ui$Element$width(
 			A2($mdgriffith$elm_ui$Element$maximum, 900, $mdgriffith$elm_ui$Element$fill)),
 			$mdgriffith$elm_ui$Element$spacing(10),
-			$mdgriffith$elm_ui$Element$padding(5)
+			$mdgriffith$elm_ui$Element$padding(5),
+			$mdgriffith$elm_ui$Element$centerX
 		]),
 	_List_fromArray(
 		[
@@ -12981,10 +13129,6 @@ var $elm$html$Html$Events$stopPropagationOn = F2(
 			$elm$virtual_dom$VirtualDom$on,
 			event,
 			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
-	});
-var $elm$json$Json$Decode$at = F2(
-	function (fields, decoder) {
-		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
 	});
 var $elm$html$Html$Events$targetValue = A2(
 	$elm$json$Json$Decode$at,
@@ -13806,6 +13950,7 @@ var $author$project$Sudoku$Main$viewSetUp = function (grid) {
 					]))
 			]));
 };
+var $author$project$Sudoku$Main$PressedClearAllConstants = {$: 'PressedClearAllConstants'};
 var $author$project$Sudoku$Main$borderBottomRight = {
 	round: _Utils_update(
 		$author$project$Sudoku$Main$defaultRound,
@@ -13813,6 +13958,10 @@ var $author$project$Sudoku$Main$borderBottomRight = {
 	width: _Utils_update(
 		$author$project$Sudoku$Main$defaultWidth,
 		{bottom: 4, right: 4})
+};
+var $author$project$Sudoku$Main$lightGreen = A3($mdgriffith$elm_ui$Element$rgb, 0.7, 0.9, 0.7);
+var $author$project$Sudoku$Main$PressedClearConstant = function (a) {
+	return {$: 'PressedClearConstant', a: a};
 };
 var $author$project$Sudoku$Main$PressedResetCell = function (a) {
 	return {$: 'PressedResetCell', a: a};
@@ -13822,17 +13971,21 @@ var $mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
 };
 var $mdgriffith$elm_ui$Internal$Model$CenterY = {$: 'CenterY'};
 var $mdgriffith$elm_ui$Element$centerY = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$CenterY);
-var $author$project$Sudoku$Main$lightGreen = A3($mdgriffith$elm_ui$Element$rgb, 0.7, 0.9, 0.7);
 var $author$project$Sudoku$Main$red = A3($mdgriffith$elm_ui$Element$rgb, 1.0, 0, 0);
 var $author$project$Sudoku$Main$ClickedCell = F3(
 	function (a, b, c) {
 		return {$: 'ClickedCell', a: a, b: b, c: c};
 	});
-var $author$project$Sudoku$Main$viewOption = F4(
-	function (x, y, value, show) {
+var $author$project$Sudoku$Main$white = A3($mdgriffith$elm_ui$Element$rgb, 1, 1, 1);
+var $author$project$Sudoku$Main$viewOption = F2(
+	function (value, cell) {
+		var backgroundColor = A2($elm$core$Set$member, value, cell.conflictOptions) ? $author$project$Sudoku$Main$lightRed : $author$project$Sudoku$Main$white;
 		return A2(
 			$mdgriffith$elm_ui$Element$Input$button,
-			_List_Nil,
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$Background$color(backgroundColor)
+				]),
 			{
 				label: A2(
 					$mdgriffith$elm_ui$Element$el,
@@ -13848,75 +14001,92 @@ var $author$project$Sudoku$Main$viewOption = F4(
 							$mdgriffith$elm_ui$Element$Font$size(16)
 						]),
 					$mdgriffith$elm_ui$Element$text(
-						show ? $elm$core$String$fromInt(value) : '')),
+						A2($elm$core$Set$member, value, cell.options) ? $elm$core$String$fromInt(value) : '')),
 				onPress: $elm$core$Maybe$Just(
-					A3($author$project$Sudoku$Main$ClickedCell, x, y, value))
+					A3($author$project$Sudoku$Main$ClickedCell, cell.row, cell.col, value))
 			});
 	});
 var $author$project$Sudoku$Main$viewCell = function (cell) {
-	var show = function (n) {
-		return A2($elm$core$Set$member, n, cell.options);
-	};
 	var cellValue = $elm$core$String$fromInt(
 		A2(
 			$elm$core$Maybe$withDefault,
 			0,
 			$elm$core$List$head(
 				$elm$core$Set$toList(cell.options))));
-	return (!_Utils_eq(
+	return cell.constant ? A2(
+		$mdgriffith$elm_ui$Element$column,
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$width(
+				$mdgriffith$elm_ui$Element$px(100)),
+				$mdgriffith$elm_ui$Element$height(
+				$mdgriffith$elm_ui$Element$px(100)),
+				$mdgriffith$elm_ui$Element$padding(5)
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$mdgriffith$elm_ui$Element$el,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$Font$center,
+						$mdgriffith$elm_ui$Element$centerY,
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$Font$size(42),
+						$mdgriffith$elm_ui$Element$Background$color($author$project$Sudoku$Main$lightGreen)
+					]),
+				$mdgriffith$elm_ui$Element$text(cellValue))
+			])) : ((!_Utils_eq(
 		$author$project$Sudoku$Main$isSingleCell(cell),
 		$elm$core$Maybe$Nothing)) ? A2(
 		$mdgriffith$elm_ui$Element$column,
 		_List_fromArray(
 			[
 				$mdgriffith$elm_ui$Element$width(
-				$mdgriffith$elm_ui$Element$px(101)),
+				$mdgriffith$elm_ui$Element$px(100)),
 				$mdgriffith$elm_ui$Element$height(
-				$mdgriffith$elm_ui$Element$px(101)),
+				$mdgriffith$elm_ui$Element$px(100)),
 				$mdgriffith$elm_ui$Element$padding(5),
-				$mdgriffith$elm_ui$Element$Border$width(1),
-				cell.conflict ? $mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$red) : $mdgriffith$elm_ui$Element$Border$color($author$project$Sudoku$Main$grey),
-				$mdgriffith$elm_ui$Element$Font$center
+				cell.conflict ? $mdgriffith$elm_ui$Element$Background$color($author$project$Sudoku$Main$lightRed) : $mdgriffith$elm_ui$Element$Background$color($author$project$Sudoku$Main$white)
 			]),
 		_List_fromArray(
 			[
-				cell.constant ? A2(
-				$mdgriffith$elm_ui$Element$column,
+				A2(
+				$mdgriffith$elm_ui$Element$el,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$centerY,
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$Font$size(28)
+					]),
+				$mdgriffith$elm_ui$Element$text(cellValue)),
+				A2(
+				$mdgriffith$elm_ui$Element$row,
 				_List_fromArray(
 					[
 						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
-						$mdgriffith$elm_ui$Element$Background$color($author$project$Sudoku$Main$lightGreen)
+						$mdgriffith$elm_ui$Element$spacing(5)
 					]),
 				_List_fromArray(
 					[
 						A2(
-						$mdgriffith$elm_ui$Element$el,
+						$mdgriffith$elm_ui$Element$Input$button,
 						_List_fromArray(
-							[
-								$mdgriffith$elm_ui$Element$centerY,
-								$mdgriffith$elm_ui$Element$centerX,
-								$mdgriffith$elm_ui$Element$Font$size(28)
-							]),
-						$mdgriffith$elm_ui$Element$text(cellValue))
-					])) : A2(
-				$mdgriffith$elm_ui$Element$column,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill)
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$mdgriffith$elm_ui$Element$el,
-						_List_fromArray(
-							[
-								$mdgriffith$elm_ui$Element$centerY,
-								$mdgriffith$elm_ui$Element$centerX,
-								$mdgriffith$elm_ui$Element$Font$size(28)
-							]),
-						$mdgriffith$elm_ui$Element$text(cellValue)),
+							[$mdgriffith$elm_ui$Element$centerX]),
+						{
+							label: A2(
+								$mdgriffith$elm_ui$Element$el,
+								_List_fromArray(
+									[
+										$mdgriffith$elm_ui$Element$Font$size(28)
+									]),
+								$mdgriffith$elm_ui$Element$text('↺')),
+							onPress: $elm$core$Maybe$Just(
+								$author$project$Sudoku$Main$PressedResetCell(cell))
+						}),
 						A2(
 						$mdgriffith$elm_ui$Element$Input$button,
 						_List_fromArray(
@@ -13925,9 +14095,9 @@ var $author$project$Sudoku$Main$viewCell = function (cell) {
 							label: A2(
 								$mdgriffith$elm_ui$Element$el,
 								_List_Nil,
-								$mdgriffith$elm_ui$Element$text('X')),
+								$mdgriffith$elm_ui$Element$text('💣')),
 							onPress: $elm$core$Maybe$Just(
-								$author$project$Sudoku$Main$PressedResetCell(cell))
+								$author$project$Sudoku$Main$PressedClearConstant(cell))
 						})
 					]))
 			])) : A2(
@@ -13945,74 +14115,29 @@ var $author$project$Sudoku$Main$viewCell = function (cell) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						1,
-						show(1)),
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						2,
-						show(2)),
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						3,
-						show(3))
+						A2($author$project$Sudoku$Main$viewOption, 1, cell),
+						A2($author$project$Sudoku$Main$viewOption, 2, cell),
+						A2($author$project$Sudoku$Main$viewOption, 3, cell)
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
 				_List_Nil,
 				_List_fromArray(
 					[
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						4,
-						show(4)),
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						5,
-						show(5)),
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						6,
-						show(6))
+						A2($author$project$Sudoku$Main$viewOption, 4, cell),
+						A2($author$project$Sudoku$Main$viewOption, 5, cell),
+						A2($author$project$Sudoku$Main$viewOption, 6, cell)
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$row,
 				_List_Nil,
 				_List_fromArray(
 					[
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						7,
-						show(7)),
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						8,
-						show(8)),
-						A4(
-						$author$project$Sudoku$Main$viewOption,
-						cell.row,
-						cell.col,
-						9,
-						show(9))
+						A2($author$project$Sudoku$Main$viewOption, 7, cell),
+						A2($author$project$Sudoku$Main$viewOption, 8, cell),
+						A2($author$project$Sudoku$Main$viewOption, 9, cell)
 					]))
-			]));
+			])));
 };
 var $author$project$Sudoku$Main$viewSquare = F4(
 	function (borders, grid, sr, sc) {
@@ -14093,10 +14218,28 @@ var $author$project$Sudoku$Main$viewSolve = function (grid) {
 					[
 						$author$project$Sudoku$Main$helpButton,
 						A2(
-						$mdgriffith$elm_ui$Element$el,
+						$mdgriffith$elm_ui$Element$row,
 						_List_fromArray(
-							[$mdgriffith$elm_ui$Element$centerX]),
-						$mdgriffith$elm_ui$Element$text('Solving')),
+							[
+								$mdgriffith$elm_ui$Element$centerX,
+								$mdgriffith$elm_ui$Element$spacing(5)
+							]),
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$text('Solving'),
+								A2(
+								$mdgriffith$elm_ui$Element$Input$button,
+								_Utils_ap(
+									$author$project$Sudoku$Main$buttonAttr,
+									_List_fromArray(
+										[
+											$mdgriffith$elm_ui$Element$Background$color($author$project$Sudoku$Main$lightGreen)
+										])),
+								{
+									label: $mdgriffith$elm_ui$Element$text('💣'),
+									onPress: $elm$core$Maybe$Just($author$project$Sudoku$Main$PressedClearAllConstants)
+								})
+							])),
 						A2(
 						$mdgriffith$elm_ui$Element$Input$button,
 						$author$project$Sudoku$Main$buttonAttr,
