@@ -4356,6 +4356,43 @@ function _Time_getZoneName()
 		callback(_Scheduler_succeed(name));
 	});
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -24960,8 +24997,138 @@ var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Clock$AddBusyClicked = {$: 'AddBusyClicked'};
 var $author$project$Clock$DoneButtonClicked = {$: 'DoneButtonClicked'};
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$html$Html$Attributes$colspan = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'colspan',
+		$elm$core$String$fromInt(n));
+};
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$html$Html$table = _VirtualDom_node('table');
+var $elm$html$Html$tbody = _VirtualDom_node('tbody');
+var $elm$html$Html$th = _VirtualDom_node('th');
+var $elm$html$Html$thead = _VirtualDom_node('thead');
+var $elm$html$Html$tr = _VirtualDom_node('tr');
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $author$project$Clock$RemoveBusy = function (a) {
+	return {$: 'RemoveBusy', a: a};
+};
+var $elm$core$String$cons = _String_cons;
+var $elm$core$String$fromChar = function (_char) {
+	return A2($elm$core$String$cons, _char, '');
+};
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
+var $elm$core$String$repeatHelp = F3(
+	function (n, chunk, result) {
+		return (n <= 0) ? result : A3(
+			$elm$core$String$repeatHelp,
+			n >> 1,
+			_Utils_ap(chunk, chunk),
+			(!(n & 1)) ? result : _Utils_ap(result, chunk));
+	});
+var $elm$core$String$repeat = F2(
+	function (n, chunk) {
+		return A3($elm$core$String$repeatHelp, n, chunk, '');
+	});
+var $elm$core$String$padLeft = F3(
+	function (n, _char, string) {
+		return _Utils_ap(
+			A2(
+				$elm$core$String$repeat,
+				n - $elm$core$String$length(string),
+				$elm$core$String$fromChar(_char)),
+			string);
+	});
+var $author$project$Clock$busyToString = function (timeOfDay) {
+	return A2(
+		$elm$core$String$join,
+		':',
+		_List_fromArray(
+			[
+				A3(
+				$elm$core$String$padLeft,
+				2,
+				_Utils_chr('0'),
+				$elm$core$String$fromInt(timeOfDay.hour)),
+				A3(
+				$elm$core$String$padLeft,
+				2,
+				_Utils_chr('0'),
+				$elm$core$String$fromInt(timeOfDay.minute))
+			]));
+};
+var $elm$html$Html$td = _VirtualDom_node('td');
+var $author$project$Clock$viewBusy = function (busy) {
+	return A2(
+		$elm$html$Html$tr,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$td,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$colspan(2)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$Clock$busyToString(busy.startTime))
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$colspan(2)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$Clock$busyToString(busy.endTime))
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(busy.colour)
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick(
+								$author$project$Clock$RemoveBusy(busy))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('X')
+							]))
+					]))
+			]));
+};
+var $author$project$Clock$AddBusyClicked = {$: 'AddBusyClicked'};
 var $author$project$Clock$UpdateEndHour = function (a) {
 	return {$: 'UpdateEndHour', a: a};
 };
@@ -24974,7 +25141,6 @@ var $author$project$Clock$UpdateStartHour = function (a) {
 var $author$project$Clock$UpdateStartMinute = function (a) {
 	return {$: 'UpdateStartMinute', a: a};
 };
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $author$project$Clock$UpdateColour = function (a) {
 	return {$: 'UpdateColour', a: a};
 };
@@ -25013,14 +25179,6 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 };
 var $elm$html$Html$option = _VirtualDom_node('option');
 var $elm$html$Html$select = _VirtualDom_node('select');
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Clock$colorSelector = function (_v0) {
 	var color2Option = function (colour) {
@@ -25049,22 +25207,20 @@ var $author$project$Clock$colorSelector = function (_v0) {
 		options);
 };
 var $elm$html$Html$input = _VirtualDom_node('input');
-var $elm$html$Html$Events$onClick = function (msg) {
+var $elm$html$Html$Attributes$size = function (n) {
 	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
+		_VirtualDom_attribute,
+		'size',
+		$elm$core$String$fromInt(n));
 };
-var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
-var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
-var $author$project$Clock$viewBusyControls = function (model) {
+var $author$project$Clock$viewBusyTable = function (model) {
 	return A2(
-		$elm$html$Html$div,
+		$elm$html$Html$tr,
 		_List_Nil,
 		_List_fromArray(
 			[
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$td,
 				_List_Nil,
 				_List_fromArray(
 					[
@@ -25073,34 +25229,68 @@ var $author$project$Clock$viewBusyControls = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$Events$onInput($author$project$Clock$UpdateStartHour),
-								$elm$html$Html$Attributes$value(model.startHourInput)
+								$elm$html$Html$Attributes$value(model.startHourInput),
+								$elm$html$Html$Attributes$size(3)
 							]),
-						_List_Nil),
+						_List_Nil)
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
 						A2(
 						$elm$html$Html$input,
 						_List_fromArray(
 							[
 								$elm$html$Html$Events$onInput($author$project$Clock$UpdateStartMinute),
-								$elm$html$Html$Attributes$value(model.startMinuteInput)
+								$elm$html$Html$Attributes$value(model.startMinuteInput),
+								$elm$html$Html$Attributes$size(3)
 							]),
-						_List_Nil),
+						_List_Nil)
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
 						A2(
 						$elm$html$Html$input,
 						_List_fromArray(
 							[
 								$elm$html$Html$Events$onInput($author$project$Clock$UpdateEndHour),
-								$elm$html$Html$Attributes$value(model.endHourInput)
+								$elm$html$Html$Attributes$value(model.endHourInput),
+								$elm$html$Html$Attributes$size(3)
 							]),
-						_List_Nil),
+						_List_Nil)
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
 						A2(
 						$elm$html$Html$input,
 						_List_fromArray(
 							[
 								$elm$html$Html$Events$onInput($author$project$Clock$UpdateEndMinute),
-								$elm$html$Html$Attributes$value(model.endMinuteInput)
+								$elm$html$Html$Attributes$value(model.endMinuteInput),
+								$elm$html$Html$Attributes$size(3)
 							]),
-						_List_Nil),
-						$author$project$Clock$colorSelector(model),
+						_List_Nil)
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$author$project$Clock$colorSelector(model)
+					])),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
 						A2(
 						$elm$html$Html$button,
 						_List_fromArray(
@@ -25113,7 +25303,83 @@ var $author$project$Clock$viewBusyControls = function (model) {
 								$elm$html$Html$text('Add')
 							]))
 					])),
-				$elm$html$Html$text(model.error),
+				A2(
+				$elm$html$Html$td,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(model.error)
+					]))
+			]));
+};
+var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
+var $author$project$Clock$viewBusyHours = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$table,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$thead,
+						_List_Nil,
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$tr,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$th,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$colspan(2),
+												A2($elm$html$Html$Attributes$style, 'text-align', 'left')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Start time')
+											])),
+										A2(
+										$elm$html$Html$th,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$colspan(2),
+												A2($elm$html$Html$Attributes$style, 'text-align', 'left')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('End time')
+											])),
+										A2(
+										$elm$html$Html$th,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Colour')
+											])),
+										A2(
+										$elm$html$Html$th,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Remove')
+											]))
+									]))
+							])),
+						A2(
+						$elm$html$Html$tbody,
+						_List_Nil,
+						A2(
+							$elm$core$List$cons,
+							$author$project$Clock$viewBusyTable(model),
+							A2($elm$core$List$map, $author$project$Clock$viewBusy, model.busyHours)))
+					])),
 				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
@@ -25128,134 +25394,14 @@ var $author$project$Clock$viewBusyControls = function (model) {
 					]))
 			]));
 };
-var $elm$html$Html$table = _VirtualDom_node('table');
-var $elm$html$Html$tbody = _VirtualDom_node('tbody');
-var $elm$html$Html$th = _VirtualDom_node('th');
-var $elm$html$Html$thead = _VirtualDom_node('thead');
-var $elm$html$Html$tr = _VirtualDom_node('tr');
-var $author$project$Clock$RemoveBusy = function (a) {
-	return {$: 'RemoveBusy', a: a};
-};
-var $author$project$Clock$busyToString = function (timeOfDay) {
-	return A2(
-		$elm$core$String$join,
-		':',
-		_List_fromArray(
-			[
-				$elm$core$String$fromInt(timeOfDay.hour),
-				$elm$core$String$fromInt(timeOfDay.minute)
-			]));
-};
-var $elm$html$Html$td = _VirtualDom_node('td');
-var $author$project$Clock$viewBusy = function (busy) {
-	return A2(
-		$elm$html$Html$tr,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$td,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(
-						$author$project$Clock$busyToString(busy.startTime))
-					])),
-				A2(
-				$elm$html$Html$td,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(
-						$author$project$Clock$busyToString(busy.endTime))
-					])),
-				A2(
-				$elm$html$Html$td,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(busy.colour)
-					])),
-				A2(
-				$elm$html$Html$td,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick(
-								$author$project$Clock$RemoveBusy(busy))
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('X')
-							]))
-					]))
-			]));
-};
-var $author$project$Clock$viewBusyHours = function (busies) {
-	return A2(
-		$elm$html$Html$table,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$thead,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$tr,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Start')
-									])),
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('End')
-									])),
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Colour')
-									])),
-								A2(
-								$elm$html$Html$th,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Remove')
-									]))
-							]))
-					])),
-				A2(
-				$elm$html$Html$tbody,
-				_List_Nil,
-				A2($elm$core$List$map, $author$project$Clock$viewBusy, busies))
-			]));
-};
 var $author$project$Clock$viewBusyDialog = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
-				$elm$html$Html$text('Busy hours'),
-				$author$project$Clock$viewBusyHours(model.busyHours),
-				$author$project$Clock$viewBusyControls(model)
+				$elm$html$Html$text('Busy period'),
+				$author$project$Clock$viewBusyHours(model)
 			]));
 };
 var $author$project$Clock$view = function (model) {
