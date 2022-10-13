@@ -1,12 +1,13 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>CV Per Lundholm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
 <body>
-<div id="content" style="margin: auto; max-width: 800px">
+<section aria-label="content" id="content" style="margin: auto; max-width: 800px">
     <img src="cv-headline.png" alt="curriculum vitae" style="width: 100%; padding: 20px"/>
-    <div id="two-column" style="display: flex">
+    <section aria-label="front-page" id="two-column" style="display: flex">
         <div id="left-column" style="flex: 50%; flex-direction: column; display: flex;">
             <div style="width: fit-content; margin: auto; font-size: xx-large;">
                 <p style="color: lightblue; background-color: gray; padding: 10px; border-radius: 10px; margin: 10px;">
@@ -28,9 +29,9 @@
                 "15 min of TDD" at Swedish Enforcement.
             </div>
         </div>
-    </div>
-    <div id="about-me">
-        <h2>Professional developer since 1980</h2>
+    </section>
+    <section aria-labelledby="section-about" id="about-me">
+        <h2 id="section-about">Professional developer since 1980</h2>
         <p><i>The harder the problems, the louder they call.</i></p>
         <p>
             You always need a truly senior developer like me in a team. Being senior not only means to write stable and
@@ -71,9 +72,9 @@
             <li>Assess the state of the organization, through interviews.</li>
             <li>Introduction course to Agile and Scrum.</li>
         </ul>
-    </div>
-    <div id="misc">
-        <h2>Miscellaneous</h2>
+    </section>
+    <div aria-labelledby="section-misc" id="misc">
+        <h2 id="section-misc">Miscellaneous</h2>
         <ul>
             <li><b>Awarded:</b> "Best programmers of Sweden, 2016"
                 <a href="https://techworld.idg.se/2.2524/1.670384/basta-utvecklare-2016">
@@ -96,26 +97,26 @@
             </li>
         </ul>
     </div>
-    <div id="technologies">
-        <h2>Technologies</h2>
+    <section aria-labelledby="section-tech" id="technologies">
+        <h2 id="section-tech">Technologies</h2>
         <p>
             Java, Elm, F#, C++, C, Prolog, LISP, Python, SQL, Oracle, PostgreSQL, MySQL, Spring Boot, OpenShift
             (Kubernetes), Google Cloud Storage, Docker, Amazon Web Services (AWS), Curity (OAuth), Git, Kafka, Mongodb,
             RabbitMQ, Jenkins CI/CD, GO CI/CD, Wicket , Linux, MacOS, Windows
         </p>
-    </div>
-    <div id="contact">
+    </section>
+    <section aria-labelledby="section-contact" id="contact" style="padding-bottom: 25px">
         <hr/>
-        <h3>Contact information</h3>
+        <h3 id="section-contact">Contact information</h3>
         <div style="display: flex">
             <div style="flex: 50%">
-                    Telephone: +46 708 38 55 99
+                Telephone: +46 708 38 55 99
             </div>
             <div style="flex: 50%">
-                    Mail: per.lundholm@agical.se
+                Mail: per.lundholm@agical.se
             </div>
         </div>
-    </div>
-</div>
+    </section>
+</section>
 </body>
 </html>
