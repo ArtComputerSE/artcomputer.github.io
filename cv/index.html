@@ -3,10 +3,42 @@
 <head>
     <title>CV Per Lundholm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="utf-8">
+    <style>
+        .two-column-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .left-column {
+            flex: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .right-column {
+            flex: 50%;
+            display: flex;
+        }
+
+        @media (max-width: 800px) {
+            .right-column, .left-column {
+                flex: 100%;
+            }
+        }
+
+        .thin-border {
+            border-style: solid;
+            border-color: lightgray;
+            border-radius: 5px;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
 <section aria-label="content" id="content" style="margin: auto; max-width: 800px; font-family: Helvetica,sans-serif">
-    <img src="cv-headline.png" alt="curriculum vitae" style="width: 100%; padding: 20px"/>
+    <img src="cv-headline.png" alt="curriculum vitae" style="width: 100%"/>
     <section aria-label="front-page" id="two-column" style="display: flex">
         <div id="left-column" style="flex: 50%; flex-direction: column; display: flex;">
             <div style="width: fit-content; margin: auto; font-size: xx-large;">
@@ -25,12 +57,12 @@
                  alt="picture of Per talking to audience"
                  style="border-radius: 20px; max-width: 100%; height: auto;"
             />
-            <div style="width: fit-content; margin: auto; padding-top: 10px">
+            <div style="width: fit-content; margin: auto; padding: 10px">
                 "15 min of TDD" at Swedish Enforcement.
             </div>
         </div>
     </section>
-    <section aria-labelledby="section-about" id="about-me">
+    <section aria-labelledby="section-about" id="about-me" class="thin-border">
         <h2 id="section-about">Professional developer since 1980</h2>
         <p><i>The harder the problems, the louder they call.</i></p>
         <p>
@@ -73,7 +105,7 @@
             <li>Introduction course to Agile and Scrum.</li>
         </ul>
     </section>
-    <div aria-labelledby="section-misc" id="misc">
+    <div aria-labelledby="section-misc" id="misc" class="thin-border">
         <h2 id="section-misc">Miscellaneous</h2>
         <ul>
             <li><b>Awarded:</b> "Best programmers of Sweden, 2016"
@@ -81,7 +113,7 @@
                     Article in TechWorld
                 </a>
             </li>
-            <li><b>YouTube:</b> "TDD p&aring; svenska"
+            <li><b>YouTube:</b> "TDD på svenska"
                 <a href="https://www.youtube.com/playlist?list=PLqoFX5ooBh55go9izEXd9D4x6jxKCq6ep" target="_blank">
                     YouTube playlist
                 </a>
@@ -97,25 +129,63 @@
             </li>
         </ul>
     </div>
-    <section aria-labelledby="section-tech" id="technologies">
-        <h2 id="section-tech">Technologies</h2>
-        <p>
-            Java, Elm, F#, C++, C, Prolog, LISP, Python, SQL, Oracle, PostgreSQL, MySQL, Spring Boot, OpenShift
-            (Kubernetes), Google Cloud Storage, Docker, Amazon Web Services (AWS), Curity (OAuth), Git, Kafka, Mongodb,
-            RabbitMQ, Jenkins CI/CD, GO CI/CD, Wicket , Linux, MacOS, Windows
-        </p>
+    <section aria-label="hard-facts" id="hard-facts" class="two-column-container">
+        <div class="left-column">
+            <section aria-labelledby="section-tech" id="technologies" class="thin-border">
+                <h2 id="section-tech">Technologies</h2>
+                <p>
+                    Java, Elm, F#, C++, C, Prolog, LISP, Python, SQL, Oracle, PostgreSQL, MySQL, Spring Boot, OpenShift
+                    (Kubernetes), Google Cloud Storage, Docker, Amazon Web Services (AWS), Curity (OAuth), Git, Kafka,
+                    Mongodb,
+                    RabbitMQ, Jenkins CI/CD, GO CI/CD, Wicket , Linux, MacOS, Windows
+                </p>
+            </section>
+            <section aria-labelledby="section-employments" id="employments" class="thin-border">
+                <h2 id="section-employments">Employments</h2>
+                <ul>
+                    <li>2022 - Agical (Consultant)</li>
+                    <li>2021 - 2022 Insurello AB (Developer)</li>
+                    <li>2007 - 2021 Crisp AB (Partner)</li>
+                    <li>2003 - 2007 Swedish Tax Agency (Architect)</li>
+                    <li>1993 - 2003 CAG (Consultant)</li>
+                    <li>1991 - 1993 Objective Systems (Software Engineer)</li>
+                    <li>1980 - 1991 Institute of microelectronics (Engineer)</li>
+                </ul>
+            </section>
+        </div>
+        <div class="right-column">
+            <section aria-labelledby="section-education" id="eduction" class="thin-border" style="width:100%">
+                <h2 id="section-education">Education</h2>
+                <p>Autodidact, plus some electronics engineering and psychology at university.</p>
+                <h3>Classes (a selection):</h3>
+                <ul>
+                    <li>Agile at scale, inspired by Spotify (Jimmy Janlén, Joakim Sundén)</li>
+                    <li>Certified Scrum Master (Jeff Sutherland)</li>
+                    <li>Certified Product Owner (Jeff Patton)</li>
+                    <li>Certified Scrum Developer (Chet Hendriksen, Ron Jeffries)</li>
+                    <li>Advanced Agile (Alistair Cockburn)</li>
+                    <li>Accelerated Agile (Dan North)</li>
+                    <li>Coaching Agile Teams (Lyssa Adkins)</li>
+                    <li>The Agile Facilitator (Lyssa Adkins, Leslie Stein)</li>
+                    <li>Specification by Example (Gojko Adzic)</li>
+                    <li>Impact Mapping (Gojko Adzic)</li>
+                    <li>Training from the back of the room (Sharon Bowman)</li>
+                    <li>Clean Code (Robert C Martin)</li>
+                    <li>Psychology, 30p (Stockholm University)</li>
+                </ul>
+            </section>
+        </div>
     </section>
-    <section aria-labelledby="section-contact" id="contact" style="padding-bottom: 25px">
-        <hr/>
+    <section aria-labelledby="section-contact" id="contact" class="thin-border">
         <h3 id="section-contact">Contact information</h3>
-        <div style="display: flex; justify-content: space-around; font-size: medium">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-around; font-size: medium">
             <div style="padding-right: 2px">
                 Telephone: +46&nbsp;708&nbsp;38&nbsp;55&nbsp;99
             </div>
             <div style="padding-right: 2px">
                 Mail: per.lundholm@agical.se
             </div>
-            <div>
+            <div style="max-width: 100%">
                 <a href="https://linkedin.com/in/perlundholm" target="_blank">
                     <img src="LI-Logo.png" height="16px" alt="LinkedIn hyperlink"/>
                 </a>
