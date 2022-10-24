@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta charset="utf-8">
     <style>
+        .top-banner {
+            display: flex;
+            justify-content: center;
+            background-color: rgb(45, 62, 80);
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        .main-image {
+            border-radius: 5px;
+            max-width: 100%;
+            height: auto;
+        }
+
         .two-column-container {
             display: flex;
             flex-wrap: wrap;
@@ -38,24 +53,26 @@
 </head>
 <body>
 <section aria-label="content" id="content" style="margin: auto; max-width: 800px; font-family: Helvetica,sans-serif">
-    <img src="cv-headline.png" alt="curriculum vitae" style="width: 100%"/>
+    <div class="top-banner">
+        <img width="100" src="https://agical.se/img/logo.svg" alt="Agical logotype">
+    </div>
     <section aria-label="front-page" id="two-column" style="display: flex">
         <div id="left-column" style="flex: 50%; flex-direction: column; display: flex;">
             <div style="width: fit-content; margin: auto; font-size: xx-large;">
-                <p style="color: lightblue; background-color: gray; padding: 10px; border-radius: 10px; margin: 10px;">
+                <p style="color: lightblue; background-color: gray; padding: 10px; border-radius: 5px; margin: 10px;">
                     Per Lundholm
                 </p>
             </div>
             <div style="width: fit-content; margin: auto; font-size: xx-large; text-align: center; padding-bottom: 25%; ">
-                <p style="color: gray; background-color: lightblue; padding: 10px; border-radius: 10px; margin: 10px;">
+                <p style="color: gray; background-color: lightblue; padding: 10px; border-radius: 5px; margin: 10px;">
                     Agile Coder and Coach
                 </p>
             </div>
         </div>
         <div id="right-column" style="flex: 50%">
-            <img src="per-pratar2.jpg"
+            <img src="per-pratar-small.jpg"
                  alt="picture of Per talking to audience"
-                 style="border-radius: 20px; max-width: 100%; height: auto;"
+                 class="main-image"
             />
             <div style="width: fit-content; margin: auto; padding: 10px">
                 "15 min of TDD" at Swedish Enforcement.
