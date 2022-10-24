@@ -1,0 +1,52 @@
+.container {
+    border-style: solid;
+    border-color: red;
+    border-radius: 20px;
+    padding: 20px;
+    margin: auto;
+    max-width: fit-content;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+}
+
+.top-banner {
+    background-color: #e10200;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+.logo {
+    width: 50%;
+}
+
+.total-score {
+    background-color: wheat;
+}
+
+.driver-name {
+    font-weight: lighter;
+}
+
+.player-name {
+    text-align: center;
+    font-weight: normal;
+}
+
+.points {
+    text-align: center;
+}
+
+.points-title {
+    font-weight: bold;
+}
+
+.gp-round {
+    font-weight: normal;
+}
+
+.section-title {
+    color: green;
+}
