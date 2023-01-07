@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.aD.ae === region.aQ.ae)
+	if (region.aB.ac === region.aP.ac)
 	{
-		return 'on line ' + region.aD.ae;
+		return 'on line ' + region.aB.ac;
 	}
-	return 'on lines ' + region.aD.ae + ' through ' + region.aQ.ae;
+	return 'on lines ' + region.aB.ac + ' through ' + region.aP.ac;
 }
 
 
@@ -2705,8 +2705,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		F: func(record.F),
-		aE: record.aE,
-		aB: record.aB
+		aC: record.aC,
+		az: record.az
 	}
 });
 
@@ -2975,10 +2975,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.F;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aE;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aC;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.aB) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.az) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3968,7 +3968,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.ct,
 		impl.cn,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.aC && impl.aC(sendToApp)
+			var divertHrefToApp = impl.aA && impl.aA(sendToApp)
 			var view = impl.cu;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4043,7 +4043,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		aC: function(sendToApp)
+		aA: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4060,7 +4060,7 @@ function _Browser_application(impl)
 					sendToApp(onUrlRequest(
 						(next
 							&& curr.bd === next.bd
-							&& curr.aY === next.aY
+							&& curr.aX === next.aX
 							&& curr.ba.a === next.ba.a
 						)
 							? $elm$browser$Browser$Internal(next)
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		O: _Browser_getScene(),
+		S: _Browser_getScene(),
 		bv: {
 			by: _Browser_window.pageXOffset,
 			bz: _Browser_window.pageYOffset,
 			bx: _Browser_doc.documentElement.clientWidth,
-			aX: _Browser_doc.documentElement.clientHeight
+			aW: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4248,7 +4248,7 @@ function _Browser_getScene()
 	var elem = _Browser_doc.documentElement;
 	return {
 		bx: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		aX: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aW: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			O: {
+			S: {
 				bx: node.scrollWidth,
-				aX: node.scrollHeight
+				aW: node.scrollHeight
 			},
 			bv: {
 				by: node.scrollLeft,
 				bz: node.scrollTop,
 				bx: node.clientWidth,
-				aX: node.clientHeight
+				aW: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			O: _Browser_getScene(),
+			S: _Browser_getScene(),
 			bv: {
 				by: x,
 				bz: y,
 				bx: _Browser_doc.documentElement.clientWidth,
-				aX: _Browser_doc.documentElement.clientHeight
+				aW: _Browser_doc.documentElement.clientHeight
 			},
 			bO: {
 				by: x + rect.left,
 				bz: y + rect.top,
 				bx: rect.width,
-				aX: rect.height
+				aW: rect.height
 			}
 		};
 	});
@@ -4365,19 +4365,19 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.av.a(response)));
+			callback(toTask(request.at.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.av.b, xhr)); });
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.at.b, xhr)); });
 		$elm$core$Maybe$isJust(request.bu) && _Http_track(router, xhr, request.bu.a);
 
 		try {
-			xhr.open(request.b$, request.V, true);
+			xhr.open(request.b$, request.aF, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.V));
+			return done($elm$http$Http$BadUrl_(request.aF));
 		}
 
 		_Http_configureRequest(xhr, request);
@@ -4394,12 +4394,12 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.aW; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.aV; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 	xhr.timeout = request.cq.a || 0;
-	xhr.responseType = request.av.d;
+	xhr.responseType = request.at.d;
 	xhr.withCredentials = request.bC;
 }
 
@@ -4421,10 +4421,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		V: xhr.responseURL,
+		aF: xhr.responseURL,
 		cl: xhr.status,
 		cm: xhr.statusText,
-		aW: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		aV: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4530,13 +4530,7 @@ function _Http_track(router, xhr, tracker)
 			bm: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
-}var $author$project$Main$LinkClicked = function (a) {
-	return {$: 5, a: a};
-};
-var $author$project$Main$UrlChanged = function (a) {
-	return {$: 6, a: a};
-};
-var $elm$core$Basics$EQ = 1;
+}var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
 var $elm$core$List$cons = _List_cons;
@@ -5040,7 +5034,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {aS: fragment, aY: host, a8: path, ba: port_, bd: protocol, be: query};
+		return {aR: fragment, aX: host, a8: path, ba: port_, bd: protocol, be: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5318,26 +5312,23 @@ var $elm$core$Task$perform = F2(
 		return $elm$core$Task$command(
 			A2($elm$core$Task$map, toMessage, task));
 	});
-var $elm$browser$Browser$application = _Browser_application;
+var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$Library = 0;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$init = F3(
-	function (_v0, url, key) {
-		return _Utils_Tuple2(
-			{
-				J: $elm$core$Maybe$Nothing,
-				ab: $elm$core$Dict$empty,
-				ac: key,
-				aq: {O: _List_Nil},
-				ah: $elm$core$Dict$empty,
-				V: url,
-				at: 0
-			},
-			$elm$core$Platform$Cmd$none);
-	});
+var $author$project$Main$init = function (_v0) {
+	return _Utils_Tuple2(
+		{
+			J: $elm$core$Maybe$Nothing,
+			aa: $elm$core$Dict$empty,
+			ao: {S: _List_Nil},
+			af: $elm$core$Dict$empty,
+			ar: 0
+		},
+		$elm$core$Platform$Cmd$none);
+};
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$subscriptions = function (_v0) {
@@ -5359,11 +5350,11 @@ var $elm$core$List$filter = F2(
 			list);
 	});
 var $author$project$Main$Story = function (scene) {
-	return {O: scene};
+	return {S: scene};
 };
 var $author$project$Main$Scene = F3(
 	function (home, name, route) {
-		return {T: home, a1: name, bj: route};
+		return {_: home, a1: name, bj: route};
 	});
 var $author$project$Main$SceneOption = F2(
 	function (optionText, target) {
@@ -6158,12 +6149,12 @@ var $elm$http$Http$cmdMap = F2(
 				{
 					bC: r.bC,
 					bG: r.bG,
-					av: A2(_Http_mapExpect, func, r.av),
-					aW: r.aW,
+					at: A2(_Http_mapExpect, func, r.at),
+					aV: r.aV,
 					b$: r.b$,
 					cq: r.cq,
 					bu: r.bu,
-					V: r.V
+					aF: r.aF
 				});
 		}
 	});
@@ -6186,17 +6177,17 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{bC: false, bG: r.bG, av: r.av, aW: r.aW, b$: r.b$, cq: r.cq, bu: r.bu, V: r.V}));
+			{bC: false, bG: r.bG, at: r.at, aV: r.aV, b$: r.b$, cq: r.cq, bu: r.bu, aF: r.aF}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{bG: $elm$http$Http$emptyBody, av: r.av, aW: _List_Nil, b$: 'GET', cq: $elm$core$Maybe$Nothing, bu: $elm$core$Maybe$Nothing, V: r.V});
+		{bG: $elm$http$Http$emptyBody, at: r.at, aV: _List_Nil, b$: 'GET', cq: $elm$core$Maybe$Nothing, bu: $elm$core$Maybe$Nothing, aF: r.aF});
 };
 var $author$project$Main$getStory = function (message) {
 	return $elm$http$Http$get(
 		{
-			av: A2($elm$http$Http$expectJson, message, $author$project$Main$decodeStory),
-			V: 'story/scenes.json'
+			at: A2($elm$http$Http$expectJson, message, $author$project$Main$decodeStory),
+			aF: 'story/scenes.json'
 		});
 };
 var $author$project$Main$StoryImageFound = F2(
@@ -6212,9 +6203,9 @@ var $elm$http$Http$expectString = function (toMsg) {
 var $author$project$Main$getStoryImage = function (home) {
 	return $elm$http$Http$get(
 		{
-			av: $elm$http$Http$expectString(
+			at: $elm$http$Http$expectString(
 				$author$project$Main$StoryImageFound(home)),
-			V: 'story/images/' + (home + '.png')
+			aF: 'story/images/' + (home + '.png')
 		});
 };
 var $author$project$Main$getStoryImages = function (story) {
@@ -6225,9 +6216,9 @@ var $author$project$Main$getStoryImages = function (story) {
 			A2(
 				$elm$core$List$map,
 				function ($) {
-					return $.T;
+					return $._;
 				},
-				story.O)));
+				story.S)));
 };
 var $author$project$Main$StoryTextLoaded = F2(
 	function (a, b) {
@@ -6236,9 +6227,9 @@ var $author$project$Main$StoryTextLoaded = F2(
 var $author$project$Main$getStoryText = function (home) {
 	return $elm$http$Http$get(
 		{
-			av: $elm$http$Http$expectString(
+			at: $elm$http$Http$expectString(
 				$author$project$Main$StoryTextLoaded(home)),
-			V: 'story/text/' + (home + '.txt')
+			aF: 'story/text/' + (home + '.txt')
 		});
 };
 var $author$project$Main$getStoryTexts = function (story) {
@@ -6249,9 +6240,9 @@ var $author$project$Main$getStoryTexts = function (story) {
 			A2(
 				$elm$core$List$map,
 				function ($) {
-					return $.T;
+					return $._;
 				},
-				story.O)));
+				story.S)));
 };
 var $elm$core$List$head = function (list) {
 	if (list.b) {
@@ -6262,19 +6253,7 @@ var $elm$core$List$head = function (list) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $elm$browser$Browser$Navigation$load = _Browser_load;
-var $elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (!maybe.$) {
-			var value = maybe.a;
-			return $elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
-var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
-var $author$project$Main$NoOp = {$: 7};
+var $author$project$Main$NoOp = {$: 5};
 var $elm$browser$Browser$Dom$setViewport = _Browser_setViewport;
 var $author$project$Main$resetViewport = A2(
 	$elm$core$Task$perform,
@@ -6282,59 +6261,6 @@ var $author$project$Main$resetViewport = A2(
 		return $author$project$Main$NoOp;
 	},
 	A2($elm$browser$Browser$Dom$setViewport, 0, 0));
-var $elm$url$Url$addPort = F2(
-	function (maybePort, starter) {
-		if (maybePort.$ === 1) {
-			return starter;
-		} else {
-			var port_ = maybePort.a;
-			return starter + (':' + $elm$core$String$fromInt(port_));
-		}
-	});
-var $elm$url$Url$addPrefixed = F3(
-	function (prefix, maybeSegment, starter) {
-		if (maybeSegment.$ === 1) {
-			return starter;
-		} else {
-			var segment = maybeSegment.a;
-			return _Utils_ap(
-				starter,
-				_Utils_ap(prefix, segment));
-		}
-	});
-var $elm$url$Url$toString = function (url) {
-	var http = function () {
-		var _v0 = url.bd;
-		if (!_v0) {
-			return 'http://';
-		} else {
-			return 'https://';
-		}
-	}();
-	return A3(
-		$elm$url$Url$addPrefixed,
-		'#',
-		url.aS,
-		A3(
-			$elm$url$Url$addPrefixed,
-			'?',
-			url.be,
-			_Utils_ap(
-				A2(
-					$elm$url$Url$addPort,
-					url.ba,
-					_Utils_ap(http, url.aY)),
-				url.a8)));
-};
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (!maybe.$) {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
 var $author$project$Main$update = F2(
 	function (message, model) {
 		switch (message.$) {
@@ -6349,27 +6275,15 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								J: $elm$core$List$head(story.O),
-								aq: story,
-								at: 1
+								J: $elm$core$List$head(story.S),
+								ao: story,
+								ar: 1
 							}),
 						$elm$core$Platform$Cmd$batch(
 							_List_fromArray(
 								[
 									$author$project$Main$getStoryTexts(story),
-									$author$project$Main$getStoryImages(story),
-									A2(
-									$elm$browser$Browser$Navigation$pushUrl,
-									model.ac,
-									A2(
-										$elm$core$Maybe$withDefault,
-										'/',
-										A2(
-											$elm$core$Maybe$map,
-											function ($) {
-												return $.T;
-											},
-											$elm$core$List$head(story.O))))
+									$author$project$Main$getStoryImages(story)
 								])));
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
@@ -6382,7 +6296,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								ah: A3($elm$core$Dict$insert, home, storyText, model.ah)
+								af: A3($elm$core$Dict$insert, home, storyText, model.af)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -6395,7 +6309,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								ab: A3($elm$core$Dict$insert, home, home, model.ab)
+								aa: A3($elm$core$Dict$insert, home, home, model.aa)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -6404,36 +6318,6 @@ var $author$project$Main$update = F2(
 			case 4:
 				var home = message.a;
 				return _Utils_Tuple2(
-					model,
-					A2($elm$browser$Browser$Navigation$pushUrl, model.ac, home));
-			case 5:
-				var urlRequest = message.a;
-				if (!urlRequest.$) {
-					var url = urlRequest.a;
-					return _Utils_Tuple2(
-						model,
-						A2(
-							$elm$browser$Browser$Navigation$pushUrl,
-							model.ac,
-							$elm$url$Url$toString(url)));
-				} else {
-					var href = urlRequest.a;
-					return _Utils_Tuple2(
-						model,
-						$elm$browser$Browser$Navigation$load(href));
-				}
-			case 6:
-				var url = message.a;
-				var home = A2(
-					$elm$core$Maybe$withDefault,
-					'???',
-					$elm$core$List$head(
-						$elm$core$List$reverse(
-							A2(
-								$elm$core$String$split,
-								'/',
-								$elm$url$Url$toString(url)))));
-				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
@@ -6441,10 +6325,9 @@ var $author$project$Main$update = F2(
 								A2(
 									$elm$core$List$filter,
 									function (scene) {
-										return _Utils_eq(scene.T, home);
+										return _Utils_eq(scene._, home);
 									},
-									model.aq.O)),
-							V: url
+									model.ao.S))
 						}),
 					$author$project$Main$resetViewport);
 			default:
@@ -6499,6 +6382,16 @@ var $author$project$Main$viewLibrary = A2(
 		]));
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$img = _VirtualDom_node('img');
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -6556,6 +6449,15 @@ var $author$project$Main$viewOptions = function (sceneOptions) {
 			]),
 		A2($elm$core$List$map, $author$project$Main$viewOption, sceneOptions));
 };
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$Main$viewStory = function (model) {
 	var title = A2(
 		$elm$core$Maybe$withDefault,
@@ -6581,11 +6483,11 @@ var $author$project$Main$viewStory = function (model) {
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.T;
+				return $._;
 			},
 			model.J));
 	var hasImage = function () {
-		var _v0 = A2($elm$core$Dict$get, home, model.ab);
+		var _v0 = A2($elm$core$Dict$get, home, model.aa);
 		if (!_v0.$) {
 			return true;
 		} else {
@@ -6595,10 +6497,14 @@ var $author$project$Main$viewStory = function (model) {
 	var content = A2(
 		$elm$core$Maybe$withDefault,
 		'??',
-		A2($elm$core$Dict$get, home, model.ah));
+		A2($elm$core$Dict$get, home, model.af));
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
+		_List_fromArray(
+			[
+				A2($elm$html$Html$Attributes$style, 'max-width', '600px'),
+				A2($elm$html$Html$Attributes$style, 'margin', 'auto')
+			]),
 		_List_fromArray(
 			[
 				hasImage ? A2(
@@ -6630,22 +6536,14 @@ var $author$project$Main$viewStory = function (model) {
 			]));
 };
 var $author$project$Main$view = function (model) {
-	return {
-		bG: _List_fromArray(
-			[
-				function () {
-				var _v0 = model.at;
-				if (!_v0) {
-					return $author$project$Main$viewLibrary;
-				} else {
-					return $author$project$Main$viewStory(model);
-				}
-			}()
-			]),
-		cr: 'Interactive Fiction'
-	};
+	var _v0 = model.ar;
+	if (!_v0) {
+		return $author$project$Main$viewLibrary;
+	} else {
+		return $author$project$Main$viewStory(model);
+	}
 };
-var $author$project$Main$main = $elm$browser$Browser$application(
-	{bX: $author$project$Main$init, ca: $author$project$Main$UrlChanged, cb: $author$project$Main$LinkClicked, cn: $author$project$Main$subscriptions, ct: $author$project$Main$update, cu: $author$project$Main$view});
+var $author$project$Main$main = $elm$browser$Browser$element(
+	{bX: $author$project$Main$init, cn: $author$project$Main$subscriptions, ct: $author$project$Main$update, cu: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
