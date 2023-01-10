@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.aS.an === region.a3.an)
+	if (region.aV.ar === region.a6.ar)
 	{
-		return 'on line ' + region.aS.an;
+		return 'on line ' + region.aV.ar;
 	}
-	return 'on lines ' + region.aS.an + ' through ' + region.a3.an;
+	return 'on lines ' + region.aV.ar + ' through ' + region.a6.ar;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b5,
-		impl.cG,
-		impl.cz,
+		impl.b8,
+		impl.cJ,
+		impl.cC,
 		function() { return function() {} }
 	);
 });
@@ -2704,9 +2704,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		O: func(record.O),
-		aT: record.aT,
-		aQ: record.aQ
+		P: func(record.P),
+		aW: record.aW,
+		aT: record.aT
 	}
 });
 
@@ -2974,11 +2974,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.O;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aT;
+		var message = !tag ? value : tag < 3 ? value.a : value.P;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aW;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.aQ) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.aT) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,11 +3928,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b5,
-		impl.cG,
-		impl.cz,
+		impl.b8,
+		impl.cJ,
+		impl.cC,
 		function(sendToApp, initialModel) {
-			var view = impl.cH;
+			var view = impl.cK;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b5,
-		impl.cG,
-		impl.cz,
+		impl.b8,
+		impl.cJ,
+		impl.cC,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.aR && impl.aR(sendToApp)
-			var view = impl.cH;
+			var divertHrefToApp = impl.aU && impl.aU(sendToApp)
+			var view = impl.cK;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3977,12 +3977,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bR);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bU);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.cE) && (_VirtualDom_doc.title = title = doc.cE);
+				(title !== doc.cH) && (_VirtualDom_doc.title = title = doc.cH);
 			});
 		}
 	);
@@ -4038,12 +4038,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.cl;
-	var onUrlRequest = impl.cm;
+	var onUrlChange = impl.co;
+	var onUrlRequest = impl.cp;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		aR: function(sendToApp)
+		aU: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.br === next.br
-							&& curr.bb === next.bb
-							&& curr.bo.a === next.bo.a
+							&& curr.bu === next.bu
+							&& curr.be === next.be
+							&& curr.br.a === next.br.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		b5: function(flags)
+		b8: function(flags)
 		{
-			return A3(impl.b5, flags, _Browser_getUrl(), key);
+			return A3(impl.b8, flags, _Browser_getUrl(), key);
 		},
-		cH: impl.cH,
-		cG: impl.cG,
-		cz: impl.cz
+		cK: impl.cK,
+		cJ: impl.cJ,
+		cC: impl.cC
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { b2: 'hidden', bU: 'visibilitychange' }
+		? { b5: 'hidden', bX: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { b2: 'mozHidden', bU: 'mozvisibilitychange' }
+		? { b5: 'mozHidden', bX: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { b2: 'msHidden', bU: 'msvisibilitychange' }
+		? { b5: 'msHidden', bX: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { b2: 'webkitHidden', bU: 'webkitvisibilitychange' }
-		: { b2: 'hidden', bU: 'visibilitychange' };
+		? { b5: 'webkitHidden', bX: 'webkitvisibilitychange' }
+		: { b5: 'hidden', bX: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aE: _Browser_getScene(),
-		bJ: {
-			z: _Browser_window.pageXOffset,
-			I: _Browser_window.pageYOffset,
-			ag: _Browser_doc.documentElement.clientWidth,
-			al: _Browser_doc.documentElement.clientHeight
+		at: _Browser_getScene(),
+		bM: {
+			w: _Browser_window.pageXOffset,
+			G: _Browser_window.pageYOffset,
+			aj: _Browser_doc.documentElement.clientWidth,
+			ap: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		ag: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		al: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aj: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		ap: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aE: {
-				ag: node.scrollWidth,
-				al: node.scrollHeight
+			at: {
+				aj: node.scrollWidth,
+				ap: node.scrollHeight
 			},
-			bJ: {
-				z: node.scrollLeft,
-				I: node.scrollTop,
-				ag: node.clientWidth,
-				al: node.clientHeight
+			bM: {
+				w: node.scrollLeft,
+				G: node.scrollTop,
+				aj: node.clientWidth,
+				ap: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aE: _Browser_getScene(),
-			bJ: {
-				z: x,
-				I: y,
-				ag: _Browser_doc.documentElement.clientWidth,
-				al: _Browser_doc.documentElement.clientHeight
+			at: _Browser_getScene(),
+			bM: {
+				w: x,
+				G: y,
+				aj: _Browser_doc.documentElement.clientWidth,
+				ap: _Browser_doc.documentElement.clientHeight
 			},
-			ay: {
-				z: x + rect.left,
-				I: y + rect.top,
-				ag: rect.width,
-				al: rect.height
+			aB: {
+				w: x + rect.left,
+				G: y + rect.top,
+				aj: rect.width,
+				ap: rect.height
 			}
 		};
 	});
@@ -4365,25 +4365,25 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.a5.a(response)));
+			callback(toTask(request.a8.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.a5.b, xhr)); });
-		$elm$core$Maybe$isJust(request.bH) && _Http_track(router, xhr, request.bH.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.a8.b, xhr)); });
+		$elm$core$Maybe$isJust(request.bK) && _Http_track(router, xhr, request.bK.a);
 
 		try {
-			xhr.open(request.b9, request.bI, true);
+			xhr.open(request.cc, request.bL, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.bI));
+			return done($elm$http$Http$BadUrl_(request.bL));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		request.bR.a && xhr.setRequestHeader('Content-Type', request.bR.a);
-		xhr.send(request.bR.b);
+		request.bU.a && xhr.setRequestHeader('Content-Type', request.bU.a);
+		xhr.send(request.bU.b);
 
 		return function() { xhr.c = true; xhr.abort(); };
 	});
@@ -4394,13 +4394,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.ba; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.bd; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.cD.a || 0;
-	xhr.responseType = request.a5.d;
-	xhr.withCredentials = request.bN;
+	xhr.timeout = request.cG.a || 0;
+	xhr.responseType = request.a8.d;
+	xhr.withCredentials = request.bQ;
 }
 
 
@@ -4421,10 +4421,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		bI: xhr.responseURL,
-		cx: xhr.status,
-		cy: xhr.statusText,
-		ba: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		bL: xhr.responseURL,
+		cA: xhr.status,
+		cB: xhr.statusText,
+		bd: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4519,18 +4519,196 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			cw: event.loaded,
-			bA: event.total
+			cz: event.loaded,
+			bD: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			cq: event.loaded,
-			bA: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			ct: event.loaded,
+			bD: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
-}var $elm$core$Basics$EQ = 1;
+}
+
+
+// DECODER
+
+var _File_decoder = _Json_decodePrim(function(value) {
+	// NOTE: checks if `File` exists in case this is run on node
+	return (typeof File !== 'undefined' && value instanceof File)
+		? $elm$core$Result$Ok(value)
+		: _Json_expecting('a FILE', value);
+});
+
+
+// METADATA
+
+function _File_name(file) { return file.name; }
+function _File_mime(file) { return file.type; }
+function _File_size(file) { return file.size; }
+
+function _File_lastModified(file)
+{
+	return $elm$time$Time$millisToPosix(file.lastModified);
+}
+
+
+// DOWNLOAD
+
+var _File_downloadNode;
+
+function _File_getDownloadNode()
+{
+	return _File_downloadNode || (_File_downloadNode = document.createElement('a'));
+}
+
+var _File_download = F3(function(name, mime, content)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var blob = new Blob([content], {type: mime});
+
+		// for IE10+
+		if (navigator.msSaveOrOpenBlob)
+		{
+			navigator.msSaveOrOpenBlob(blob, name);
+			return;
+		}
+
+		// for HTML5
+		var node = _File_getDownloadNode();
+		var objectUrl = URL.createObjectURL(blob);
+		node.href = objectUrl;
+		node.download = name;
+		_File_click(node);
+		URL.revokeObjectURL(objectUrl);
+	});
+});
+
+function _File_downloadUrl(href)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var node = _File_getDownloadNode();
+		node.href = href;
+		node.download = '';
+		node.origin === location.origin || (node.target = '_blank');
+		_File_click(node);
+	});
+}
+
+
+// IE COMPATIBILITY
+
+function _File_makeBytesSafeForInternetExplorer(bytes)
+{
+	// only needed by IE10 and IE11 to fix https://github.com/elm/file/issues/10
+	// all other browsers can just run `new Blob([bytes])` directly with no problem
+	//
+	return new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+}
+
+function _File_click(node)
+{
+	// only needed by IE10 and IE11 to fix https://github.com/elm/file/issues/11
+	// all other browsers have MouseEvent and do not need this conditional stuff
+	//
+	if (typeof MouseEvent === 'function')
+	{
+		node.dispatchEvent(new MouseEvent('click'));
+	}
+	else
+	{
+		var event = document.createEvent('MouseEvents');
+		event.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+		document.body.appendChild(node);
+		node.dispatchEvent(event);
+		document.body.removeChild(node);
+	}
+}
+
+
+// UPLOAD
+
+var _File_node;
+
+function _File_uploadOne(mimes)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		_File_node = document.createElement('input');
+		_File_node.type = 'file';
+		_File_node.accept = A2($elm$core$String$join, ',', mimes);
+		_File_node.addEventListener('change', function(event)
+		{
+			callback(_Scheduler_succeed(event.target.files[0]));
+		});
+		_File_click(_File_node);
+	});
+}
+
+function _File_uploadOneOrMore(mimes)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		_File_node = document.createElement('input');
+		_File_node.type = 'file';
+		_File_node.multiple = true;
+		_File_node.accept = A2($elm$core$String$join, ',', mimes);
+		_File_node.addEventListener('change', function(event)
+		{
+			var elmFiles = _List_fromArray(event.target.files);
+			callback(_Scheduler_succeed(_Utils_Tuple2(elmFiles.a, elmFiles.b)));
+		});
+		_File_click(_File_node);
+	});
+}
+
+
+// CONTENT
+
+function _File_toString(blob)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var reader = new FileReader();
+		reader.addEventListener('loadend', function() {
+			callback(_Scheduler_succeed(reader.result));
+		});
+		reader.readAsText(blob);
+		return function() { reader.abort(); };
+	});
+}
+
+function _File_toBytes(blob)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var reader = new FileReader();
+		reader.addEventListener('loadend', function() {
+			callback(_Scheduler_succeed(new DataView(reader.result)));
+		});
+		reader.readAsArrayBuffer(blob);
+		return function() { reader.abort(); };
+	});
+}
+
+function _File_toUrl(blob)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var reader = new FileReader();
+		reader.addEventListener('loadend', function() {
+			callback(_Scheduler_succeed(reader.result));
+		});
+		reader.readAsDataURL(blob);
+		return function() { reader.abort(); };
+	});
+}
+
+var $elm$core$Basics$EQ = 1;
 var $elm$core$Basics$GT = 2;
 var $elm$core$Basics$LT = 0;
 var $elm$core$List$cons = _List_cons;
@@ -5034,7 +5212,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {a6: fragment, bb: host, bm: path, bo: port_, br: protocol, bs: query};
+		return {a9: fragment, be: host, bp: path, br: port_, bu: protocol, bv: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5342,38 +5520,37 @@ var $elm$core$Task$attempt = F2(
 	});
 var $elm$browser$Browser$Dom$getElement = _Browser_getElement;
 var $author$project$Editor$graphId = 'graph';
+var $author$project$Editor$getDrawingArea = A2(
+	$elm$core$Task$attempt,
+	$author$project$Editor$GotDomElement,
+	$elm$browser$Browser$Dom$getElement($author$project$Editor$graphId));
 var $author$project$Editor$Dimension = F2(
 	function (width, height) {
-		return {al: height, ag: width};
+		return {ap: height, aj: width};
 	});
 var $author$project$Editor$Position = F2(
 	function (x, y) {
-		return {z: x, I: y};
+		return {w: x, G: y};
 	});
 var $author$project$Editor$Static = {$: 0};
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $author$project$Editor$initialModel = {
-	aw: false,
-	_: $author$project$Editor$Static,
-	ax: _List_Nil,
-	M: {
-		K: A2($author$project$Editor$Dimension, 0, 0),
-		i: A2($author$project$Editor$Position, 0, 0)
+	aA: false,
+	aL: $elm$core$Maybe$Nothing,
+	ab: $author$project$Editor$Static,
+	p: {ao: _List_Nil, C: $elm$core$Dict$empty},
+	N: {
+		L: A2($author$project$Editor$Dimension, 0, 0),
+		h: A2($author$project$Editor$Position, 0, 0)
 	},
-	G: $elm$core$Dict$empty,
-	X: 1.0
+	Z: 1.0
 };
-var $author$project$Editor$init = _Utils_Tuple2(
-	$author$project$Editor$initialModel,
-	A2(
-		$elm$core$Task$attempt,
-		$author$project$Editor$GotDomElement,
-		$elm$browser$Browser$Dom$getElement($author$project$Editor$graphId)));
+var $author$project$Editor$init = _Utils_Tuple2($author$project$Editor$initialModel, $author$project$Editor$getDrawingArea);
 var $author$project$StoryModel$init = {
-	am: $elm$core$Dict$empty,
-	aF: {aE: _List_Nil},
-	aq: $elm$core$Dict$empty
+	aq: $elm$core$Dict$empty,
+	aI: {at: _List_Nil},
+	aw: $elm$core$Dict$empty
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
@@ -5381,11 +5558,11 @@ var $author$project$Main$init = function (_v0) {
 	var _v1 = $author$project$Editor$init;
 	var editorModel = _v1.a;
 	return _Utils_Tuple2(
-		{S: $elm$core$Maybe$Nothing, E: 'https://artcomputer.se/interfict/story', L: editorModel, y: $author$project$StoryModel$init, av: 0},
+		{T: $elm$core$Maybe$Nothing, H: 'https://artcomputer.se/interfict/story', M: editorModel, au: false, A: $author$project$StoryModel$init, ah: 0},
 		$elm$core$Platform$Cmd$none);
 };
 var $author$project$Main$EditorMessage = function (a) {
-	return {$: 8, a: a};
+	return {$: 9, a: a};
 };
 var $elm$core$Platform$Sub$map = _Platform_map;
 var $author$project$Editor$DragMove = F3(
@@ -5396,6 +5573,9 @@ var $author$project$Editor$DragStop = F2(
 	function (a, b) {
 		return {$: 3, a: a, b: b};
 	});
+var $author$project$Editor$GraphLoaded = function (a) {
+	return {$: 7, a: a};
+};
 var $author$project$Editor$WindowResize = {$: 6};
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$json$Json$Decode$field = _Json_decodeField;
@@ -5412,7 +5592,9 @@ var $author$project$Editor$decodeButtons = A2(
 var $elm$json$Json$Decode$float = _Json_decodeFloat;
 var $author$project$Editor$decodeFractionX = A2($elm$json$Json$Decode$field, 'pageX', $elm$json$Json$Decode$float);
 var $author$project$Editor$decodeFractionY = A2($elm$json$Json$Decode$field, 'pageY', $elm$json$Json$Decode$float);
-var $author$project$Editor$decodePosition = A3($elm$json$Json$Decode$map2, $author$project$Editor$Position, $author$project$Editor$decodeFractionX, $author$project$Editor$decodeFractionY);
+var $author$project$Editor$decodeMousePosition = A3($elm$json$Json$Decode$map2, $author$project$Editor$Position, $author$project$Editor$decodeFractionX, $author$project$Editor$decodeFractionY);
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Editor$graphLoaded = _Platform_incomingPort('graphLoaded', $elm$json$Json$Decode$string);
 var $elm$browser$Browser$Events$Document = 0;
 var $elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
@@ -5420,7 +5602,7 @@ var $elm$browser$Browser$Events$MySub = F3(
 	});
 var $elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {bn: pids, bE: subs};
+		return {bq: pids, bH: subs};
 	});
 var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
 	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
@@ -5650,7 +5832,7 @@ var $elm$core$Dict$merge = F6(
 	});
 var $elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {a4: event, bd: key};
+		return {a7: event, bg: key};
 	});
 var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$browser$Browser$Events$spawn = F3(
@@ -5725,7 +5907,7 @@ var $elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.bn,
+			state.bq,
 			$elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
 		var deadPids = _v0.a;
@@ -5771,8 +5953,8 @@ var $elm$core$List$filterMap = F2(
 	});
 var $elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _v0, state) {
-		var key = _v0.bd;
-		var event = _v0.a4;
+		var key = _v0.bg;
+		var event = _v0.a7;
 		var toMessage = function (_v2) {
 			var subKey = _v2.a;
 			var _v3 = _v2.b;
@@ -5781,7 +5963,7 @@ var $elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _v3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
 		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.bE);
+		var messages = A2($elm$core$List$filterMap, toMessage, state.bH);
 		return A2(
 			$elm$core$Task$andThen,
 			function (_v1) {
@@ -5829,13 +6011,18 @@ var $elm$browser$Browser$Events$onResize = function (func) {
 				A2($elm$json$Json$Decode$field, 'innerHeight', $elm$json$Json$Decode$int))));
 };
 var $author$project$Editor$subscriptions = function (model) {
-	var _v0 = model._;
+	var _v0 = model.ab;
 	if (!_v0.$) {
-		return $elm$browser$Browser$Events$onResize(
-			F2(
-				function (_v1, _v2) {
-					return $author$project$Editor$WindowResize;
-				}));
+		return $elm$core$Platform$Sub$batch(
+			_List_fromArray(
+				[
+					$elm$browser$Browser$Events$onResize(
+					F2(
+						function (_v1, _v2) {
+							return $author$project$Editor$WindowResize;
+						})),
+					$author$project$Editor$graphLoaded($author$project$Editor$GraphLoaded)
+				]));
 	} else {
 		var id = _v0.a;
 		return $elm$core$Platform$Sub$batch(
@@ -5846,12 +6033,12 @@ var $author$project$Editor$subscriptions = function (model) {
 						$elm$json$Json$Decode$map2,
 						$author$project$Editor$DragMove(id),
 						$author$project$Editor$decodeButtons,
-						$author$project$Editor$decodePosition)),
+						$author$project$Editor$decodeMousePosition)),
 					$elm$browser$Browser$Events$onMouseUp(
 					A2(
 						$elm$json$Json$Decode$map,
 						$author$project$Editor$DragStop(id),
-						$author$project$Editor$decodePosition))
+						$author$project$Editor$decodeMousePosition))
 				]));
 	}
 };
@@ -5859,10 +6046,10 @@ var $author$project$Main$subscriptions = function (model) {
 	return A2(
 		$elm$core$Platform$Sub$map,
 		$author$project$Main$EditorMessage,
-		$author$project$Editor$subscriptions(model.L));
+		$author$project$Editor$subscriptions(model.M));
 };
 var $author$project$Main$StoryLoaded = function (a) {
-	return {$: 3, a: a};
+	return {$: 4, a: a};
 };
 var $author$project$Main$ViewEditor = 2;
 var $author$project$Main$ViewStory = 1;
@@ -5892,20 +6079,20 @@ var $author$project$StoryModel$getScene = F2(
 			A2(
 				$elm$core$List$filter,
 				function (scene) {
-					return _Utils_eq(scene.aL, home);
+					return _Utils_eq(scene.aO, home);
 				},
-				model.aF.aE));
+				model.aI.at));
 	});
 var $author$project$StoryModel$Story = function (scene) {
-	return {aE: scene};
+	return {at: scene};
 };
 var $author$project$StoryModel$Scene = F3(
 	function (home, name, route) {
-		return {aL: home, cc: name, bx: route};
+		return {aO: home, cf: name, bA: route};
 	});
 var $author$project$StoryModel$SceneOption = F2(
 	function (optionText, target) {
-		return {co: optionText, cC: target};
+		return {cr: optionText, cF: target};
 	});
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
@@ -5915,7 +6102,6 @@ var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
 			A2($elm$json$Json$Decode$field, key, valDecoder),
 			decoder);
 	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$StoryModel$decodeSceneOption = A3(
 	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
 	'target',
@@ -6424,7 +6610,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.cx));
+					$elm$http$Http$BadStatus(metadata.cA));
 			default:
 				var body = response.b;
 				return A2(
@@ -6452,7 +6638,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {bu: reqs, bE: subs};
+		return {bx: reqs, bH: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -6495,7 +6681,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.bH;
+							var _v4 = req.bK;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -6525,7 +6711,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.bu));
+			A3($elm$http$Http$updateReqs, router, cmds, state.bx));
 	});
 var $elm$http$Http$maybeSend = F4(
 	function (router, desiredTracker, progress, _v0) {
@@ -6550,7 +6736,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.bE)));
+					state.bH)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -6564,14 +6750,14 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
-					bN: r.bN,
-					bR: r.bR,
-					a5: A2(_Http_mapExpect, func, r.a5),
-					ba: r.ba,
-					b9: r.b9,
-					cD: r.cD,
-					bH: r.bH,
-					bI: r.bI
+					bQ: r.bQ,
+					bU: r.bU,
+					a8: A2(_Http_mapExpect, func, r.a8),
+					bd: r.bd,
+					cc: r.cc,
+					cG: r.cG,
+					bK: r.bK,
+					bL: r.bL
 				});
 		}
 	});
@@ -6594,23 +6780,23 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{bN: false, bR: r.bR, a5: r.a5, ba: r.ba, b9: r.b9, cD: r.cD, bH: r.bH, bI: r.bI}));
+			{bQ: false, bU: r.bU, a8: r.a8, bd: r.bd, cc: r.cc, cG: r.cG, bK: r.bK, bL: r.bL}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{bR: $elm$http$Http$emptyBody, a5: r.a5, ba: _List_Nil, b9: 'GET', cD: $elm$core$Maybe$Nothing, bH: $elm$core$Maybe$Nothing, bI: r.bI});
+		{bU: $elm$http$Http$emptyBody, a8: r.a8, bd: _List_Nil, cc: 'GET', cG: $elm$core$Maybe$Nothing, bK: $elm$core$Maybe$Nothing, bL: r.bL});
 };
 var $author$project$StoryModel$getStory = F2(
 	function (storyLocation, message) {
 		return $elm$http$Http$get(
 			{
-				a5: A2($elm$http$Http$expectJson, message, $author$project$StoryModel$decodeStory),
-				bI: storyLocation + '/scenes.json'
+				a8: A2($elm$http$Http$expectJson, message, $author$project$StoryModel$decodeStory),
+				bL: storyLocation + '/scenes.json'
 			});
 	});
 var $author$project$Main$StoryImageFound = F2(
 	function (a, b) {
-		return {$: 5, a: a, b: b};
+		return {$: 6, a: a, b: b};
 	});
 var $elm$http$Http$expectString = function (toMsg) {
 	return A2(
@@ -6622,9 +6808,9 @@ var $author$project$Main$getStoryImage = F2(
 	function (storyLocation, home) {
 		return $elm$http$Http$get(
 			{
-				a5: $elm$http$Http$expectString(
+				a8: $elm$http$Http$expectString(
 					$author$project$Main$StoryImageFound(home)),
-				bI: storyLocation + ('/images/' + (home + '.png'))
+				bL: storyLocation + ('/images/' + (home + '.png'))
 			});
 	});
 var $author$project$Main$getStoryImages = F2(
@@ -6636,21 +6822,21 @@ var $author$project$Main$getStoryImages = F2(
 				A2(
 					$elm$core$List$map,
 					function ($) {
-						return $.aL;
+						return $.aO;
 					},
-					story.aE)));
+					story.at)));
 	});
 var $author$project$Main$StoryTextLoaded = F2(
 	function (a, b) {
-		return {$: 4, a: a, b: b};
+		return {$: 5, a: a, b: b};
 	});
 var $author$project$Main$getStoryText = F2(
 	function (storyLocation, home) {
 		return $elm$http$Http$get(
 			{
-				a5: $elm$http$Http$expectString(
+				a8: $elm$http$Http$expectString(
 					$author$project$Main$StoryTextLoaded(home)),
-				bI: storyLocation + ('/text/' + (home + '.txt'))
+				bL: storyLocation + ('/text/' + (home + '.txt'))
 			});
 	});
 var $author$project$Main$getStoryTexts = F2(
@@ -6662,12 +6848,19 @@ var $author$project$Main$getStoryTexts = F2(
 				A2(
 					$elm$core$List$map,
 					function ($) {
-						return $.aL;
+						return $.aO;
 					},
-					story.aE)));
+					story.at)));
+	});
+var $elm$json$Json$Encode$null = _Json_encodeNull;
+var $author$project$Editor$loadGraph = _Platform_outgoingPort(
+	'loadGraph',
+	function ($) {
+		return $elm$json$Json$Encode$null;
 	});
 var $elm$core$Platform$Cmd$map = _Platform_map;
-var $author$project$Main$NoOp = {$: 7};
+var $elm$core$Basics$not = _Basics_not;
+var $author$project$Main$NoOp = {$: 8};
 var $elm$browser$Browser$Dom$setViewport = _Browser_setViewport;
 var $author$project$Main$resetViewport = A2(
 	$elm$core$Task$perform,
@@ -6680,12 +6873,12 @@ var $author$project$StoryModel$setImage = F2(
 		return _Utils_update(
 			model,
 			{
-				am: A3($elm$core$Dict$insert, home, home, model.am)
+				aq: A3($elm$core$Dict$insert, home, home, model.aq)
 			});
 	});
 var $author$project$Editor$Edge = F3(
 	function (fromNode, toNode, label) {
-		return {aJ: fromNode, ac: label, as: toNode};
+		return {aD: fromNode, W: label, af: toNode};
 	});
 var $elm$core$List$append = F2(
 	function (xs, ys) {
@@ -6708,12 +6901,12 @@ var $author$project$Editor$mergeTarget = F2(
 			} else {
 				var head = edges.a;
 				var tail = edges.b;
-				if (_Utils_eq(head.as, edge.as)) {
+				if (_Utils_eq(head.af, edge.af)) {
 					return A2(
 						$elm$core$List$cons,
 						_Utils_update(
 							head,
-							{ac: head.ac + ('/' + edge.ac)}),
+							{W: head.W + ('/' + edge.W)}),
 						tail);
 				} else {
 					var $temp$edge = edge,
@@ -6748,16 +6941,16 @@ var $author$project$Editor$setStory = F2(
 						A2(
 							$elm$core$List$filter,
 							function (e) {
-								return $elm$core$String$length(e.ac) > 0;
+								return $elm$core$String$length(e.W) > 0;
 							},
 							A2(
 								$elm$core$List$map,
 								function (r) {
-									return A3($author$project$Editor$Edge, s.aL, r.cC, r.co);
+									return A3($author$project$Editor$Edge, s.aO, r.cF, r.cr);
 								},
-								s.bx)));
+								s.bA)));
 				},
-				story.aE));
+				story.at));
 		var mkPos = function (n) {
 			return A2($author$project$Editor$Position, 10.0 * n, 10.0 * n);
 		};
@@ -6767,51 +6960,245 @@ var $author$project$Editor$setStory = F2(
 				F2(
 					function (n, s) {
 						return _Utils_Tuple2(
-							s.aL,
+							s.aO,
 							{
-								i: mkPos(n),
-								aE: s
+								h: mkPos(n),
+								at: s
 							});
 					}),
-				story.aE));
+				story.at));
 		return _Utils_update(
 			model,
-			{ax: newEdges, G: newGraph});
+			{
+				p: {ao: newEdges, C: newGraph}
+			});
 	});
 var $author$project$StoryModel$setStory = F2(
 	function (model, story) {
 		return _Utils_update(
 			model,
-			{aF: story});
+			{aI: story});
 	});
 var $author$project$StoryModel$setText = F3(
 	function (model, home, storyText) {
 		return _Utils_update(
 			model,
 			{
-				aq: A3($elm$core$Dict$insert, home, storyText, model.aq)
+				aw: A3($elm$core$Dict$insert, home, storyText, model.aw)
 			});
 	});
+var $author$project$Editor$EditSessionSelected = function (a) {
+	return {$: 10, a: a};
+};
 var $author$project$Editor$Moving = function (a) {
 	return {$: 1, a: a};
 };
+var $author$project$Editor$NodeGraph = F2(
+	function (nodes, edges) {
+		return {ao: edges, C: nodes};
+	});
+var $author$project$Editor$decodeEdge = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'label',
+	$elm$json$Json$Decode$string,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'toNode',
+		$elm$json$Json$Decode$string,
+		A3(
+			$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+			'fromNode',
+			$elm$json$Json$Decode$string,
+			$elm$json$Json$Decode$succeed($author$project$Editor$Edge))));
+var $author$project$Editor$Node = F2(
+	function (position, scene) {
+		return {h: position, at: scene};
+	});
+var $author$project$Editor$decodePosition = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'y',
+	$elm$json$Json$Decode$float,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'x',
+		$elm$json$Json$Decode$float,
+		$elm$json$Json$Decode$succeed($author$project$Editor$Position)));
+var $author$project$Editor$decodeNode = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'scene',
+	$author$project$StoryModel$decodeScene,
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'position',
+		$author$project$Editor$decodePosition,
+		$elm$json$Json$Decode$succeed($author$project$Editor$Node)));
+var $elm$json$Json$Decode$keyValuePairs = _Json_decodeKeyValuePairs;
+var $elm$json$Json$Decode$dict = function (decoder) {
+	return A2(
+		$elm$json$Json$Decode$map,
+		$elm$core$Dict$fromList,
+		$elm$json$Json$Decode$keyValuePairs(decoder));
+};
+var $author$project$Editor$decodeGraph = A3(
+	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+	'edges',
+	$elm$json$Json$Decode$list($author$project$Editor$decodeEdge),
+	A3(
+		$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
+		'nodes',
+		$elm$json$Json$Decode$dict($author$project$Editor$decodeNode),
+		$elm$json$Json$Decode$succeed($author$project$Editor$NodeGraph)));
+var $elm$json$Json$Encode$dict = F3(
+	function (toKey, toValue, dictionary) {
+		return _Json_wrap(
+			A3(
+				$elm$core$Dict$foldl,
+				F3(
+					function (key, value, obj) {
+						return A3(
+							_Json_addField,
+							toKey(key),
+							toValue(value),
+							obj);
+					}),
+				_Json_emptyObject(0),
+				dictionary));
+	});
+var $elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v0, obj) {
+					var k = _v0.a;
+					var v = _v0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(0),
+			pairs));
+};
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Editor$encodeEdge = function (edge) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'fromNode',
+				$elm$json$Json$Encode$string(edge.aD)),
+				_Utils_Tuple2(
+				'toNode',
+				$elm$json$Json$Encode$string(edge.af)),
+				_Utils_Tuple2(
+				'label',
+				$elm$json$Json$Encode$string(edge.W))
+			]));
+};
+var $elm$json$Json$Encode$float = _Json_wrap;
+var $author$project$Editor$encodePosition = function (position) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'x',
+				$elm$json$Json$Encode$float(position.w)),
+				_Utils_Tuple2(
+				'y',
+				$elm$json$Json$Encode$float(position.G))
+			]));
+};
+var $author$project$StoryModel$encodeSceneOption = function (sceneOption) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'optionText',
+				$elm$json$Json$Encode$string(sceneOption.cr)),
+				_Utils_Tuple2(
+				'target',
+				$elm$json$Json$Encode$string(sceneOption.cF))
+			]));
+};
+var $elm$json$Json$Encode$list = F2(
+	function (func, entries) {
+		return _Json_wrap(
+			A3(
+				$elm$core$List$foldl,
+				_Json_addEntry(func),
+				_Json_emptyArray(0),
+				entries));
+	});
+var $author$project$StoryModel$encodeScene = function (scene) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'home',
+				$elm$json$Json$Encode$string(scene.aO)),
+				_Utils_Tuple2(
+				'name',
+				$elm$json$Json$Encode$string(scene.cf)),
+				_Utils_Tuple2(
+				'route',
+				A2($elm$json$Json$Encode$list, $author$project$StoryModel$encodeSceneOption, scene.bA))
+			]));
+};
+var $author$project$Editor$encodeNode = function (node) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'position',
+				$author$project$Editor$encodePosition(node.h)),
+				_Utils_Tuple2(
+				'scene',
+				$author$project$StoryModel$encodeScene(node.at))
+			]));
+};
+var $author$project$Editor$encodeGraph = function (graph) {
+	return A2(
+		$elm$json$Json$Encode$encode,
+		0,
+		$elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'nodes',
+					A3($elm$json$Json$Encode$dict, $elm$core$Basics$identity, $author$project$Editor$encodeNode, graph.C)),
+					_Utils_Tuple2(
+					'edges',
+					A2($elm$json$Json$Encode$list, $author$project$Editor$encodeEdge, graph.ao))
+				])));
+};
+var $elm$time$Time$Posix = $elm$core$Basics$identity;
+var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
+var $elm$file$File$Select$file = F2(
+	function (mimes, toMsg) {
+		return A2(
+			$elm$core$Task$perform,
+			toMsg,
+			_File_uploadOne(mimes));
+	});
 var $author$project$Editor$viewPortHeight = 100;
 var $author$project$Editor$viewPortWidth = 100;
 var $author$project$Editor$fromScreen = F3(
 	function (position, zoom, graphElement) {
-		return A2($author$project$Editor$Position, (((position.z - graphElement.i.z) / graphElement.K.ag) * $author$project$Editor$viewPortWidth) / zoom, (((position.I - graphElement.i.I) / graphElement.K.al) * $author$project$Editor$viewPortHeight) / zoom);
+		return A2($author$project$Editor$Position, (((position.w - graphElement.h.w) / graphElement.L.aj) * $author$project$Editor$viewPortWidth) / zoom, (((position.G - graphElement.h.G) / graphElement.L.ap) * $author$project$Editor$viewPortHeight) / zoom);
 	});
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
-var $elm$core$Basics$not = _Basics_not;
-var $elm$core$String$toFloat = _String_toFloat;
-var $author$project$Editor$Node = F2(
-	function (position, scene) {
-		return {i: position, aE: scene};
+var $author$project$Editor$storeGraph = _Platform_outgoingPort('storeGraph', $elm$json$Json$Encode$string);
+var $elm$file$File$Download$string = F3(
+	function (name, mime, content) {
+		return A2(
+			$elm$core$Task$perform,
+			$elm$core$Basics$never,
+			A3(_File_download, name, mime, content));
 	});
-var $author$project$Editor$emptyScene = {aL: '', cc: '', bx: _List_Nil};
+var $elm$core$String$toFloat = _String_toFloat;
+var $elm$file$File$toString = _File_toString;
+var $author$project$Editor$emptyScene = {aO: '', cf: '', bA: _List_Nil};
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (!maybe.$) {
@@ -6839,7 +7226,7 @@ var $author$project$Editor$updateNodePos = F3(
 			nodeId,
 			_Utils_update(
 				currentNode,
-				{i: position}),
+				{h: position}),
 			nodeGraph);
 	});
 var $author$project$Editor$update = F2(
@@ -6849,7 +7236,7 @@ var $author$project$Editor$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{aw: !model.aw}),
+						{aA: !model.aA}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
 				var nodeId = msg.a;
@@ -6857,68 +7244,118 @@ var $author$project$Editor$update = F2(
 					_Utils_update(
 						model,
 						{
-							_: $author$project$Editor$Moving(nodeId)
+							ab: $author$project$Editor$Moving(nodeId)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
 				var nodeId = msg.a;
 				var isDown = msg.b;
 				var pos = msg.c;
-				var newPos = A3($author$project$Editor$fromScreen, pos, model.X, model.M);
+				var newPos = A3($author$project$Editor$fromScreen, pos, model.Z, model.N);
+				var currentGraph = model.p;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							_: isDown ? $author$project$Editor$Moving(nodeId) : $author$project$Editor$Static,
-							G: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.G)
+							ab: isDown ? $author$project$Editor$Moving(nodeId) : $author$project$Editor$Static,
+							p: _Utils_update(
+								currentGraph,
+								{
+									C: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.p.C)
+								})
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 3:
 				var nodeId = msg.a;
 				var pos = msg.b;
-				var newPos = A3($author$project$Editor$fromScreen, pos, model.X, model.M);
+				var newPos = A3($author$project$Editor$fromScreen, pos, model.Z, model.N);
+				var currentGraph = model.p;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							_: $author$project$Editor$Static,
-							G: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.G)
+							ab: $author$project$Editor$Static,
+							p: _Utils_update(
+								currentGraph,
+								{
+									C: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.p.C)
+								})
 						}),
-					$elm$core$Platform$Cmd$none);
-			case 4:
-				var floatString = msg.a;
-				var _v1 = $elm$core$String$toFloat(floatString);
-				if (_v1.$ === 1) {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				} else {
-					var _float = _v1.a;
+					$author$project$Editor$storeGraph(
+						$author$project$Editor$encodeGraph(model.p)));
+			case 7:
+				var json = msg.a;
+				var _v1 = A2($elm$json$Json$Decode$decodeString, $author$project$Editor$decodeGraph, json);
+				if (!_v1.$) {
+					var graph = _v1.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{X: _float}),
+							{p: graph}),
+						$author$project$Editor$getDrawingArea);
+				} else {
+					var error = _v1.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								aL: $elm$core$Maybe$Just(error)
+							}),
 						$elm$core$Platform$Cmd$none);
 				}
-			case 6:
+			case 8:
+				return _Utils_Tuple2(
+					model,
+					A3(
+						$elm$file$File$Download$string,
+						'graph.json',
+						'application/json',
+						$author$project$Editor$encodeGraph(model.p)));
+			case 9:
 				return _Utils_Tuple2(
 					model,
 					A2(
-						$elm$core$Task$attempt,
-						$author$project$Editor$GotDomElement,
-						$elm$browser$Browser$Dom$getElement($author$project$Editor$graphId)));
+						$elm$file$File$Select$file,
+						_List_fromArray(
+							['application/json']),
+						$author$project$Editor$EditSessionSelected));
+			case 10:
+				var file = msg.a;
+				return _Utils_Tuple2(
+					model,
+					A2(
+						$elm$core$Task$perform,
+						$author$project$Editor$GraphLoaded,
+						$elm$file$File$toString(file)));
+			case 4:
+				var floatString = msg.a;
+				var _v2 = $elm$core$String$toFloat(floatString);
+				if (_v2.$ === 1) {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				} else {
+					var _float = _v2.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{Z: _float}),
+						$elm$core$Platform$Cmd$none);
+				}
+			case 6:
+				return _Utils_Tuple2(model, $author$project$Editor$getDrawingArea);
 			default:
 				var result = msg.a;
 				if (result.$ === 1) {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
 					var domElement = result.a;
-					var side = A2($elm$core$Basics$min, domElement.ay.al, domElement.ay.ag) - 2;
+					var side = A2($elm$core$Basics$min, domElement.aB.ap, domElement.aB.aj) - 2;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								M: {
-									K: {al: side, ag: side},
-									i: {z: domElement.ay.z, I: domElement.ay.I}
+								N: {
+									L: {ap: side, aj: side},
+									h: {w: domElement.aB.w, G: domElement.aB.G}
 								}
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -6927,19 +7364,19 @@ var $author$project$Editor$update = F2(
 	});
 var $author$project$Main$updateEditor = F2(
 	function (message, model) {
-		var _v0 = A2($author$project$Editor$update, message, model.L);
+		var _v0 = A2($author$project$Editor$update, message, model.M);
 		var editorModel = _v0.a;
 		var editorCommand = _v0.b;
 		return _Utils_Tuple2(
 			_Utils_update(
 				model,
-				{L: editorModel}),
+				{M: editorModel}),
 			A2($elm$core$Platform$Cmd$map, $author$project$Main$EditorMessage, editorCommand));
 	});
 var $author$project$Main$update = F2(
 	function (message, model) {
 		switch (message.$) {
-			case 8:
+			case 9:
 				var editorMessage = message.a;
 				return A2($author$project$Main$updateEditor, editorMessage, model);
 			case 0:
@@ -6947,21 +7384,27 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{E: storyLocation}),
+						{H: storyLocation}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{av: 1}),
-					A2($author$project$StoryModel$getStory, model.E, $author$project$Main$StoryLoaded));
+						{ah: 1}),
+					A2($author$project$StoryModel$getStory, model.H, $author$project$Main$StoryLoaded));
 			case 2:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{av: 2}),
-					A2($author$project$StoryModel$getStory, model.E, $author$project$Main$StoryLoaded));
+						{ah: 2}),
+					A2($author$project$StoryModel$getStory, model.H, $author$project$Main$StoryLoaded));
 			case 3:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{ah: 2}),
+					$author$project$Editor$loadGraph(0));
+			case 4:
 				if (!message.a.$) {
 					var story = message.a.a;
 					var _v1 = $author$project$Editor$init;
@@ -6970,21 +7413,21 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								S: $elm$core$List$head(story.aE),
-								L: A2($author$project$Editor$setStory, model.L, story),
-								y: A2($author$project$StoryModel$setStory, model.y, story)
+								T: $elm$core$List$head(story.at),
+								M: A2($author$project$Editor$setStory, model.M, story),
+								A: A2($author$project$StoryModel$setStory, model.A, story)
 							}),
 						$elm$core$Platform$Cmd$batch(
 							_List_fromArray(
 								[
-									A2($author$project$Main$getStoryTexts, model.E, story),
-									A2($author$project$Main$getStoryImages, model.E, story),
+									A2($author$project$Main$getStoryTexts, model.H, story),
+									A2($author$project$Main$getStoryImages, model.H, story),
 									A2($elm$core$Platform$Cmd$map, $author$project$Main$EditorMessage, editCmd)
 								])));
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			case 4:
+			case 5:
 				if (!message.b.$) {
 					var home = message.a;
 					var storyText = message.b.a;
@@ -6992,45 +7435,104 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								y: A3($author$project$StoryModel$setText, model.y, home, storyText)
-							}),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
-			case 5:
-				if (!message.b.$) {
-					var home = message.a;
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								y: A2($author$project$StoryModel$setImage, model.y, home)
+								A: A3($author$project$StoryModel$setText, model.A, home, storyText)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			case 6:
+				if (!message.b.$) {
+					var home = message.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								A: A2($author$project$StoryModel$setImage, model.A, home)
+							}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+				}
+			case 7:
 				var home = message.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							S: A2($author$project$StoryModel$getScene, model.y, home)
+							T: A2($author$project$StoryModel$getScene, model.A, home)
 						}),
 					$author$project$Main$resetViewport);
-			default:
+			case 8:
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{au: !model.au}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var $elm$html$Html$map = $elm$virtual_dom$VirtualDom$map;
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $author$project$Editor$DumpEditSession = {$: 8};
+var $author$project$Editor$RequestUploadSession = {$: 9};
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$svg$Svg$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Editor$viewCommandBar = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+			A2($elm$html$Html$Attributes$style, 'justify-content', 'space-evenly'),
+			A2($elm$html$Html$Attributes$style, 'padding', '5px')
+		]),
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$button,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Events$onClick($author$project$Editor$DumpEditSession)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Dump session')
+				])),
+			A2(
+			$elm$html$Html$button,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Events$onClick($author$project$Editor$RequestUploadSession)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Upload session')
+				]))
+		]));
 var $elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
-var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
 var $elm$svg$Svg$g = $elm$svg$Svg$trustedNode('g');
 var $elm$svg$Svg$Attributes$id = _VirtualDom_attribute('id');
@@ -7039,7 +7541,6 @@ var $elm$svg$Svg$Attributes$startOffset = _VirtualDom_attribute('startOffset');
 var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
 var $elm$svg$Svg$Attributes$strokeWidth = _VirtualDom_attribute('stroke-width');
 var $elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$svg$Svg$textPath = $elm$svg$Svg$trustedNode('textPath');
 var $elm$svg$Svg$text_ = $elm$svg$Svg$trustedNode('text');
@@ -7052,13 +7553,13 @@ var $elm$svg$Svg$Attributes$xlinkHref = function (value) {
 };
 var $author$project$Editor$drawEdge = F2(
 	function (edge, nodes) {
-		var toNode = A2($author$project$Editor$getNode, nodes, edge.as);
+		var toNode = A2($author$project$Editor$getNode, nodes, edge.af);
 		var pathPoints = F2(
 			function (fn, tn) {
-				return 'M' + ($elm$core$String$fromFloat(fn.i.z) + (',' + ($elm$core$String$fromFloat(fn.i.I) + (' L' + ($elm$core$String$fromFloat(tn.i.z) + (',' + $elm$core$String$fromFloat(tn.i.I)))))));
+				return 'M' + ($elm$core$String$fromFloat(fn.h.w) + (',' + ($elm$core$String$fromFloat(fn.h.G) + (' L' + ($elm$core$String$fromFloat(tn.h.w) + (',' + $elm$core$String$fromFloat(tn.h.G)))))));
 			});
-		var idString = 'edge' + (edge.aJ + ('-' + edge.as));
-		var fromNode = A2($author$project$Editor$getNode, nodes, edge.aJ);
+		var idString = 'edge' + (edge.aD + ('-' + edge.af));
+		var fromNode = A2($author$project$Editor$getNode, nodes, edge.aD);
 		return A2(
 			$elm$svg$Svg$g,
 			_List_Nil,
@@ -7070,7 +7571,7 @@ var $author$project$Editor$drawEdge = F2(
 						[
 							$elm$svg$Svg$Attributes$id(idString),
 							$elm$svg$Svg$Attributes$d(
-							(_Utils_cmp(fromNode.i.z, toNode.i.z) > 0) ? A2(pathPoints, toNode, fromNode) : A2(pathPoints, fromNode, toNode)),
+							(_Utils_cmp(fromNode.h.w, toNode.h.w) > 0) ? A2(pathPoints, toNode, fromNode) : A2(pathPoints, fromNode, toNode)),
 							$elm$svg$Svg$Attributes$stroke('black'),
 							$elm$svg$Svg$Attributes$strokeWidth('0.1')
 						]),
@@ -7090,20 +7591,19 @@ var $author$project$Editor$drawEdge = F2(
 								]),
 							_List_fromArray(
 								[
-									$elm$svg$Svg$text(edge.ac)
+									$elm$svg$Svg$text(edge.W)
 								]))
 						]))
 				]));
 	});
-var $author$project$Editor$drawEdges = F2(
-	function (edges, dict) {
-		return A2(
-			$elm$core$List$map,
-			function (e) {
-				return A2($author$project$Editor$drawEdge, e, dict);
-			},
-			edges);
-	});
+var $author$project$Editor$drawEdges = function (graph) {
+	return A2(
+		$elm$core$List$map,
+		function (e) {
+			return A2($author$project$Editor$drawEdge, e, graph.C);
+		},
+		graph.ao);
+};
 var $author$project$Editor$ClickedCircle = {$: 0};
 var $author$project$Editor$DragStart = function (a) {
 	return {$: 1, a: a};
@@ -7113,23 +7613,6 @@ var $elm$svg$Svg$Attributes$cx = _VirtualDom_attribute('cx');
 var $elm$svg$Svg$Attributes$cy = _VirtualDom_attribute('cy');
 var $elm$svg$Svg$Attributes$fill = _VirtualDom_attribute('fill');
 var $elm$svg$Svg$Attributes$fillOpacity = _VirtualDom_attribute('fill-opacity');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 0, a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$svg$Svg$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
 var $elm$svg$Svg$Events$onMouseDown = function (msg) {
 	return A2(
 		$elm$html$Html$Events$on,
@@ -7152,9 +7635,9 @@ var $author$project$Editor$drawNode = F2(
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$cx(
-							$elm$core$String$fromFloat(node.i.z)),
+							$elm$core$String$fromFloat(node.h.w)),
 							$elm$svg$Svg$Attributes$cy(
-							$elm$core$String$fromFloat(node.i.I)),
+							$elm$core$String$fromFloat(node.h.G)),
 							$elm$svg$Svg$Attributes$r('5'),
 							$elm$svg$Svg$Attributes$stroke('black'),
 							$elm$svg$Svg$Attributes$strokeWidth('0.4'),
@@ -7171,9 +7654,9 @@ var $author$project$Editor$drawNode = F2(
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$x(
-							$elm$core$String$fromFloat(node.i.z - 4)),
+							$elm$core$String$fromFloat(node.h.w - 4)),
 							$elm$svg$Svg$Attributes$y(
-							$elm$core$String$fromFloat(node.i.I + 1)),
+							$elm$core$String$fromFloat(node.h.G + 1)),
 							$elm$svg$Svg$Attributes$style('font-size:2')
 						]),
 					_List_fromArray(
@@ -7193,7 +7676,6 @@ var $author$project$Editor$drawNodes = function (dict) {
 		$elm$core$Dict$toList(dict));
 };
 var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
-var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -7243,9 +7725,9 @@ var $author$project$Editor$viewGraph = function (model) {
 				_List_fromArray(
 					[
 						$elm$svg$Svg$Attributes$width(
-						$elm$core$String$fromFloat(model.M.K.ag)),
+						$elm$core$String$fromFloat(model.N.L.aj)),
 						$elm$svg$Svg$Attributes$height(
-						$elm$core$String$fromFloat(model.M.K.al)),
+						$elm$core$String$fromFloat(model.N.L.ap)),
 						$elm$svg$Svg$Attributes$viewBox(
 						'0 0 ' + ($elm$core$String$fromInt($author$project$Editor$viewPortWidth) + (' ' + $elm$core$String$fromInt($author$project$Editor$viewPortHeight))))
 					]),
@@ -7259,11 +7741,11 @@ var $author$project$Editor$viewGraph = function (model) {
 							_List_fromArray(
 								[
 									$elm$svg$Svg$Attributes$transform(
-									$author$project$Editor$scale(model.X))
+									$author$project$Editor$scale(model.Z))
 								]),
 							_Utils_ap(
-								A2($author$project$Editor$drawEdges, model.ax, model.G),
-								$author$project$Editor$drawNodes(model.G)))
+								$author$project$Editor$drawEdges(model.p),
+								$author$project$Editor$drawNodes(model.p.C)))
 						])))
 			]));
 };
@@ -7309,26 +7791,22 @@ var $elm$html$Html$Attributes$step = function (n) {
 };
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Editor$viewZoomControl = F2(
-	function (scale_, width) {
-		return A2(
-			$elm$html$Html$input,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$type_('range'),
-					$elm$html$Html$Attributes$min('0.1'),
-					$elm$html$Html$Attributes$max('10'),
-					$elm$html$Html$Attributes$step('0.1'),
-					$elm$html$Html$Attributes$value(
-					$elm$core$String$fromFloat(scale_)),
-					$elm$html$Html$Events$onInput($author$project$Editor$SetZoom),
-					A2(
-					$elm$html$Html$Attributes$style,
-					'width',
-					$elm$core$String$fromFloat(width) + 'px')
-				]),
-			_List_Nil);
-	});
+var $author$project$Editor$viewZoomControl = function (scale_) {
+	return A2(
+		$elm$html$Html$input,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$type_('range'),
+				$elm$html$Html$Attributes$min('0.1'),
+				$elm$html$Html$Attributes$max('10'),
+				$elm$html$Html$Attributes$step('0.1'),
+				$elm$html$Html$Attributes$value(
+				$elm$core$String$fromFloat(scale_)),
+				$elm$html$Html$Events$onInput($author$project$Editor$SetZoom),
+				A2($elm$html$Html$Attributes$style, 'width', '100%')
+			]),
+		_List_Nil);
+};
 var $author$project$Editor$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -7338,7 +7816,20 @@ var $author$project$Editor$view = function (model) {
 			]),
 		_List_fromArray(
 			[
-				A2($author$project$Editor$viewZoomControl, model.X, model.M.K.ag),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$Attributes$style,
+						'width',
+						$elm$core$String$fromFloat(model.N.L.aj) + 'px')
+					]),
+				_List_fromArray(
+					[
+						$author$project$Editor$viewCommandBar,
+						$author$project$Editor$viewZoomControl(model.Z)
+					])),
 				$author$project$Editor$viewGraph(model)
 			]));
 };
@@ -7347,7 +7838,8 @@ var $author$project$Main$ChangeStoryLocation = function (a) {
 };
 var $author$project$Main$LoadEditor = {$: 2};
 var $author$project$Main$LoadStory = {$: 1};
-var $elm$html$Html$button = _VirtualDom_node('button');
+var $author$project$Main$ReloadEditorSession = {$: 3};
+var $author$project$Main$ToggleHelp = {$: 10};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$Events$onClick = function (msg) {
 	return A2(
@@ -7361,7 +7853,60 @@ var $elm$html$Html$Attributes$size = function (n) {
 		'size',
 		$elm$core$String$fromInt(n));
 };
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$h3 = _VirtualDom_node('h3');
+var $author$project$Main$helpText = '\n    This is a reader and editor for interactive fiction, also called\n    create your own adventure. The reader is started by loading the story\n    from an URL. An example is provided.\n\n    The editor allows you to see a graphical presentation of the possible\n    paths through the story. If you never edited the story, the initial\n    position of the nodes is set along a line from top left to bottom right.\n\n    As soon as you change the position of a node by dragging it, the position\n    is stored in your browser. To continue from that, use reload editing session\n    button on the first page.\n\n    If you like to store your editing session on file, there is a button\n    inside the editor to download it as a json file.\n    Conversely, you may upload a session from a file.\n\n    The slider on the top of the editor is a zoom control.\n\n    The editor is resizing itself with the window but stays square.\n    ';
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $author$project$Main$textToParagraphs = function (storyText) {
+	return A2(
+		$elm$core$List$map,
+		function (s) {
+			return A2(
+				$elm$html$Html$p,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(s)
+					]));
+		},
+		A2($elm$core$String$split, '\n\n', storyText));
+};
+var $author$project$Main$viewHelp = A2(
+	$elm$html$Html$div,
+	_List_fromArray(
+		[
+			A2($elm$html$Html$Attributes$style, 'background-color', 'white'),
+			A2($elm$html$Html$Attributes$style, 'max-width', '75%'),
+			A2($elm$html$Html$Attributes$style, 'color', 'darkgrey'),
+			A2($elm$html$Html$Attributes$style, 'margin', 'auto'),
+			A2($elm$html$Html$Attributes$style, 'border-radius', '10px'),
+			A2($elm$html$Html$Attributes$style, 'padding', '10px')
+		]),
+	_Utils_ap(
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$h3,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Help')
+					]))
+			]),
+		_Utils_ap(
+			$author$project$Main$textToParagraphs($author$project$Main$helpText),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Events$onClick($author$project$Main$ToggleHelp)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Close')
+						]))
+				]))));
 var $author$project$Main$viewLibrary = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -7405,7 +7950,7 @@ var $author$project$Main$viewLibrary = function (model) {
 						$elm$html$Html$input,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$value(model.E),
+								$elm$html$Html$Attributes$value(model.H),
 								$elm$html$Html$Events$onInput($author$project$Main$ChangeStoryLocation),
 								$elm$html$Html$Attributes$size(35)
 							]),
@@ -7430,6 +7975,49 @@ var $author$project$Main$viewLibrary = function (model) {
 							[
 								$elm$html$Html$text('Edit')
 							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+						A2($elm$html$Html$Attributes$style, 'justify-content', 'flex-end'),
+						A2($elm$html$Html$Attributes$style, 'padding-top', '50px'),
+						A2($elm$html$Html$Attributes$style, 'padding-right', '50px')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick($author$project$Main$ReloadEditorSession)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Reload editing session')
+							]))
+					])),
+				model.au ? $author$project$Main$viewHelp : A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'position', 'relative'),
+						A2($elm$html$Html$Attributes$style, 'left', '250px')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Events$onClick($author$project$Main$ToggleHelp),
+								A2($elm$html$Html$Attributes$style, 'font-size', 'x-large')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('?')
+							]))
 					]))
 			]));
 };
@@ -7438,11 +8026,11 @@ var $author$project$StoryModel$getText = F2(
 		return A2(
 			$elm$core$Maybe$withDefault,
 			'??',
-			A2($elm$core$Dict$get, home, model.aq));
+			A2($elm$core$Dict$get, home, model.aw));
 	});
 var $author$project$StoryModel$hasImage = F2(
 	function (model, home) {
-		var _v0 = A2($elm$core$Dict$get, home, model.am);
+		var _v0 = A2($elm$core$Dict$get, home, model.aq);
 		if (!_v0.$) {
 			return true;
 		} else {
@@ -7466,23 +8054,8 @@ var $elm$html$Html$Attributes$src = function (url) {
 		'src',
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
-var $elm$html$Html$p = _VirtualDom_node('p');
-var $author$project$Main$textToParagraphs = function (storyText) {
-	return A2(
-		$elm$core$List$map,
-		function (s) {
-			return A2(
-				$elm$html$Html$p,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(s)
-					]));
-		},
-		A2($elm$core$String$split, '\n\n', storyText));
-};
 var $author$project$Main$GotoScene = function (a) {
-	return {$: 6, a: a};
+	return {$: 7, a: a};
 };
 var $author$project$Main$viewOption = function (sceneOption) {
 	return A2(
@@ -7490,11 +8063,11 @@ var $author$project$Main$viewOption = function (sceneOption) {
 		_List_fromArray(
 			[
 				$elm$html$Html$Events$onClick(
-				$author$project$Main$GotoScene(sceneOption.cC))
+				$author$project$Main$GotoScene(sceneOption.cF))
 			]),
 		_List_fromArray(
 			[
-				$elm$html$Html$text(sceneOption.co)
+				$elm$html$Html$text(sceneOption.cr)
 			]));
 };
 var $author$project$Main$viewOptions = function (sceneOptions) {
@@ -7516,27 +8089,27 @@ var $author$project$Main$viewStory = function (model) {
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.cc;
+				return $.cf;
 			},
-			model.S));
+			model.T));
 	var route = A2(
 		$elm$core$Maybe$withDefault,
 		_List_Nil,
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.bx;
+				return $.bA;
 			},
-			model.S));
+			model.T));
 	var home = A2(
 		$elm$core$Maybe$withDefault,
 		'??',
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.aL;
+				return $.aO;
 			},
-			model.S));
+			model.T));
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -7546,11 +8119,11 @@ var $author$project$Main$viewStory = function (model) {
 			]),
 		_List_fromArray(
 			[
-				A2($author$project$StoryModel$hasImage, model.y, home) ? A2(
+				A2($author$project$StoryModel$hasImage, model.A, home) ? A2(
 				$elm$html$Html$img,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$src(model.E + ('/images/' + (home + '.png'))),
+						$elm$html$Html$Attributes$src(model.H + ('/images/' + (home + '.png'))),
 						A2($elm$html$Html$Attributes$style, 'width', '100%')
 					]),
 				_List_Nil) : A2($elm$html$Html$div, _List_Nil, _List_Nil),
@@ -7571,12 +8144,12 @@ var $author$project$Main$viewStory = function (model) {
 						A2($elm$html$Html$Attributes$style, 'margin', '5px')
 					]),
 				$author$project$Main$textToParagraphs(
-					A2($author$project$StoryModel$getText, model.y, home))),
+					A2($author$project$StoryModel$getText, model.A, home))),
 				$author$project$Main$viewOptions(route)
 			]));
 };
 var $author$project$Main$view = function (model) {
-	var _v0 = model.av;
+	var _v0 = model.ah;
 	switch (_v0) {
 		case 0:
 			return $author$project$Main$viewLibrary(model);
@@ -7586,10 +8159,10 @@ var $author$project$Main$view = function (model) {
 			return A2(
 				$elm$html$Html$map,
 				$author$project$Main$EditorMessage,
-				$author$project$Editor$view(model.L));
+				$author$project$Editor$view(model.M));
 	}
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{b5: $author$project$Main$init, cz: $author$project$Main$subscriptions, cG: $author$project$Main$update, cH: $author$project$Main$view});
+	{b8: $author$project$Main$init, cC: $author$project$Main$subscriptions, cJ: $author$project$Main$update, cK: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
