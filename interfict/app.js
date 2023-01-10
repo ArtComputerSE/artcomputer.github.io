@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.aV.ar === region.a6.ar)
+	if (region.aX.at === region.a8.at)
 	{
-		return 'on line ' + region.aV.ar;
+		return 'on line ' + region.aX.at;
 	}
-	return 'on lines ' + region.aV.ar + ' through ' + region.a6.ar;
+	return 'on lines ' + region.aX.at + ' through ' + region.a8.at;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b8,
-		impl.cJ,
-		impl.cC,
+		impl.ca,
+		impl.cL,
+		impl.cE,
 		function() { return function() {} }
 	);
 });
@@ -2704,9 +2704,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		P: func(record.P),
-		aW: record.aW,
-		aT: record.aT
+		R: func(record.R),
+		aY: record.aY,
+		aV: record.aV
 	}
 });
 
@@ -2974,11 +2974,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.P;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aW;
+		var message = !tag ? value : tag < 3 ? value.a : value.R;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aY;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.aT) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.aV) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,11 +3928,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b8,
-		impl.cJ,
-		impl.cC,
+		impl.ca,
+		impl.cL,
+		impl.cE,
 		function(sendToApp, initialModel) {
-			var view = impl.cK;
+			var view = impl.cM;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.b8,
-		impl.cJ,
-		impl.cC,
+		impl.ca,
+		impl.cL,
+		impl.cE,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.aU && impl.aU(sendToApp)
-			var view = impl.cK;
+			var divertHrefToApp = impl.aW && impl.aW(sendToApp)
+			var view = impl.cM;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3977,12 +3977,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bU);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.bW);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.cH) && (_VirtualDom_doc.title = title = doc.cH);
+				(title !== doc.cJ) && (_VirtualDom_doc.title = title = doc.cJ);
 			});
 		}
 	);
@@ -4038,12 +4038,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.co;
-	var onUrlRequest = impl.cp;
+	var onUrlChange = impl.cq;
+	var onUrlRequest = impl.cr;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		aU: function(sendToApp)
+		aW: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.bu === next.bu
-							&& curr.be === next.be
-							&& curr.br.a === next.br.a
+							&& curr.bw === next.bw
+							&& curr.bg === next.bg
+							&& curr.bt.a === next.bt.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		b8: function(flags)
+		ca: function(flags)
 		{
-			return A3(impl.b8, flags, _Browser_getUrl(), key);
+			return A3(impl.ca, flags, _Browser_getUrl(), key);
 		},
-		cK: impl.cK,
-		cJ: impl.cJ,
-		cC: impl.cC
+		cM: impl.cM,
+		cL: impl.cL,
+		cE: impl.cE
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { b5: 'hidden', bX: 'visibilitychange' }
+		? { b7: 'hidden', bZ: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { b5: 'mozHidden', bX: 'mozvisibilitychange' }
+		? { b7: 'mozHidden', bZ: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { b5: 'msHidden', bX: 'msvisibilitychange' }
+		? { b7: 'msHidden', bZ: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { b5: 'webkitHidden', bX: 'webkitvisibilitychange' }
-		: { b5: 'hidden', bX: 'visibilitychange' };
+		? { b7: 'webkitHidden', bZ: 'webkitvisibilitychange' }
+		: { b7: 'hidden', bZ: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		at: _Browser_getScene(),
-		bM: {
-			w: _Browser_window.pageXOffset,
-			G: _Browser_window.pageYOffset,
-			aj: _Browser_doc.documentElement.clientWidth,
-			ap: _Browser_doc.documentElement.clientHeight
+		av: _Browser_getScene(),
+		bO: {
+			j: _Browser_window.pageXOffset,
+			n: _Browser_window.pageYOffset,
+			al: _Browser_doc.documentElement.clientWidth,
+			ar: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aj: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ap: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		al: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		ar: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			at: {
-				aj: node.scrollWidth,
-				ap: node.scrollHeight
+			av: {
+				al: node.scrollWidth,
+				ar: node.scrollHeight
 			},
-			bM: {
-				w: node.scrollLeft,
-				G: node.scrollTop,
-				aj: node.clientWidth,
-				ap: node.clientHeight
+			bO: {
+				j: node.scrollLeft,
+				n: node.scrollTop,
+				al: node.clientWidth,
+				ar: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			at: _Browser_getScene(),
-			bM: {
-				w: x,
-				G: y,
-				aj: _Browser_doc.documentElement.clientWidth,
-				ap: _Browser_doc.documentElement.clientHeight
+			av: _Browser_getScene(),
+			bO: {
+				j: x,
+				n: y,
+				al: _Browser_doc.documentElement.clientWidth,
+				ar: _Browser_doc.documentElement.clientHeight
 			},
-			aB: {
-				w: x + rect.left,
-				G: y + rect.top,
-				aj: rect.width,
-				ap: rect.height
+			aD: {
+				j: x + rect.left,
+				n: y + rect.top,
+				al: rect.width,
+				ar: rect.height
 			}
 		};
 	});
@@ -4365,25 +4365,25 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.a8.a(response)));
+			callback(toTask(request.ba.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.a8.b, xhr)); });
-		$elm$core$Maybe$isJust(request.bK) && _Http_track(router, xhr, request.bK.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.ba.b, xhr)); });
+		$elm$core$Maybe$isJust(request.bM) && _Http_track(router, xhr, request.bM.a);
 
 		try {
-			xhr.open(request.cc, request.bL, true);
+			xhr.open(request.ce, request.bN, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.bL));
+			return done($elm$http$Http$BadUrl_(request.bN));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		request.bU.a && xhr.setRequestHeader('Content-Type', request.bU.a);
-		xhr.send(request.bU.b);
+		request.bW.a && xhr.setRequestHeader('Content-Type', request.bW.a);
+		xhr.send(request.bW.b);
 
 		return function() { xhr.c = true; xhr.abort(); };
 	});
@@ -4394,13 +4394,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.bd; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.bf; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.cG.a || 0;
-	xhr.responseType = request.a8.d;
-	xhr.withCredentials = request.bQ;
+	xhr.timeout = request.cI.a || 0;
+	xhr.responseType = request.ba.d;
+	xhr.withCredentials = request.bS;
 }
 
 
@@ -4421,10 +4421,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		bL: xhr.responseURL,
-		cA: xhr.status,
-		cB: xhr.statusText,
-		bd: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		bN: xhr.responseURL,
+		cC: xhr.status,
+		cD: xhr.statusText,
+		bf: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4519,15 +4519,15 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			cz: event.loaded,
-			bD: event.total
+			cB: event.loaded,
+			bF: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			ct: event.loaded,
-			bD: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			cv: event.loaded,
+			bF: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
 }
@@ -5117,22 +5117,22 @@ var $elm$core$Array$builderToArray = F2(
 		if (!builder.g) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.j),
+				$elm$core$Elm$JsArray$length(builder.k),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.j);
+				builder.k);
 		} else {
 			var treeLen = builder.g * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.k) : builder.k;
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.l) : builder.l;
 			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.g);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.j) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.k) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.j);
+				builder.k);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -5145,7 +5145,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{k: nodeList, g: (len / $elm$core$Array$branchFactor) | 0, j: tail});
+					{l: nodeList, g: (len / $elm$core$Array$branchFactor) | 0, k: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -5212,7 +5212,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {a9: fragment, be: host, bp: path, br: port_, bu: protocol, bv: query};
+		return {bb: fragment, bg: host, br: path, bt: port_, bw: protocol, bx: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5493,7 +5493,7 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$Library = 0;
 var $author$project$Editor$GotDomElement = function (a) {
-	return {$: 5, a: a};
+	return {$: 8, a: a};
 };
 var $elm$core$Basics$composeL = F3(
 	function (g, f, x) {
@@ -5526,31 +5526,34 @@ var $author$project$Editor$getDrawingArea = A2(
 	$elm$browser$Browser$Dom$getElement($author$project$Editor$graphId));
 var $author$project$Editor$Dimension = F2(
 	function (width, height) {
-		return {ap: height, aj: width};
+		return {ar: height, al: width};
 	});
 var $author$project$Editor$Position = F2(
 	function (x, y) {
-		return {w: x, G: y};
+		return {j: x, n: y};
 	});
 var $author$project$Editor$Static = {$: 0};
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $author$project$Editor$initialModel = {
-	aA: false,
-	aL: $elm$core$Maybe$Nothing,
-	ab: $author$project$Editor$Static,
-	p: {ao: _List_Nil, C: $elm$core$Dict$empty},
-	N: {
-		L: A2($author$project$Editor$Dimension, 0, 0),
+	aC: false,
+	aN: $elm$core$Maybe$Nothing,
+	D: $author$project$Editor$Static,
+	r: {aq: _List_Nil, F: $elm$core$Dict$empty},
+	P: {
+		N: A2($author$project$Editor$Dimension, 0, 0),
 		h: A2($author$project$Editor$Position, 0, 0)
 	},
-	Z: 1.0
+	w: {
+		ab: 1.0,
+		T: A2($author$project$Editor$Position, 0, 0)
+	}
 };
 var $author$project$Editor$init = _Utils_Tuple2($author$project$Editor$initialModel, $author$project$Editor$getDrawingArea);
 var $author$project$StoryModel$init = {
-	aq: $elm$core$Dict$empty,
-	aI: {at: _List_Nil},
-	aw: $elm$core$Dict$empty
+	as: $elm$core$Dict$empty,
+	aK: {av: _List_Nil},
+	ay: $elm$core$Dict$empty
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
@@ -5558,7 +5561,7 @@ var $author$project$Main$init = function (_v0) {
 	var _v1 = $author$project$Editor$init;
 	var editorModel = _v1.a;
 	return _Utils_Tuple2(
-		{T: $elm$core$Maybe$Nothing, H: 'https://artcomputer.se/interfict/story', M: editorModel, au: false, A: $author$project$StoryModel$init, ah: 0},
+		{W: $elm$core$Maybe$Nothing, J: 'https://artcomputer.se/interfict/story', O: editorModel, aw: false, C: $author$project$StoryModel$init, aj: 0},
 		$elm$core$Platform$Cmd$none);
 };
 var $author$project$Main$EditorMessage = function (a) {
@@ -5574,9 +5577,16 @@ var $author$project$Editor$DragStop = F2(
 		return {$: 3, a: a, b: b};
 	});
 var $author$project$Editor$GraphLoaded = function (a) {
-	return {$: 7, a: a};
+	return {$: 10, a: a};
 };
-var $author$project$Editor$WindowResize = {$: 6};
+var $author$project$Editor$PanMove = F2(
+	function (a, b) {
+		return {$: 5, a: a, b: b};
+	});
+var $author$project$Editor$PanStop = function (a) {
+	return {$: 6, a: a};
+};
+var $author$project$Editor$WindowResize = {$: 9};
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
@@ -5602,7 +5612,7 @@ var $elm$browser$Browser$Events$MySub = F3(
 	});
 var $elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {bq: pids, bH: subs};
+		return {bs: pids, bJ: subs};
 	});
 var $elm$browser$Browser$Events$init = $elm$core$Task$succeed(
 	A2($elm$browser$Browser$Events$State, _List_Nil, $elm$core$Dict$empty));
@@ -5832,7 +5842,7 @@ var $elm$core$Dict$merge = F6(
 	});
 var $elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {a7: event, bg: key};
+		return {a9: event, bi: key};
 	});
 var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var $elm$browser$Browser$Events$spawn = F3(
@@ -5907,7 +5917,7 @@ var $elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.bq,
+			state.bs,
 			$elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, $elm$core$Dict$empty, _List_Nil));
 		var deadPids = _v0.a;
@@ -5953,8 +5963,8 @@ var $elm$core$List$filterMap = F2(
 	});
 var $elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _v0, state) {
-		var key = _v0.bg;
-		var event = _v0.a7;
+		var key = _v0.bi;
+		var event = _v0.a9;
 		var toMessage = function (_v2) {
 			var subKey = _v2.a;
 			var _v3 = _v2.b;
@@ -5963,7 +5973,7 @@ var $elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _v3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : $elm$core$Maybe$Nothing;
 		};
-		var messages = A2($elm$core$List$filterMap, toMessage, state.bH);
+		var messages = A2($elm$core$List$filterMap, toMessage, state.bJ);
 		return A2(
 			$elm$core$Task$andThen,
 			function (_v1) {
@@ -6011,42 +6021,52 @@ var $elm$browser$Browser$Events$onResize = function (func) {
 				A2($elm$json$Json$Decode$field, 'innerHeight', $elm$json$Json$Decode$int))));
 };
 var $author$project$Editor$subscriptions = function (model) {
-	var _v0 = model.ab;
-	if (!_v0.$) {
-		return $elm$core$Platform$Sub$batch(
-			_List_fromArray(
-				[
-					$elm$browser$Browser$Events$onResize(
-					F2(
-						function (_v1, _v2) {
-							return $author$project$Editor$WindowResize;
-						})),
-					$author$project$Editor$graphLoaded($author$project$Editor$GraphLoaded)
-				]));
-	} else {
-		var id = _v0.a;
-		return $elm$core$Platform$Sub$batch(
-			_List_fromArray(
-				[
-					$elm$browser$Browser$Events$onMouseMove(
-					A3(
-						$elm$json$Json$Decode$map2,
-						$author$project$Editor$DragMove(id),
-						$author$project$Editor$decodeButtons,
-						$author$project$Editor$decodeMousePosition)),
-					$elm$browser$Browser$Events$onMouseUp(
-					A2(
-						$elm$json$Json$Decode$map,
-						$author$project$Editor$DragStop(id),
-						$author$project$Editor$decodeMousePosition))
-				]));
+	var _v0 = model.D;
+	switch (_v0.$) {
+		case 0:
+			return $elm$core$Platform$Sub$batch(
+				_List_fromArray(
+					[
+						$elm$browser$Browser$Events$onResize(
+						F2(
+							function (_v1, _v2) {
+								return $author$project$Editor$WindowResize;
+							})),
+						$author$project$Editor$graphLoaded($author$project$Editor$GraphLoaded)
+					]));
+		case 1:
+			var id = _v0.a;
+			return $elm$core$Platform$Sub$batch(
+				_List_fromArray(
+					[
+						$elm$browser$Browser$Events$onMouseMove(
+						A3(
+							$elm$json$Json$Decode$map2,
+							$author$project$Editor$DragMove(id),
+							$author$project$Editor$decodeButtons,
+							$author$project$Editor$decodeMousePosition)),
+						$elm$browser$Browser$Events$onMouseUp(
+						A2(
+							$elm$json$Json$Decode$map,
+							$author$project$Editor$DragStop(id),
+							$author$project$Editor$decodeMousePosition))
+					]));
+		default:
+			return $elm$core$Platform$Sub$batch(
+				_List_fromArray(
+					[
+						$elm$browser$Browser$Events$onMouseMove(
+						A3($elm$json$Json$Decode$map2, $author$project$Editor$PanMove, $author$project$Editor$decodeButtons, $author$project$Editor$decodeMousePosition)),
+						$elm$browser$Browser$Events$onMouseUp(
+						A2($elm$json$Json$Decode$map, $author$project$Editor$PanStop, $author$project$Editor$decodeMousePosition))
+					]));
 	}
 };
 var $author$project$Main$subscriptions = function (model) {
 	return A2(
 		$elm$core$Platform$Sub$map,
 		$author$project$Main$EditorMessage,
-		$author$project$Editor$subscriptions(model.M));
+		$author$project$Editor$subscriptions(model.O));
 };
 var $author$project$Main$StoryLoaded = function (a) {
 	return {$: 4, a: a};
@@ -6079,20 +6099,20 @@ var $author$project$StoryModel$getScene = F2(
 			A2(
 				$elm$core$List$filter,
 				function (scene) {
-					return _Utils_eq(scene.aO, home);
+					return _Utils_eq(scene.aQ, home);
 				},
-				model.aI.at));
+				model.aK.av));
 	});
 var $author$project$StoryModel$Story = function (scene) {
-	return {at: scene};
+	return {av: scene};
 };
 var $author$project$StoryModel$Scene = F3(
 	function (home, name, route) {
-		return {aO: home, cf: name, bA: route};
+		return {aQ: home, ch: name, bC: route};
 	});
 var $author$project$StoryModel$SceneOption = F2(
 	function (optionText, target) {
-		return {cr: optionText, cF: target};
+		return {ct: optionText, cH: target};
 	});
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$custom = $elm$json$Json$Decode$map2($elm$core$Basics$apR);
 var $NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required = F3(
@@ -6610,7 +6630,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.cA));
+					$elm$http$Http$BadStatus(metadata.cC));
 			default:
 				var body = response.b;
 				return A2(
@@ -6638,7 +6658,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {bx: reqs, bH: subs};
+		return {bz: reqs, bJ: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -6681,7 +6701,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.bK;
+							var _v4 = req.bM;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -6711,7 +6731,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.bx));
+			A3($elm$http$Http$updateReqs, router, cmds, state.bz));
 	});
 var $elm$http$Http$maybeSend = F4(
 	function (router, desiredTracker, progress, _v0) {
@@ -6736,7 +6756,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.bH)));
+					state.bJ)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -6750,14 +6770,14 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
-					bQ: r.bQ,
-					bU: r.bU,
-					a8: A2(_Http_mapExpect, func, r.a8),
-					bd: r.bd,
-					cc: r.cc,
-					cG: r.cG,
-					bK: r.bK,
-					bL: r.bL
+					bS: r.bS,
+					bW: r.bW,
+					ba: A2(_Http_mapExpect, func, r.ba),
+					bf: r.bf,
+					ce: r.ce,
+					cI: r.cI,
+					bM: r.bM,
+					bN: r.bN
 				});
 		}
 	});
@@ -6780,18 +6800,18 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{bQ: false, bU: r.bU, a8: r.a8, bd: r.bd, cc: r.cc, cG: r.cG, bK: r.bK, bL: r.bL}));
+			{bS: false, bW: r.bW, ba: r.ba, bf: r.bf, ce: r.ce, cI: r.cI, bM: r.bM, bN: r.bN}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{bU: $elm$http$Http$emptyBody, a8: r.a8, bd: _List_Nil, cc: 'GET', cG: $elm$core$Maybe$Nothing, bK: $elm$core$Maybe$Nothing, bL: r.bL});
+		{bW: $elm$http$Http$emptyBody, ba: r.ba, bf: _List_Nil, ce: 'GET', cI: $elm$core$Maybe$Nothing, bM: $elm$core$Maybe$Nothing, bN: r.bN});
 };
 var $author$project$StoryModel$getStory = F2(
 	function (storyLocation, message) {
 		return $elm$http$Http$get(
 			{
-				a8: A2($elm$http$Http$expectJson, message, $author$project$StoryModel$decodeStory),
-				bL: storyLocation + '/scenes.json'
+				ba: A2($elm$http$Http$expectJson, message, $author$project$StoryModel$decodeStory),
+				bN: storyLocation + '/scenes.json'
 			});
 	});
 var $author$project$Main$StoryImageFound = F2(
@@ -6808,9 +6828,9 @@ var $author$project$Main$getStoryImage = F2(
 	function (storyLocation, home) {
 		return $elm$http$Http$get(
 			{
-				a8: $elm$http$Http$expectString(
+				ba: $elm$http$Http$expectString(
 					$author$project$Main$StoryImageFound(home)),
-				bL: storyLocation + ('/images/' + (home + '.png'))
+				bN: storyLocation + ('/images/' + (home + '.png'))
 			});
 	});
 var $author$project$Main$getStoryImages = F2(
@@ -6822,9 +6842,9 @@ var $author$project$Main$getStoryImages = F2(
 				A2(
 					$elm$core$List$map,
 					function ($) {
-						return $.aO;
+						return $.aQ;
 					},
-					story.at)));
+					story.av)));
 	});
 var $author$project$Main$StoryTextLoaded = F2(
 	function (a, b) {
@@ -6834,9 +6854,9 @@ var $author$project$Main$getStoryText = F2(
 	function (storyLocation, home) {
 		return $elm$http$Http$get(
 			{
-				a8: $elm$http$Http$expectString(
+				ba: $elm$http$Http$expectString(
 					$author$project$Main$StoryTextLoaded(home)),
-				bL: storyLocation + ('/text/' + (home + '.txt'))
+				bN: storyLocation + ('/text/' + (home + '.txt'))
 			});
 	});
 var $author$project$Main$getStoryTexts = F2(
@@ -6848,9 +6868,9 @@ var $author$project$Main$getStoryTexts = F2(
 				A2(
 					$elm$core$List$map,
 					function ($) {
-						return $.aO;
+						return $.aQ;
 					},
-					story.at)));
+					story.av)));
 	});
 var $elm$json$Json$Encode$null = _Json_encodeNull;
 var $author$project$Editor$loadGraph = _Platform_outgoingPort(
@@ -6873,12 +6893,12 @@ var $author$project$StoryModel$setImage = F2(
 		return _Utils_update(
 			model,
 			{
-				aq: A3($elm$core$Dict$insert, home, home, model.aq)
+				as: A3($elm$core$Dict$insert, home, home, model.as)
 			});
 	});
 var $author$project$Editor$Edge = F3(
 	function (fromNode, toNode, label) {
-		return {aD: fromNode, W: label, af: toNode};
+		return {aF: fromNode, Z: label, ah: toNode};
 	});
 var $elm$core$List$append = F2(
 	function (xs, ys) {
@@ -6901,12 +6921,12 @@ var $author$project$Editor$mergeTarget = F2(
 			} else {
 				var head = edges.a;
 				var tail = edges.b;
-				if (_Utils_eq(head.af, edge.af)) {
+				if (_Utils_eq(head.ah, edge.ah)) {
 					return A2(
 						$elm$core$List$cons,
 						_Utils_update(
 							head,
-							{W: head.W + ('/' + edge.W)}),
+							{Z: head.Z + ('/' + edge.Z)}),
 						tail);
 				} else {
 					var $temp$edge = edge,
@@ -6941,16 +6961,16 @@ var $author$project$Editor$setStory = F2(
 						A2(
 							$elm$core$List$filter,
 							function (e) {
-								return $elm$core$String$length(e.W) > 0;
+								return $elm$core$String$length(e.Z) > 0;
 							},
 							A2(
 								$elm$core$List$map,
 								function (r) {
-									return A3($author$project$Editor$Edge, s.aO, r.cF, r.cr);
+									return A3($author$project$Editor$Edge, s.aQ, r.cH, r.ct);
 								},
-								s.bA)));
+								s.bC)));
 				},
-				story.at));
+				story.av));
 		var mkPos = function (n) {
 			return A2($author$project$Editor$Position, 10.0 * n, 10.0 * n);
 		};
@@ -6960,42 +6980,45 @@ var $author$project$Editor$setStory = F2(
 				F2(
 					function (n, s) {
 						return _Utils_Tuple2(
-							s.aO,
+							s.aQ,
 							{
 								h: mkPos(n),
-								at: s
+								av: s
 							});
 					}),
-				story.at));
+				story.av));
 		return _Utils_update(
 			model,
 			{
-				p: {ao: newEdges, C: newGraph}
+				r: {aq: newEdges, F: newGraph}
 			});
 	});
 var $author$project$StoryModel$setStory = F2(
 	function (model, story) {
 		return _Utils_update(
 			model,
-			{aI: story});
+			{aK: story});
 	});
 var $author$project$StoryModel$setText = F3(
 	function (model, home, storyText) {
 		return _Utils_update(
 			model,
 			{
-				aw: A3($elm$core$Dict$insert, home, storyText, model.aw)
+				ay: A3($elm$core$Dict$insert, home, storyText, model.ay)
 			});
 	});
 var $author$project$Editor$EditSessionSelected = function (a) {
-	return {$: 10, a: a};
+	return {$: 13, a: a};
 };
 var $author$project$Editor$Moving = function (a) {
 	return {$: 1, a: a};
 };
+var $author$project$Editor$Panning = function (a) {
+	return {$: 2, a: a};
+};
 var $author$project$Editor$NodeGraph = F2(
 	function (nodes, edges) {
-		return {ao: edges, C: nodes};
+		return {aq: edges, F: nodes};
 	});
 var $author$project$Editor$decodeEdge = A3(
 	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
@@ -7012,7 +7035,7 @@ var $author$project$Editor$decodeEdge = A3(
 			$elm$json$Json$Decode$succeed($author$project$Editor$Edge))));
 var $author$project$Editor$Node = F2(
 	function (position, scene) {
-		return {h: position, at: scene};
+		return {h: position, av: scene};
 	});
 var $author$project$Editor$decodePosition = A3(
 	$NoRedInk$elm_json_decode_pipeline$Json$Decode$Pipeline$required,
@@ -7084,13 +7107,13 @@ var $author$project$Editor$encodeEdge = function (edge) {
 			[
 				_Utils_Tuple2(
 				'fromNode',
-				$elm$json$Json$Encode$string(edge.aD)),
+				$elm$json$Json$Encode$string(edge.aF)),
 				_Utils_Tuple2(
 				'toNode',
-				$elm$json$Json$Encode$string(edge.af)),
+				$elm$json$Json$Encode$string(edge.ah)),
 				_Utils_Tuple2(
 				'label',
-				$elm$json$Json$Encode$string(edge.W))
+				$elm$json$Json$Encode$string(edge.Z))
 			]));
 };
 var $elm$json$Json$Encode$float = _Json_wrap;
@@ -7100,10 +7123,10 @@ var $author$project$Editor$encodePosition = function (position) {
 			[
 				_Utils_Tuple2(
 				'x',
-				$elm$json$Json$Encode$float(position.w)),
+				$elm$json$Json$Encode$float(position.j)),
 				_Utils_Tuple2(
 				'y',
-				$elm$json$Json$Encode$float(position.G))
+				$elm$json$Json$Encode$float(position.n))
 			]));
 };
 var $author$project$StoryModel$encodeSceneOption = function (sceneOption) {
@@ -7112,10 +7135,10 @@ var $author$project$StoryModel$encodeSceneOption = function (sceneOption) {
 			[
 				_Utils_Tuple2(
 				'optionText',
-				$elm$json$Json$Encode$string(sceneOption.cr)),
+				$elm$json$Json$Encode$string(sceneOption.ct)),
 				_Utils_Tuple2(
 				'target',
-				$elm$json$Json$Encode$string(sceneOption.cF))
+				$elm$json$Json$Encode$string(sceneOption.cH))
 			]));
 };
 var $elm$json$Json$Encode$list = F2(
@@ -7133,13 +7156,13 @@ var $author$project$StoryModel$encodeScene = function (scene) {
 			[
 				_Utils_Tuple2(
 				'home',
-				$elm$json$Json$Encode$string(scene.aO)),
+				$elm$json$Json$Encode$string(scene.aQ)),
 				_Utils_Tuple2(
 				'name',
-				$elm$json$Json$Encode$string(scene.cf)),
+				$elm$json$Json$Encode$string(scene.ch)),
 				_Utils_Tuple2(
 				'route',
-				A2($elm$json$Json$Encode$list, $author$project$StoryModel$encodeSceneOption, scene.bA))
+				A2($elm$json$Json$Encode$list, $author$project$StoryModel$encodeSceneOption, scene.bC))
 			]));
 };
 var $author$project$Editor$encodeNode = function (node) {
@@ -7151,7 +7174,7 @@ var $author$project$Editor$encodeNode = function (node) {
 				$author$project$Editor$encodePosition(node.h)),
 				_Utils_Tuple2(
 				'scene',
-				$author$project$StoryModel$encodeScene(node.at))
+				$author$project$StoryModel$encodeScene(node.av))
 			]));
 };
 var $author$project$Editor$encodeGraph = function (graph) {
@@ -7163,10 +7186,10 @@ var $author$project$Editor$encodeGraph = function (graph) {
 				[
 					_Utils_Tuple2(
 					'nodes',
-					A3($elm$json$Json$Encode$dict, $elm$core$Basics$identity, $author$project$Editor$encodeNode, graph.C)),
+					A3($elm$json$Json$Encode$dict, $elm$core$Basics$identity, $author$project$Editor$encodeNode, graph.F)),
 					_Utils_Tuple2(
 					'edges',
-					A2($elm$json$Json$Encode$list, $author$project$Editor$encodeEdge, graph.ao))
+					A2($elm$json$Json$Encode$list, $author$project$Editor$encodeEdge, graph.aq))
 				])));
 };
 var $elm$time$Time$Posix = $elm$core$Basics$identity;
@@ -7181,8 +7204,12 @@ var $elm$file$File$Select$file = F2(
 var $author$project$Editor$viewPortHeight = 100;
 var $author$project$Editor$viewPortWidth = 100;
 var $author$project$Editor$fromScreen = F3(
-	function (position, zoom, graphElement) {
-		return A2($author$project$Editor$Position, (((position.w - graphElement.h.w) / graphElement.L.aj) * $author$project$Editor$viewPortWidth) / zoom, (((position.G - graphElement.h.G) / graphElement.L.ap) * $author$project$Editor$viewPortHeight) / zoom);
+	function (mouse, transform, graphElement) {
+		var posY = ((mouse.n - graphElement.h.n) / graphElement.N.ar) * $author$project$Editor$viewPortHeight;
+		var posX = ((mouse.j - graphElement.h.j) / graphElement.N.al) * $author$project$Editor$viewPortWidth;
+		var newY = (posY / transform.ab) - transform.T.n;
+		var newX = (posX / transform.ab) - transform.T.j;
+		return A2($author$project$Editor$Position, newX, newY);
 	});
 var $elm$core$Basics$min = F2(
 	function (x, y) {
@@ -7198,7 +7225,7 @@ var $elm$file$File$Download$string = F3(
 	});
 var $elm$core$String$toFloat = _String_toFloat;
 var $elm$file$File$toString = _File_toString;
-var $author$project$Editor$emptyScene = {aO: '', cf: '', bA: _List_Nil};
+var $author$project$Editor$emptyScene = {aQ: '', ch: '', bC: _List_Nil};
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (!maybe.$) {
@@ -7236,7 +7263,7 @@ var $author$project$Editor$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{aA: !model.aA}),
+						{aC: !model.aC}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
 				var nodeId = msg.a;
@@ -7244,74 +7271,116 @@ var $author$project$Editor$update = F2(
 					_Utils_update(
 						model,
 						{
-							ab: $author$project$Editor$Moving(nodeId)
+							D: $author$project$Editor$Moving(nodeId)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
 				var nodeId = msg.a;
 				var isDown = msg.b;
 				var pos = msg.c;
-				var newPos = A3($author$project$Editor$fromScreen, pos, model.Z, model.N);
-				var currentGraph = model.p;
+				var newPos = A3($author$project$Editor$fromScreen, pos, model.w, model.P);
+				var currentGraph = model.r;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							ab: isDown ? $author$project$Editor$Moving(nodeId) : $author$project$Editor$Static,
-							p: _Utils_update(
+							D: isDown ? $author$project$Editor$Moving(nodeId) : $author$project$Editor$Static,
+							r: _Utils_update(
 								currentGraph,
 								{
-									C: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.p.C)
+									F: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.r.F)
 								})
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 3:
 				var nodeId = msg.a;
 				var pos = msg.b;
-				var newPos = A3($author$project$Editor$fromScreen, pos, model.Z, model.N);
-				var currentGraph = model.p;
+				var newPos = A3($author$project$Editor$fromScreen, pos, model.w, model.P);
+				var currentGraph = model.r;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							ab: $author$project$Editor$Static,
-							p: _Utils_update(
+							D: $author$project$Editor$Static,
+							r: _Utils_update(
 								currentGraph,
 								{
-									C: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.p.C)
+									F: A3($author$project$Editor$updateNodePos, nodeId, newPos, model.r.F)
 								})
 						}),
 					$author$project$Editor$storeGraph(
-						$author$project$Editor$encodeGraph(model.p)));
-			case 7:
+						$author$project$Editor$encodeGraph(model.r)));
+			case 4:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							D: $author$project$Editor$Panning(
+								A2($author$project$Editor$Position, 0, 0))
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 5:
+				var isDown = msg.a;
+				var pos = msg.b;
+				var previousPosition = function () {
+					var _v1 = model.D;
+					if (_v1.$ === 2) {
+						var p = _v1.a;
+						return p;
+					} else {
+						return A2($author$project$Editor$Position, 0, 0);
+					}
+				}();
+				var newDragState = isDown ? $author$project$Editor$Panning(pos) : $author$project$Editor$Static;
+				var deltaPos = A2($author$project$Editor$Position, previousPosition.j - pos.j, previousPosition.n - pos.n);
+				var currentTransform = model.w;
+				return (!previousPosition.j) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{D: newDragState}),
+					$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							D: newDragState,
+							w: _Utils_update(
+								currentTransform,
+								{
+									T: A2($author$project$Editor$Position, model.w.T.j - deltaPos.j, model.w.T.n - deltaPos.n)
+								})
+						}),
+					$elm$core$Platform$Cmd$none);
+			case 6:
+				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+			case 10:
 				var json = msg.a;
-				var _v1 = A2($elm$json$Json$Decode$decodeString, $author$project$Editor$decodeGraph, json);
-				if (!_v1.$) {
-					var graph = _v1.a;
+				var _v2 = A2($elm$json$Json$Decode$decodeString, $author$project$Editor$decodeGraph, json);
+				if (!_v2.$) {
+					var graph = _v2.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{p: graph}),
+							{r: graph}),
 						$author$project$Editor$getDrawingArea);
 				} else {
-					var error = _v1.a;
+					var error = _v2.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								aL: $elm$core$Maybe$Just(error)
+								aN: $elm$core$Maybe$Just(error)
 							}),
 						$elm$core$Platform$Cmd$none);
 				}
-			case 8:
+			case 11:
 				return _Utils_Tuple2(
 					model,
 					A3(
 						$elm$file$File$Download$string,
 						'graph.json',
 						'application/json',
-						$author$project$Editor$encodeGraph(model.p)));
-			case 9:
+						$author$project$Editor$encodeGraph(model.r)));
+			case 12:
 				return _Utils_Tuple2(
 					model,
 					A2(
@@ -7319,7 +7388,7 @@ var $author$project$Editor$update = F2(
 						_List_fromArray(
 							['application/json']),
 						$author$project$Editor$EditSessionSelected));
-			case 10:
+			case 13:
 				var file = msg.a;
 				return _Utils_Tuple2(
 					model,
@@ -7327,20 +7396,25 @@ var $author$project$Editor$update = F2(
 						$elm$core$Task$perform,
 						$author$project$Editor$GraphLoaded,
 						$elm$file$File$toString(file)));
-			case 4:
+			case 7:
 				var floatString = msg.a;
-				var _v2 = $elm$core$String$toFloat(floatString);
-				if (_v2.$ === 1) {
+				var currentTransform = model.w;
+				var _v3 = $elm$core$String$toFloat(floatString);
+				if (_v3.$ === 1) {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
-					var _float = _v2.a;
+					var _float = _v3.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{Z: _float}),
+							{
+								w: _Utils_update(
+									currentTransform,
+									{ab: _float})
+							}),
 						$elm$core$Platform$Cmd$none);
 				}
-			case 6:
+			case 9:
 				return _Utils_Tuple2(model, $author$project$Editor$getDrawingArea);
 			default:
 				var result = msg.a;
@@ -7348,14 +7422,14 @@ var $author$project$Editor$update = F2(
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
 					var domElement = result.a;
-					var side = A2($elm$core$Basics$min, domElement.aB.ap, domElement.aB.aj) - 2;
+					var side = A2($elm$core$Basics$min, domElement.aD.ar, domElement.aD.al) - 2;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								N: {
-									L: {ap: side, aj: side},
-									h: {w: domElement.aB.w, G: domElement.aB.G}
+								P: {
+									N: {ar: side, al: side},
+									h: {j: domElement.aD.j, n: domElement.aD.n}
 								}
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -7364,13 +7438,13 @@ var $author$project$Editor$update = F2(
 	});
 var $author$project$Main$updateEditor = F2(
 	function (message, model) {
-		var _v0 = A2($author$project$Editor$update, message, model.M);
+		var _v0 = A2($author$project$Editor$update, message, model.O);
 		var editorModel = _v0.a;
 		var editorCommand = _v0.b;
 		return _Utils_Tuple2(
 			_Utils_update(
 				model,
-				{M: editorModel}),
+				{O: editorModel}),
 			A2($elm$core$Platform$Cmd$map, $author$project$Main$EditorMessage, editorCommand));
 	});
 var $author$project$Main$update = F2(
@@ -7384,25 +7458,25 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{H: storyLocation}),
+						{J: storyLocation}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{ah: 1}),
-					A2($author$project$StoryModel$getStory, model.H, $author$project$Main$StoryLoaded));
+						{aj: 1}),
+					A2($author$project$StoryModel$getStory, model.J, $author$project$Main$StoryLoaded));
 			case 2:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{ah: 2}),
-					A2($author$project$StoryModel$getStory, model.H, $author$project$Main$StoryLoaded));
+						{aj: 2}),
+					A2($author$project$StoryModel$getStory, model.J, $author$project$Main$StoryLoaded));
 			case 3:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{ah: 2}),
+						{aj: 2}),
 					$author$project$Editor$loadGraph(0));
 			case 4:
 				if (!message.a.$) {
@@ -7413,15 +7487,15 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								T: $elm$core$List$head(story.at),
-								M: A2($author$project$Editor$setStory, model.M, story),
-								A: A2($author$project$StoryModel$setStory, model.A, story)
+								W: $elm$core$List$head(story.av),
+								O: A2($author$project$Editor$setStory, model.O, story),
+								C: A2($author$project$StoryModel$setStory, model.C, story)
 							}),
 						$elm$core$Platform$Cmd$batch(
 							_List_fromArray(
 								[
-									A2($author$project$Main$getStoryTexts, model.H, story),
-									A2($author$project$Main$getStoryImages, model.H, story),
+									A2($author$project$Main$getStoryTexts, model.J, story),
+									A2($author$project$Main$getStoryImages, model.J, story),
 									A2($elm$core$Platform$Cmd$map, $author$project$Main$EditorMessage, editCmd)
 								])));
 				} else {
@@ -7435,7 +7509,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								A: A3($author$project$StoryModel$setText, model.A, home, storyText)
+								C: A3($author$project$StoryModel$setText, model.C, home, storyText)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -7448,7 +7522,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								A: A2($author$project$StoryModel$setImage, model.A, home)
+								C: A2($author$project$StoryModel$setImage, model.C, home)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -7460,7 +7534,7 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							T: A2($author$project$StoryModel$getScene, model.A, home)
+							W: A2($author$project$StoryModel$getScene, model.C, home)
 						}),
 					$author$project$Main$resetViewport);
 			case 8:
@@ -7469,7 +7543,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{au: !model.au}),
+						{aw: !model.aw}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -7479,8 +7553,8 @@ var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
-var $author$project$Editor$DumpEditSession = {$: 8};
-var $author$project$Editor$RequestUploadSession = {$: 9};
+var $author$project$Editor$DumpEditSession = {$: 11};
+var $author$project$Editor$RequestUploadSession = {$: 12};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
@@ -7553,13 +7627,13 @@ var $elm$svg$Svg$Attributes$xlinkHref = function (value) {
 };
 var $author$project$Editor$drawEdge = F2(
 	function (edge, nodes) {
-		var toNode = A2($author$project$Editor$getNode, nodes, edge.af);
+		var toNode = A2($author$project$Editor$getNode, nodes, edge.ah);
 		var pathPoints = F2(
 			function (fn, tn) {
-				return 'M' + ($elm$core$String$fromFloat(fn.h.w) + (',' + ($elm$core$String$fromFloat(fn.h.G) + (' L' + ($elm$core$String$fromFloat(tn.h.w) + (',' + $elm$core$String$fromFloat(tn.h.G)))))));
+				return 'M' + ($elm$core$String$fromFloat(fn.h.j) + (',' + ($elm$core$String$fromFloat(fn.h.n) + (' L' + ($elm$core$String$fromFloat(tn.h.j) + (',' + $elm$core$String$fromFloat(tn.h.n)))))));
 			});
-		var idString = 'edge' + (edge.aD + ('-' + edge.af));
-		var fromNode = A2($author$project$Editor$getNode, nodes, edge.aD);
+		var idString = 'edge' + (edge.aF + ('-' + edge.ah));
+		var fromNode = A2($author$project$Editor$getNode, nodes, edge.aF);
 		return A2(
 			$elm$svg$Svg$g,
 			_List_Nil,
@@ -7571,7 +7645,7 @@ var $author$project$Editor$drawEdge = F2(
 						[
 							$elm$svg$Svg$Attributes$id(idString),
 							$elm$svg$Svg$Attributes$d(
-							(_Utils_cmp(fromNode.h.w, toNode.h.w) > 0) ? A2(pathPoints, toNode, fromNode) : A2(pathPoints, fromNode, toNode)),
+							(_Utils_cmp(fromNode.h.j, toNode.h.j) > 0) ? A2(pathPoints, toNode, fromNode) : A2(pathPoints, fromNode, toNode)),
 							$elm$svg$Svg$Attributes$stroke('black'),
 							$elm$svg$Svg$Attributes$strokeWidth('0.1')
 						]),
@@ -7591,7 +7665,7 @@ var $author$project$Editor$drawEdge = F2(
 								]),
 							_List_fromArray(
 								[
-									$elm$svg$Svg$text(edge.W)
+									$elm$svg$Svg$text(edge.Z)
 								]))
 						]))
 				]));
@@ -7600,9 +7674,9 @@ var $author$project$Editor$drawEdges = function (graph) {
 	return A2(
 		$elm$core$List$map,
 		function (e) {
-			return A2($author$project$Editor$drawEdge, e, graph.C);
+			return A2($author$project$Editor$drawEdge, e, graph.F);
 		},
-		graph.ao);
+		graph.aq);
 };
 var $author$project$Editor$ClickedCircle = {$: 0};
 var $author$project$Editor$DragStart = function (a) {
@@ -7635,9 +7709,9 @@ var $author$project$Editor$drawNode = F2(
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$cx(
-							$elm$core$String$fromFloat(node.h.w)),
+							$elm$core$String$fromFloat(node.h.j)),
 							$elm$svg$Svg$Attributes$cy(
-							$elm$core$String$fromFloat(node.h.G)),
+							$elm$core$String$fromFloat(node.h.n)),
 							$elm$svg$Svg$Attributes$r('5'),
 							$elm$svg$Svg$Attributes$stroke('black'),
 							$elm$svg$Svg$Attributes$strokeWidth('0.4'),
@@ -7654,9 +7728,9 @@ var $author$project$Editor$drawNode = F2(
 					_List_fromArray(
 						[
 							$elm$svg$Svg$Attributes$x(
-							$elm$core$String$fromFloat(node.h.w - 4)),
+							$elm$core$String$fromFloat(node.h.j - 4)),
 							$elm$svg$Svg$Attributes$y(
-							$elm$core$String$fromFloat(node.h.G + 1)),
+							$elm$core$String$fromFloat(node.h.n + 1)),
 							$elm$svg$Svg$Attributes$style('font-size:2')
 						]),
 					_List_fromArray(
@@ -7689,7 +7763,11 @@ var $author$project$Editor$scale = function (zoom) {
 };
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
+var $author$project$Editor$translate = function (translation) {
+	return 'translate(' + ($elm$core$String$fromFloat(translation.j) + (', ' + ($elm$core$String$fromFloat(translation.n) + ')')));
+};
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
+var $author$project$Editor$PanStart = {$: 4};
 var $elm$svg$Svg$rect = $elm$svg$Svg$trustedNode('rect');
 var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $author$project$Editor$viewBoxBackground = A2(
@@ -7705,7 +7783,8 @@ var $author$project$Editor$viewBoxBackground = A2(
 					$elm$svg$Svg$Attributes$strokeWidth('0.1'),
 					$elm$svg$Svg$Attributes$width('100'),
 					$elm$svg$Svg$Attributes$height('100'),
-					$elm$svg$Svg$Attributes$fillOpacity('0.1')
+					$elm$svg$Svg$Attributes$fillOpacity('0.1'),
+					$elm$svg$Svg$Events$onMouseDown($author$project$Editor$PanStart)
 				]),
 			_List_Nil)
 		]));
@@ -7725,9 +7804,9 @@ var $author$project$Editor$viewGraph = function (model) {
 				_List_fromArray(
 					[
 						$elm$svg$Svg$Attributes$width(
-						$elm$core$String$fromFloat(model.N.L.aj)),
+						$elm$core$String$fromFloat(model.P.N.al)),
 						$elm$svg$Svg$Attributes$height(
-						$elm$core$String$fromFloat(model.N.L.ap)),
+						$elm$core$String$fromFloat(model.P.N.ar)),
 						$elm$svg$Svg$Attributes$viewBox(
 						'0 0 ' + ($elm$core$String$fromInt($author$project$Editor$viewPortWidth) + (' ' + $elm$core$String$fromInt($author$project$Editor$viewPortHeight))))
 					]),
@@ -7741,16 +7820,16 @@ var $author$project$Editor$viewGraph = function (model) {
 							_List_fromArray(
 								[
 									$elm$svg$Svg$Attributes$transform(
-									$author$project$Editor$scale(model.Z))
+									$author$project$Editor$scale(model.w.ab) + (',' + $author$project$Editor$translate(model.w.T)))
 								]),
 							_Utils_ap(
-								$author$project$Editor$drawEdges(model.p),
-								$author$project$Editor$drawNodes(model.p.C)))
+								$author$project$Editor$drawEdges(model.r),
+								$author$project$Editor$drawNodes(model.r.F)))
 						])))
 			]));
 };
 var $author$project$Editor$SetZoom = function (a) {
-	return {$: 4, a: a};
+	return {$: 7, a: a};
 };
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
@@ -7823,12 +7902,12 @@ var $author$project$Editor$view = function (model) {
 						A2(
 						$elm$html$Html$Attributes$style,
 						'width',
-						$elm$core$String$fromFloat(model.N.L.aj) + 'px')
+						$elm$core$String$fromFloat(model.P.N.al) + 'px')
 					]),
 				_List_fromArray(
 					[
 						$author$project$Editor$viewCommandBar,
-						$author$project$Editor$viewZoomControl(model.Z)
+						$author$project$Editor$viewZoomControl(model.w.ab)
 					])),
 				$author$project$Editor$viewGraph(model)
 			]));
@@ -7854,7 +7933,7 @@ var $elm$html$Html$Attributes$size = function (n) {
 		$elm$core$String$fromInt(n));
 };
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
-var $author$project$Main$helpText = '\n    This is a reader and editor for interactive fiction, also called\n    create your own adventure. The reader is started by loading the story\n    from an URL. An example is provided.\n\n    The editor allows you to see a graphical presentation of the possible\n    paths through the story. If you never edited the story, the initial\n    position of the nodes is set along a line from top left to bottom right.\n\n    As soon as you change the position of a node by dragging it, the position\n    is stored in your browser. To continue from that, use reload editing session\n    button on the first page.\n\n    If you like to store your editing session on file, there is a button\n    inside the editor to download it as a json file.\n    Conversely, you may upload a session from a file.\n\n    The slider on the top of the editor is a zoom control.\n\n    The editor is resizing itself with the window but stays square.\n    ';
+var $author$project$Main$helpText = '\n    This is a reader and editor for interactive fiction, also called\n    create your own adventure. The reader is started by loading the story\n    from an URL. An example is provided.\n\n    The editor allows you to see a graphical presentation of the possible\n    paths through the story. If you never edited the story, the initial\n    position of the nodes is set along a line from top left to bottom right.\n\n    As soon as you change the position of a node by dragging it, the position\n    is stored in your browser. To continue from that, use reload editing session\n    button on the first page.\n\n    If you like to store your editing session on file, there is a button\n    inside the editor to download it as a json file.\n    Conversely, you may upload a session from a file.\n\n    The slider on the top of the editor is a zoom control.\n\n    You can pan the view by dragging the background.\n\n    The editor is resizing itself with the window but stays square.\n    ';
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $author$project$Main$textToParagraphs = function (storyText) {
 	return A2(
@@ -7950,7 +8029,7 @@ var $author$project$Main$viewLibrary = function (model) {
 						$elm$html$Html$input,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$value(model.H),
+								$elm$html$Html$Attributes$value(model.J),
 								$elm$html$Html$Events$onInput($author$project$Main$ChangeStoryLocation),
 								$elm$html$Html$Attributes$size(35)
 							]),
@@ -7998,7 +8077,7 @@ var $author$project$Main$viewLibrary = function (model) {
 								$elm$html$Html$text('Reload editing session')
 							]))
 					])),
-				model.au ? $author$project$Main$viewHelp : A2(
+				model.aw ? $author$project$Main$viewHelp : A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
@@ -8026,11 +8105,11 @@ var $author$project$StoryModel$getText = F2(
 		return A2(
 			$elm$core$Maybe$withDefault,
 			'??',
-			A2($elm$core$Dict$get, home, model.aw));
+			A2($elm$core$Dict$get, home, model.ay));
 	});
 var $author$project$StoryModel$hasImage = F2(
 	function (model, home) {
-		var _v0 = A2($elm$core$Dict$get, home, model.aq);
+		var _v0 = A2($elm$core$Dict$get, home, model.as);
 		if (!_v0.$) {
 			return true;
 		} else {
@@ -8063,11 +8142,11 @@ var $author$project$Main$viewOption = function (sceneOption) {
 		_List_fromArray(
 			[
 				$elm$html$Html$Events$onClick(
-				$author$project$Main$GotoScene(sceneOption.cF))
+				$author$project$Main$GotoScene(sceneOption.cH))
 			]),
 		_List_fromArray(
 			[
-				$elm$html$Html$text(sceneOption.cr)
+				$elm$html$Html$text(sceneOption.ct)
 			]));
 };
 var $author$project$Main$viewOptions = function (sceneOptions) {
@@ -8089,27 +8168,27 @@ var $author$project$Main$viewStory = function (model) {
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.cf;
+				return $.ch;
 			},
-			model.T));
+			model.W));
 	var route = A2(
 		$elm$core$Maybe$withDefault,
 		_List_Nil,
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.bA;
+				return $.bC;
 			},
-			model.T));
+			model.W));
 	var home = A2(
 		$elm$core$Maybe$withDefault,
 		'??',
 		A2(
 			$elm$core$Maybe$map,
 			function ($) {
-				return $.aO;
+				return $.aQ;
 			},
-			model.T));
+			model.W));
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -8119,11 +8198,11 @@ var $author$project$Main$viewStory = function (model) {
 			]),
 		_List_fromArray(
 			[
-				A2($author$project$StoryModel$hasImage, model.A, home) ? A2(
+				A2($author$project$StoryModel$hasImage, model.C, home) ? A2(
 				$elm$html$Html$img,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$src(model.H + ('/images/' + (home + '.png'))),
+						$elm$html$Html$Attributes$src(model.J + ('/images/' + (home + '.png'))),
 						A2($elm$html$Html$Attributes$style, 'width', '100%')
 					]),
 				_List_Nil) : A2($elm$html$Html$div, _List_Nil, _List_Nil),
@@ -8144,12 +8223,12 @@ var $author$project$Main$viewStory = function (model) {
 						A2($elm$html$Html$Attributes$style, 'margin', '5px')
 					]),
 				$author$project$Main$textToParagraphs(
-					A2($author$project$StoryModel$getText, model.A, home))),
+					A2($author$project$StoryModel$getText, model.C, home))),
 				$author$project$Main$viewOptions(route)
 			]));
 };
 var $author$project$Main$view = function (model) {
-	var _v0 = model.ah;
+	var _v0 = model.aj;
 	switch (_v0) {
 		case 0:
 			return $author$project$Main$viewLibrary(model);
@@ -8159,10 +8238,10 @@ var $author$project$Main$view = function (model) {
 			return A2(
 				$elm$html$Html$map,
 				$author$project$Main$EditorMessage,
-				$author$project$Editor$view(model.M));
+				$author$project$Editor$view(model.O));
 	}
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{b8: $author$project$Main$init, cC: $author$project$Main$subscriptions, cJ: $author$project$Main$update, cK: $author$project$Main$view});
+	{ca: $author$project$Main$init, cE: $author$project$Main$subscriptions, cL: $author$project$Main$update, cM: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
