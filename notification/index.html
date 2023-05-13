@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification test</title>
+    <script type="text/javascript" src="elm.js"></script>
+</head>
+<body>
+<h1>Notification test</h1>
+<p>
+    Use this to test how notification behaves on different devices.
+</p>
+<div id="elm">
+    <!-- Elm -->
+</div>
+<script type="text/javascript">
+    const currentPermission = Notification.permission;
+    let notification = null;
+
+    const elmApp =
+        Elm.Notification.Notification.init({
+            node: document.getElementById('elm'),
+            flags: currentPermission
+        });
+
+    elmApp.ports.sendNotification.subscribe(function (notificationJson) {
+        notification = new Notification(notificationJson.title,
+            {
+                body: notificationJson.body,
+                icon: notificationJson.icon
+            });
+        notification.addEventListener('error', (event) => {
+            console.log("ERROR", event);
+            elmApp.ports.notificationError.send(event.target.body);
+        });
+        notification.addEventListener('click', (event) => {
+            elmApp.ports.notificationClicked.send(event.target.body);
+        });
+        console.log(notification);
+        setTimeout(() => {
+            notification.close();
+        }, 10 * 1000);
+    });
+
+    elmApp.ports.requestPermission.subscribe(async () => {
+        let notifyPermission = await Notification.requestPermission();
+        elmApp.ports.permissionChanged.send(notifyPermission);
+    });
+</script>
+</body>
+</html>
