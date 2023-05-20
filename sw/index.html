@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test!</title>
+</head>
+<body>
+<p>
+    Testing notifications.
+</p>
+<input id="requestButton" type="button" value="Request"/>
+<input id="sendButton" type="button" value="Send">
+<script src="./index.js"></script>
+<script>
+    document.getElementById("requestButton").addEventListener("click", () => {
+        requestPermission();
+    });
+    document.getElementById("sendButton").addEventListener("click", () => {
+        sendNotification({'title': 'THE title', 'body': 'Body text', 'icon': 'https://artcomputer.se/favicon.ico'})
+    });
+</script>
+</body>
+</html>
