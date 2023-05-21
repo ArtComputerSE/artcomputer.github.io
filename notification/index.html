@@ -2,50 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notification test</title>
-    <script type="text/javascript" src="elm.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test!</title>
 </head>
 <body>
-<h1>Notification test</h1>
 <p>
-    Use this to test how notification behaves on different devices.
+    Testing notifications. This page has a service worker that is used to send a notification. There's no push involved.
 </p>
-<div id="elm">
-    <!-- Elm -->
+<input id="requestButton" type="button" value="Request"/>
+<input id="sendButton" type="button" value="Send">
+<div>
+    <ul id="log">
+
+    </ul>
 </div>
-<script type="text/javascript">
-    const currentPermission = Notification.permission;
-    let notification = null;
-
-    const elmApp =
-        Elm.Notification.Notification.init({
-            node: document.getElementById('elm'),
-            flags: currentPermission
-        });
-
-    elmApp.ports.sendNotification.subscribe(function (notificationJson) {
-        notification = new Notification(notificationJson.title,
-            {
-                body: notificationJson.body,
-                icon: notificationJson.icon
-            });
-        notification.addEventListener('error', (event) => {
-            console.log("ERROR", event);
-            elmApp.ports.notificationError.send(event.target.body);
-        });
-        notification.addEventListener('click', (event) => {
-            elmApp.ports.notificationClicked.send(event.target.body);
-        });
-        console.log(notification);
-        setTimeout(() => {
-            notification.close();
-        }, 10 * 1000);
+<script src="./index.js"></script>
+<script>
+    document.getElementById("requestButton").addEventListener("click", () => {
+        requestPermission();
     });
-
-    elmApp.ports.requestPermission.subscribe(async () => {
-        let notifyPermission = await Notification.requestPermission();
-        elmApp.ports.permissionChanged.send(notifyPermission);
+    document.getElementById("sendButton").addEventListener("click", () => {
+        sendNotification({'title': 'The title', 'body': 'Body text', 'icon': 'https://artcomputer.se/favicon.ico'})
     });
 </script>
 </body>
