@@ -3,21 +3,25 @@ console.log('Hello from service worker') ;
 
 self.addEventListener("notificationclick", (event) => {
     console.log("On notification click: ", event.notification.tag);
-    event.notification.close();
+    console.log(event.notification);
 
-    // This looks to see if the current is already open and
-    // focuses if it is
     event.waitUntil(
-        clients
-            .matchAll({
-                type: "window",
-            })
+        self.clients
+            .matchAll()
             .then((clientList) => {
-                for (const client of clientList) {
-                    if (client.url === "/sw" && "focus" in client) return client.focus();
-                }
-                if (clients.openWindow) return clients.openWindow("/sw");
+                clientList.forEach(function(client) {
+                    client.postMessage('Notification clicked');
+                });
             })
     );
+    event.notification.close();
+});
+
+self.addEventListener('activate', function(event) {
+    // Perform actions when the service worker is activated
+    console.log('Service worker activated');
+
+    // Optional: Claiming clients to take immediate control
+    event.waitUntil(self.clients.claim());
 });
 

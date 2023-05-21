@@ -11,13 +11,18 @@
 </p>
 <input id="requestButton" type="button" value="Request"/>
 <input id="sendButton" type="button" value="Send">
+<div>
+    <ul id="log">
+
+    </ul>
+</div>
 <script src="./index.js"></script>
 <script>
     document.getElementById("requestButton").addEventListener("click", () => {
         requestPermission();
     });
     document.getElementById("sendButton").addEventListener("click", () => {
-        sendNotification({'title': 'THE title', 'body': 'Body text', 'icon': 'https://artcomputer.se/favicon.ico'})
+        sendNotification({'title': 'The title', 'body': 'Body text', 'icon': 'https://artcomputer.se/favicon.ico'})
     });
 </script>
 </body>
