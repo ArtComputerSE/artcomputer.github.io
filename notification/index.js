@@ -7,8 +7,12 @@ const sendNotification = (notificationJson) => {
 }
 
 const requestPermission = async () => {
-    let notifyPermission = await Notification.requestPermission();
-    console.log(notifyPermission);
+    if (!("Notification" in window)) {
+        show("This browser does not support notifications.");
+    } else {
+        let notifyPermission = await Notification.requestPermission();
+        show(notifyPermission);
+    }
 }
 
 // Add an event listener to listen for messages
@@ -18,9 +22,13 @@ navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.origin === self.location.origin) {
         // Handle the received message
         console.log('Message received:', event.data);
-        const logList = document.getElementById('log');
-        const li = document.createElement('li');
-        li.textContent = event.data;
-        logList.appendChild(li);
+        show(event.data);
     }
 });
+
+function show(textContent) {
+    const logList = document.getElementById('log');
+    const li = document.createElement('li');
+    li.textContent = textContent;
+    logList.appendChild(li);
+}
