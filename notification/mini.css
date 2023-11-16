@@ -1,0 +1,69 @@
+/* Grundläggande återställning för att säkerställa konsistens över olika webbläsare */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif; /* Modern och lättläst teckensnitt */
+    background-color: #f4f4f4; /* Ljus bakgrundsfärg */
+    color: #333; /* Mörk textfärg för kontrast */
+    line-height: 1.6; /* Luftig radavstånd */
+    padding: 20px; /* Lite utrymme runt innehållet */
+}
+
+.container {
+    width: 80%; /* Maxbredd för innehåll */
+    margin: auto; /* Centrerar innehållet */
+    padding: 20px; /* Inre marginal för innehållsboxen */
+    background-color: #fff; /* Vit bakgrund för innehållet */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Lägger till en subtil skugga runt innehållsboxen */
+}
+
+h1 {
+    font-size: 2.5em; /* Stor rubrik */
+    color: #444; /* Något mörkare för rubriken */
+    margin-bottom: 10px; /* Lägger till lite utrymme under rubriken */
+}
+
+p {
+    font-size: 1em; /* Standardstorlek för text */
+    margin-bottom: 10px; /* Utrymme under varje stycke */
+}
+ul {
+    list-style-type: none; /* Tar bort standardmarkörerna */
+    padding-left: 0; /* Tar bort standardindrag */
+    margin-top: 20px; /* Lägger till lite utrymme ovanför listan */
+}
+
+li {
+    background-color: #e9ecef; /* Ljus bakgrundsfärg för varje listelement */
+    padding: 10px; /* Lite utrymme inuti varje listelement */
+    margin-bottom: 10px; /* Utrymme mellan listelementen */
+    border-radius: 5px; /* Rundade hörn för en mjukare look */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtil skugga för djup */
+}
+
+li:last-child {
+    margin-bottom: 0; /* Tar bort marginalen från det sista listelementet */
+}
+
+input[type="button"] {
+    background-color: #007bff; /* Blå bakgrundsfärg */
+    color: white; /* Vit text */
+    padding: 10px 20px; /* Vertikal och horisontell padding */
+    border: none; /* Tar bort standardkanten */
+    border-radius: 5px; /* Rundade hörn */
+    font-size: 1em; /* Lämplig teckensnittsstorlek */
+    cursor: pointer; /* Ändrar muspekaren till en hand när den hovrar över knappen */
+    transition: background-color 0.3s; /* Gör en mjuk övergång för hover-effekten */
+}
+
+input[type="button"]:hover {
+    background-color: #0056b3; /* Mörkare blå färg vid hover */
+}
+
+input[type="button"]:active {
+    background-color: #004085; /* Ännu mörkare blå vid klick */
+}

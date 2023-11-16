@@ -2,19 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test!</title>
+    <link rel="stylesheet" href="mini.css">
 </head>
 <body>
-<p>
-    Testing notifications. This page has a service worker that is used to send a notification. There's no push involved.
-</p>
-<input id="requestButton" type="button" value="Request"/>
-<input id="sendButton" type="button" value="Send">
-<div>
-    <ul id="log">
+<div class="container">
+    <h1>Testing notifications</h1>
+    <p>
+        This page has a service worker that is used to send a notification. There's no push involved, all is local.
+    </p>
+    <p>
+        When you press <b>Request</b>, the app will request permission to show notifications from the browser.
+        If there is no output below, the indicator that the page has requested permission is probably too
+        discrete to see. Look in the address bar for some symbol or text that might indicate this. On Edge
+        it is a bell.
+    </p>
+    <p>
+        Once you have responded to the request, the result should be shown below. You may now test the notification
+        by pressing <b>Send</b>.
+    </p>
+    <input id="requestButton" type="button" value="Request"/>
+    <input id="sendButton" type="button" value="Send">
+    <div>
+        <ul id="log">
 
-    </ul>
+        </ul>
+    </div>
 </div>
 <script src="./index.js"></script>
 <script>
