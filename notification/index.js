@@ -1,4 +1,9 @@
-navigator.serviceWorker.register('service-worker.js');
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+        .then(_r => show("Service worker registration done!"));
+} else {
+    show("This browser has no support for service worker!")
+}
 
 const sendNotification = (notificationJson) => {
     navigator.serviceWorker.ready.then((registration) => {
