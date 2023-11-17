@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-    width: 80%; /* Maxbredd för innehåll */
+    max-width: 800px; /* Maxbredd för innehåll */
     margin: auto; /* Centrerar innehållet */
     padding: 20px; /* Inre marginal för innehållsboxen */
     background-color: #fff; /* Vit bakgrund för innehållet */
